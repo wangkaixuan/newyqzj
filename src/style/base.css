@@ -38,3 +38,19 @@ i,em{font-style:normal;}
 .noData p {
   margin-top: 10px;
 }
+/*element ui 提示信息位置调整上下左右居中*/
+body .ele_ui_tips_position {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  -o-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+.border_box{
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}

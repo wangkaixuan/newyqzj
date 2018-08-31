@@ -1,27 +1,27 @@
 <template>
-	<div class="wrap">
-		<yqzj-Head></yqzj-Head>
-		<div class="center">
-			<div class="info_detail_box clearfix">
+	<div class="wrap_detail">
+		<yqzj-Head @isHasPower="getPower"></yqzj-Head>
+		<div class="center_detail">
+			<div class="info_detail_box clearfix_detail">
 				<div class="info_detail_left fl">
-					<h1 class="info_detail_title">{{datailInfo.kvTitle}}</h1>
+					<h1 class="info_detail_title" v-html="datailInfo.kvTitleMakeRed"></h1> 
 					<div class="information">
 						<span class="info_time">{{datailInfo.krCtime}}</span>
 						<span class="info_source">来源：{{datailInfo.kvSite}}</span>
             <span class="info_author">作者：{{datailInfo.kvAuthor}}</span>
             <span class="info_forward_num">转发数：{{sameInfoNum}}</span>
 						<span class="info_tendency">倾向性：
-              <span class="zheng" v-if="datailInfo.orientation == 1">正面</span>
-              <span class="fu" v-if="datailInfo.orientation == 2">负面</span>
-              <span class="zhong" v-else="datailInfo.orientation == 3">中性</span>
+              <span class="zheng" v-if="datailInfo.orientation == '1'">正面</span>
+              <span class="fu" v-if="datailInfo.orientation == '2'">负面</span>
+              <span class="zhong" v-if="datailInfo.orientation == '3'">中性</span>
             </span>
 					</div>
           <div class="info_url">
             <span class="url">原文链接:</span>
-            <a :href="datailInfo.kvUrl">{{datailInfo.kvUrl}}</a>
+            <a :href="datailInfo.kvUrl" target="_blank">{{datailInfo.kvUrl}}</a>
             <span class="copy_url">复制链接</span>
           </div>
-          <div class="info_datail_content clearfix">
+          <div class="info_datail_content clearfix_detail">
             <div class="pic_wrap fl">
               <ul>
                 <li class="copy_info">
@@ -41,7 +41,9 @@
                   <a href="javascript:void(0)" class="add_topic" title="加入话题"><i></i>加话题</a>
                 </li>
                 <li class="report">
-                  <a href="javascript:void(0)" class="report_info" title="上报信息"><i></i>上报</a>
+                  <!-- <a href="javascript:void(0)" class="report_info" title="上报信息"><i></i>上报</a> -->
+                  <router-link  tag="a" :to="{path: 'newbuiltdelivery', query: {from: 'workbench',title: datailInfo.kvTitle, url: datailInfo.kvUrl,mediatype: datailInfo.kvSourceType, source: datailInfo.kvSite,time: datailInfo.krCtime,summary: datailInfo.kvAbstract}}" class="report_info" title="上报信息" target="_blank" v-if="isHasBuiltPower"><i></i>上报</router-link>
+                  <a href="javascript:void(0)" class="report_info" title="上报信息" v-else @click="promptUser"><i></i>上报</a>
                 </li>
                 <li class="orientation">
                   <a href="javascript:void(0)" class="modify_orientation"><i></i>改倾向性</a>
@@ -51,8 +53,8 @@
                     <li class="three"><a href="javascript:void(0)" title="标为正面">标为正面</a></li>
                   </ul>
                 </li>
-                <li class="delete">
-                  <a href="javascript:void(0)" class="del_info" title="删除"><i></i>删除</a>
+                <li class="delete" v-if="msUserId == shareMsUserId">
+                  <a href="javascript:void(0)" class="del_info" title="删除" @click="delList(datailInfo.kvUrl,datailInfo.kvSimhash)" ><i></i>删除</a>
                 </li>
                 <li class="share">
                   <a href="javascript:void(0)" class="share_info"><i></i>分享</a>
@@ -69,42 +71,42 @@
                 </li>
               </ul>
             </div>
-            <div class="content_wrap fr">
-              <p>{{detailContent}}</p>
+            <div class="content_wrap border_box">
+              <p v-html="detailContent"></p>
             </div>
           </div>
           <div class="event_tips"><span>*</span> 舆情秘书和网页<i>http://weibo.com/6586838459/GuJ4jF9XY</i>的作者无关，不对其内容负责。</div>
 				</div>
 				<div class="info_detail_right fr">
           <div class="same_info keyword">
-            <div class="title clearfix"><b></b>涉及关键词<span class="close" v-bind:class="{open:keywordsArrow.isOpen}" @click="slideKeyword">{{keywordsArrow.text}}</span></div>
-            <div class="keyword_content"  v-for="item,i in keywords" v-show="!keywordsArrow.isOpen">
-              <a href="javascript:void(0)" class="keywordList" >{{item}}</a>
+            <div class="title clearfix_detail"><b></b>涉及关键词<span class="close" v-bind:class="{open:keywordsArrow.isOpen}" @click="slideKeyword">{{keywordsArrow.text}}</span></div>
+            <div class="keyword_content" v-show="!keywordsArrow.isOpen">
+              <a href="javascript:void(0)" class="keywordList" v-for="item,i in keywords">{{item}}</a>
             </div>
           </div>
           <div class="same_info special">
-            <div class="title clearfix"><b></b>涉及专题<span class="close" v-bind:class="{open:specialsArrow.isOpen}" @click="slideSpecial">{{specialsArrow.text}}</span></div>
-            <div class="special_content" v-for="item,i in specials" v-show="!specialsArrow.isOpen">
-              <router-link  tag="a" :to="{path: 'browse', query: { tid : item.kkType, sid : item.ksId , kkname: item.kkName}}" target="_blank" title="item.route">{{item.kkName}}</router-link>
+            <div class="title clearfix_detail"><b></b>涉及专题<span class="close" v-bind:class="{open:specialsArrow.isOpen}" @click="slideSpecial">{{specialsArrow.text}}</span></div>
+            <div class="special_content" v-show="!specialsArrow.isOpen">
+              <router-link  tag="a" :to="{path: 'browse', query: { tid : item.kkType, sid : item.ksId , kkname: item.kkName,shareMsUserId: shareMsUserId}}" target="_blank" title="item.route" v-for="(item,i) in specials" :key="i">{{item.kkName}}</router-link>
               <!-- <a href="/Browse/index?tid=01&amp;sid=7bd1597f62ed450daf7443952d32b8dd&amp;kkname=投资理财" target="_blank" class="" :title="item.route">{{item.kkName}}</a> -->
             </div>
           </div>
-          <div class="same_info">
-            <div class="title clearfix"><b></b>相同信息（<span class="hotname">{{sameInfoNum}}条</span>）
+          <div class="same_info" v-show="sameInfoNum > 0">
+            <div class="title clearfix_detail"><b></b>相同信息（<span class="hotname">{{sameInfoNum}}条</span>）
               <a class="daochu" href="/Browse/getSameInfoExcel?shareid=&amp;kvuuid=7139f8b0a03511e887c40242ac11000c">导出</a>
             </div>
             <ul>
               <li class="">
                 <span>首发</span>
-                <a class="firsttitle" href="http://weibo.com/6586838459/GuJ4jF9XY" target="_blank">【新浪微博】</a>
-                <span>2018-08-13 15:40</span>
+                <a class="firsttitle" :href="firstInfo.kvUrl" target="_blank">【{{firstInfo.kvSite}}】</a>
+                <span>{{firstInfo.krCtime}}</span>
               </li>
-              <li class="list" v-for="item,i in sameList">
-                <router-link  tag="a" :to="{path: 'infoDetail', query: { krUuid : item.krUuid, msUserId : $store.state.msUserId , shareMsUserId: $store.state.shareMsUserId }}" target="_blank"><i></i>{{item.kvTitle}}</router-link>
-                <!-- <a href="/Browse/infoDetail?uuid=2a2787489f0f11e8ad3d0242ac110035&amp;tid=01&amp;message=&amp;state=xx&amp;type=&amp;sourcetype=04&amp;kvHot=14&amp;shareid=&amp;kktype=&amp;classid=" target="_blank"><i></i>转发微博 @y16405 看到一些言论说斐讯倒了，这么一个五百强企业就因为零元购及理财，说倒旧倒了？旧股份卖了多少钱，股东每年分红利有多少，公示一下吧，估计也是赚的盆满钵满。新股东入主恐怕是出来挽回自</a> -->
+              <li class="list" v-if="sameList != ''"  v-for="item,i in sameList">
+                <router-link  tag="a" :to="{path: 'infoDetail', query: { krUuid : item.krUuid, msUserId : $store.state.msUserId , shareMsUserId: item.userId }}" target="_blank" v-html="item.kvTitle"></router-link>
                 <span>{{item.krCtime}}</span>
                 <span>{{item.kvSite}}</span>
               </li>
+              <li v-show="sameList.length >= 99">此处显示100条信息</li>
             </ul>
           </div>
         </div>
@@ -118,28 +120,35 @@
 import yqzjHead from '../../components/header.vue'
 import yqzjFooter from '../../components/footer.vue'
 import VueCookies from 'vue-cookies'
-import {getBrowseDetail} from '../../service/browse'
+import {getBrowseDetail,delBrowseList,markRead} from '../../service/browse'
 
 export default {
 	data() {
-	    return {
-	    	keywordsArrow: {
-          text: '收起',
-          isOpen: false
-        },
-        specialsArrow: {
-          text: '收起',
-          isOpen: false
-        },
-        datailInfo: {},    // 头部信息
-        detailContent: '', //内容
-        sameInfoNum: 0,    //相同信息条数 
-        keywords: [],      //涉及关键词
-        specials: [],      //涉及专题
-        sameList: []       //相同信息列表
-	    }
-    },
-    components:{
+    return {
+    	keywordsArrow: {
+        text: '收起',
+        isOpen: false
+      },
+      specialsArrow: {
+        text: '收起',
+        isOpen: false
+      },
+      datailInfo: {},    // 头部信息
+      detailContent: '', //内容
+      sameInfoNum: 0,    //相同信息条数 
+      keywords: [],      //涉及关键词
+      specials: [],      //涉及专题
+      sameList: [],      //相同信息列表
+      firstInfo: {},     //首发
+      isRepeat: '1',     //1 去重 0 不去重
+      msUserId: '',      //msUserId
+      shareMsUserId: '', //shareMsUserId
+      kvUrl: '',         //信息URL
+      kvSimhash: '',     //信息HASH
+      isHasBuiltPower: false, //是否有上报权限
+    }
+  },
+  components:{
 	    yqzjHead,
 	    yqzjFooter,
 	},
@@ -161,13 +170,114 @@ export default {
       }else{
         this.specialsArrow.text = '收起';
       }
+    },
+    //删除列表数据
+    delList(kvUrl,kvSimhash){
+      let _this = this;
+      let isrepeat = _this.isRepeat; //1 去重 0 不去重
+      let data = {};
+      if(isrepeat == '0'){
+        data = {
+          msUserId: _this.msUserId,
+          shareMsUserId: _this.shareMsUserId,
+          kvUrl: kvUrl,           //信息URL
+        }
+      }else{
+        data = {
+          msUserId: _this.msUserId,
+          shareMsUserId: _this.shareMsUserId,
+          kvSimhash: kvSimhash    //信息HASH
+        }
+      }
+      _this.$confirm('确认删除该条信息吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        showClose: false,
+        closeOnClickModal: false
+      }).then(() => {
+        delBrowseList(data).then(function (res) {
+          if(res.data.status == '0'){
+            _this.$alert('此页面将会关闭，请刷新原来的列表页查看!', '提示', {
+              showClose: false, //是否显示右上角的提示按钮
+              confirmButtonText: '确定',
+              duration: 1000, //显示时间, 毫秒。设为 0 则不会自动关闭
+              callback: action => {
+                window.close();//关闭当前页面
+              }
+            });
+          }else{
+            _this.$message({
+              type: 'error',
+              customClass: 'ele_ui_tips_position',
+              message: '删除失败！'
+            });
+          }
+        }).catch(err => {
+          _this.$message({
+            type: 'error',
+            customClass: 'ele_ui_tips_position',
+            message: '请求失败！'
+          });
+        });
+      }).catch(() => {
+      });
+    },
+    //标记已读
+    markedRead(){
+      let _this = this;
+      let isrepeat = _this.isRepeat; //1 去重 0 不去重
+      let data = {};
+      if(isrepeat == '0'){
+        data = {
+          msUserId: _this.msUserId,
+          shareMsUserId: _this.shareMsUserId,
+          kvUrl: _this.kvUrl,           //信息URL
+        }
+      }else{
+        data = {
+          msUserId: _this.msUserId,
+          shareMsUserId: _this.shareMsUserId,
+          kvSimhash: _this.kvSimhash    //信息HASH
+        }
+      }
+      markRead(data).then(function (res) {
+        if(res.data.result.data == 1){
+          console.log('标记已读成功');
+        }
+      }).catch(err=>{
+        console.log(err,'请求失败！');
+      });
+    },
+    //是否有上报权限
+    getPower(data){
+      let _this = this; 
+      console.log('--------是否有上报权限---------');
+      console.log(data);
+      for(let i in data){
+        if(data[i].funName == '工作台'){
+          _this.isHasBuiltPower = true;
+        }
+      }
+    },
+    //针对没有上报权限的用户，提示用户找管理员开通
+    promptUser(){
+      this.$message({
+        type: 'error',
+        customClass: 'ele_ui_tips_position',
+        message: '您还没有功能权限，请找管理员开通吧！'
+      });
     }
   },
   mounted (){
   	let _this = this;
     let query = this.$route.query;//获取链接 ？ 之后的参数
-    console.log('-------query val--------');
-    console.log(query);
+    //为删除准备的参数
+    _this.isRepeat = query.isrepeat;
+    _this.msUserId = query.msUserId;
+    _this.shareMsUserId = query.shareMsUserId;
+    _this.kvUrl = query.kvUrl;
+    _this.kvSimhash = query.kvSimhash;
   	let data = {
       krUuid: query.krUuid,
   		msUserId: query.msUserId,
@@ -177,33 +287,38 @@ export default {
     getBrowseDetail(data).then(function (res) {
     	console.log('---------获取舆情浏览详情页-------------');
     	console.log(res);
-      let result = res.data.result.data;
-      if(result){
-        _this.sameInfoNum = result.DetailReloadNum;
-        _this.datailInfo = result.validationRef;
-        _this.detailContent = result.detailInfoCnt;
-        _this.keywords = result.validationRef.kvKeyWord.split(",");
-        _this.specials = result.relationTopicList;
-        _this.sameList = result.sameInfoList;
+      let result;
+      if(res.data.result){
+        result = res.data.result.data;
+        if(result){
+          _this.sameInfoNum = result.DetailReloadNum;
+          _this.datailInfo = result.validationRef;
+          _this.detailContent = result.detailInfoCnt;
+          _this.keywords = result.validationRef.kvKeyWord.split(",");
+          _this.specials = result.relationTopicList;
+          _this.sameList = result.sameInfoList;
+          _this.firstInfo = result.firstInfo;
+        }
       }else{
         console.log('没有返回值');
       }
     }).catch(err=>{
       console.log(err,'请求失败！');
     });
+    //标记已读
+    _this.markedRead();
   }
 }
 </script>
 <style lang="less">
-.clearfix:after {
+.clearfix_detail:after {
   display: block;
   clear: both;
   content: "";
   visibility: hidden;
   height: 0;
 }
-.clearfix {
-  //overflow: auto;
+.clearfix_detail {
   zoom: 1; /* For IE 6/7 (trigger hasLayout) */
 }
 .fl {
@@ -220,18 +335,17 @@ a:hover {
 	-moz-box-sizing:border-box; /* Firefox */
 	-webkit-box-sizing:border-box; /* Safari */
 }
-.wrap {
+.wrap_detail {
   background-color: #f2f2f2;
   width: 100%;
-  /*min-width: 980px;*/
   min-width: 1100px;
 }
-.center {
+.center_detail {
   margin: 75px auto 30px;
-  width: 90%;
+  width: 94%;
   min-height: 500px;
   position: relative;
-  max-width: 1600px;
+  //max-width: 1600px;
   font-family: Avenir,Helvetica,Arial,sans-serif;
 }
 .info_detail_left {
@@ -315,6 +429,7 @@ a:hover {
 
   }
   .info_datail_content {
+    padding-right: 30px;
     .pic_wrap {
       width: 100px;
       margin-top: 10px;
@@ -515,11 +630,9 @@ a:hover {
       }
     }
     .content_wrap {
-      width: 85%;
       line-height: 28px;
       font-size: 14px;
-      margin-top: 20px;
-      margin-right: 40px;
+      margin: 20px 0 0 140px;
       min-height: 510px;
       p {
         word-break: break-all;
@@ -744,14 +857,8 @@ a:hover {
           padding-top: 10px;
           box-sizing: border-box;
           a {
-            i {
-              display: inline-block;
-              width: 12px;
-              height: 12px;
-              margin-right: 4px;
-              background: url('../../assets/browse/simpic.png') no-repeat;
-              vertical-align: middle;
-            }
+            padding-left: 16px;
+            background: url('../../assets/browse/simpic.png') left center no-repeat;
           }
         }
         &:hover {
@@ -765,5 +872,4 @@ a:hover {
     border-bottom: 1px solid #ddd;
   }
 }
-
 </style>

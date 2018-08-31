@@ -1,0 +1,275 @@
+.clearfix_see:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+.clearfix_see {
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+a:hover {
+  text-decoration: none;
+}
+.border_box {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+.wary_see {
+  background-color: #f2f2f2;
+  width: 100%;
+  min-width: 980px;
+}
+.wary_see .center {
+  width: 94%;
+  margin: 0px auto 30px;
+  min-height: 500px;
+  min-width: 980px;
+  background-color: #fff;
+  border-radius: 6px;
+  position: relative;
+  padding: 30px;
+}
+.wary_see .center .see_built_list {
+  color: #333;
+  margin-bottom: 24px;
+  position: relative;
+}
+.wary_see .center .see_built_list .line {
+  width: 2px;
+  background: #e5e5e5;
+  position: absolute;
+  left: 140px;
+  top: 0;
+  bottom: 0;
+}
+.wary_see .center .see_built_list .start {
+  width: 16px;
+  height: 16px;
+ /* width: 60px;
+  height: 24px;*/
+  line-height: 24px;
+  border-radius: 8px;
+  color: #409eff;
+  text-align: center;
+  font-size: 12px;
+  background: #fff;
+  /*border: 1px solid #409eff;
+  margin-left: -30px;*/
+  border: 1px solid #e5e5e5;
+  margin-left: -8px;
+  position: absolute;
+  left: 140px;
+  /*top: -25px;*/
+  top: -18px;
+}
+.wary_see .center .see_built_list .end {
+  width: 16px;
+  height: 16px;
+  line-height: 24px;
+  border-radius: 8px;
+  color: #409eff;
+  text-align: center;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #409eff;
+  margin-left: -8px;
+  position: absolute;
+  left: 140px;
+  bottom: -18px;
+}
+.wary_see .center .see_built_list label{
+  display: inline-block;
+  width: 80px;
+  font-size: 14px;
+  color: #999;
+  text-align: right;
+  margin-right: 6px;
+}
+.wary_see .center .see_built_list span {
+  font-size: 14px;
+  color: #333;
+}
+.wary_see .center .see_built_list .p1 {
+  width: 80px;
+  font-size: 14px;
+  color: #999;
+  text-align: right;
+  float: left;
+}
+.wary_see .center .see_built_list .p2 {
+  width: 84%;
+  float: left;
+}
+.wary_see .center .see_built_list .p2 .imgs li {
+  width: 130px;
+  height: 110px;
+  background-color: #f2f2f5;
+  float: left;
+  margin: 0 12px 12px 0;
+  position: relative;
+  border-radius: 4px;
+}
+.wary_see .center .see_built_list .p2 .imgs li img {
+  display: inline-block;
+  width: 130px;
+  height: 110px;
+  border-radius: 4px;
+}
+.wary_see .center .see_built_list .p2 .fj li {
+  display: inline-block;
+  float: left;
+  padding: 0 10px;
+  margin-bottom: 5px;
+}
+.wary_see .center .see_built_list .p2 .fj li a {
+  color: #333;
+}
+.wary_see .center .see_built_list .p2 .enclosure {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #f6f6f6;
+  border-radius: 4px;
+  color: #333;
+  font-size: 14px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+.wary_see .center .see_built_list .desc {
+  font-size: 14px;
+  color: #333;
+  margin-left: 80px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.wary_see .center .see_built_list .desc .desc_left {
+  width: 70px;
+  float: left;
+  /*border-left: 2px solid #e5e5e5;*/
+  text-align: center;
+  margin-left: 60px;
+  height: 100%;
+  position: absolute;
+  top:0;
+}
+.wary_see .center .see_built_list .desc .desc_left p {
+  /*padding-top: 28px;*/
+  /*margin-left: -70px;*/
+  background: #fff;
+  padding: 6px 0;
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  -o-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+.wary_see .center .see_built_list .desc .desc_right {
+  background: #f6f6f6;
+  border-radius: 6px;
+  padding: 10px;
+  margin-left: 150px;
+}
+/*.wary_see .center .built_list .desc .desc_right p,*/
+.wary_see .center .see_built_list .desc .desc_right div {
+  line-height: 36px;
+}
+/*.wary_see .center .built_list .desc .desc_right p span,*/
+.wary_see .center .see_built_list .desc .desc_right div span {
+  display: inline-block;
+}
+.wary_see .center .see_built_list .desc .desc_right .light {
+  width: 100px;
+  text-align: center;
+  color: #999;   
+  float: left;
+}
+.wary_see .center .see_built_list .desc .desc_right .dark {
+  color: #333;
+  margin-left: 6px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+.wary_see .center .see_built_list .desc .desc_right div.p3 .light, 
+.wary_see .center .see_built_list .desc .desc_right div.p3 .dark {
+  color: #666;
+}
+.wary_see .center .see_built_list .desc .desc_right div.p3 .dark {
+  margin-left: 20px;
+}
+.wary_see .center .see_built_list .desc .desc_right .files {
+  margin-left: 78px;
+}
+.wary_see .center .see_built_list .desc .desc_right .files img {
+  display: inline-block;
+  width: 130px;
+  height: 110px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+.wary_see .center .see_built_list2 {
+  width: 50%;
+  float: left;
+}
+/*审核*/
+.wary_see .center .see_built_list.mar_top {
+  margin-top: 50px;
+}
+.wary_see .center .see_built_list label input[type="radio"]{
+  vertical-align: middle;
+}
+.wary_see .center .see_built_list .approval_content {
+  outline: none;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+  width: 80%;
+  height: 80px;
+  resize: none;
+  padding: 12px 18px;
+  vertical-align: top;
+}
+.wary_see .center .btn_box {
+  padding: 30px;
+  border-top: 1px solid #e6e6e6;
+}
+.wary_see .center .btn_box .btn {
+  outline: none;
+  width: 120px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  cursor: pointer;
+}
+.wary_see .center .btn_box .btn.save {
+  color: #fff;
+  background: #33a7ff;
+  border: 1px solid #33a7ff;
+}
+/*加载*/
+.masker {width:100%;height:100%;position: absolute;left: 0;top:0;z-index: 10;text-align: center;color: #fff;font-size: 14px;padding-top:0px;font-weight: bold;background: rgba(0,0,0,0.4);overflow: hidden;}
+.masker > div{position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);text-align: center;}
+.masker > div img{display:block;width: 80px;height: 51px;margin: 0 auto;}
+.masker > div p{height: 30px;line-height: 30px;}
+/*错误信息*/
+.wary_see .center .see_built_tips {
+  margin: 18px 0 18px 95px;
+}
+.wary_see .center .see_built_tips .see_built_error {
+  color: #ff3333;
+  font-size: 12px;
+}
+.wary_see .center .see_built_tips .see_built_error em {
+  font-style: normal;
+  margin-right: 10px;
+}

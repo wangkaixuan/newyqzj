@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--<input class="file" name="file" type="file"  @change="update"/>-->
+    <input type="file" accept="image/gif, image/jpeg, image/x-png, image/bmp" multiple="multiple"  @change="update"/>
   </div>
 </template>
 <script>
@@ -38,24 +38,25 @@
         param.append('approver','2813');
         param.append('approveOrg','');
         param.append('enclosures','');
-        console.log(param.get('file')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-        let config = {
-          headers:{
-             'ACCESSTOKEN': token,
-              'ZHXGUSERID': userid,
-              'Content-Type':'multipart/form-data'
-          }
-        }; //添加请求头
-        axios.post('https://m-beta-b.istarshine.com/yqzj/v1/reportInfo/addOrgEditReportInfo',param,config)
-          .then(response=>{
-            console.log(response.data);
-          })
+        console.log(param.get('files')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+        // let config = {
+        //   headers:{
+        //      'ACCESSTOKEN': token,
+        //       'ZHXGUSERID': userid,
+        //       'Content-Type':'multipart/form-data'
+        //   }
+        // }; //添加请求头
+        // axios.post('https://m-beta-b.istarshine.com/yqzj/v1/reportInfo/addOrgEditReportInfo',param,config)
+        //   .then(response=>{
+        //     console.log(response.data);
+        //   })
       }
     },
     computed:{
 
     },
     created(){
+        console.log(this.env);
 //        var _this = this;
 //      const token =  VueCookies.get('accessToken') || '';
 //      const userid =  VueCookies.g et('userid') || '';
@@ -91,15 +92,15 @@
 //      }).catch(err=>{
 //          console.log(err,'请求失败！');
 //      })
-      axios({
-        url:'/api/organizational/getOrganizationalManagementTree',
-        method:'get',//请求方式
-        //这里可以添加axios文档中的各种配置
-      }).then(function (res) {
-        console.log(res,'成功');
-      }).catch(function (err) {
-        console.log(err,'错误');
-      })
+//      axios({
+//        url:'/api/organizational/getOrganizationalManagementTree',
+//        method:'get',//请求方式
+//        //这里可以添加axios文档中的各种配置
+//      }).then(function (res) {
+//        console.log(res,'成功');
+//      }).catch(function (err) {
+//        console.log(err,'错误');
+//      })
     }
   }
 </script>

@@ -1,5 +1,4 @@
 import axios from 'axios';//引入axios
-import env from '../config/env'
 import store from '../store/index'
 
 export function fetch(options){

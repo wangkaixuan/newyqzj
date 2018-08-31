@@ -1,0 +1,34 @@
+.clearfix:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+.clearfix {
+  /*overflow: auto;*/
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+a:hover {
+  text-decoration: none;
+}
+.border_box {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+.wary_pub {
+	background-color: #f2f2f2;
+  width: 100%;
+  min-width: 980px;
+}
+.wary_pub .center {
+  width: 94%;
+  margin: 0px auto 30px;
+  min-height: 500px;
+  min-width: 980px;
+  /*max-width: 1600px;*/
+  border-radius: 6px;
+  background-color: #fff;
+  position: relative;
+}

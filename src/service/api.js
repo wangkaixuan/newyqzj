@@ -1,5 +1,5 @@
 import { fetch } from "../config/fetch"; //引用fetch.js
-import api from '../config/env'; //引用url.js
+import api from '../../config/env'; //引用url.js
 
 export function getNavData(id) {
   return fetch({
@@ -10,4 +10,7 @@ export function getNavData(id) {
       accountId:id
     }
   })
+}
+export function WindowLoc(url) {
+    window.location = api.apiUrl+url;
 }

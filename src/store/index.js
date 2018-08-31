@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import vuex from 'vuex'
 import VueCookies from 'vue-cookies'
-import env from '../config/env'
+import api from '../../config/env'; //引用url.js
 
 Vue.use(vuex);
 
-const logininfo = JSON.parse(VueCookies.get('LOGININFO'));
+const logininfo = JSON.parse(VueCookies.get('LOGININFO')) || [];
 
 const stores = new vuex.Store({
     state:{
@@ -17,7 +17,8 @@ const stores = new vuex.Store({
       'orgId':logininfo.orgId || '',                                           //机构ID
       'msUserId':logininfo.msUserId  || '',                                    //秘书ID
       'shareMsUserId':logininfo.shareMsUserId || '',                           //分享ID
-      'oldyqzjUrl':env.oldyqzjUrl                                             //跳转路径
+      'savedays':logininfo.savedays || '',                                     //数据保存条数
+      'oldyqzjUrl':api.oldyqzjUrl                                             //跳转路径
     }
 });
 export default stores

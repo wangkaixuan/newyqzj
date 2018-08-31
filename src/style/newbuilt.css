@@ -1,0 +1,296 @@
+.clearfix_new:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+.clearfix_new {
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+a:hover {
+  text-decoration: none;
+}
+.border_box {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+.wary_buile {
+	background-color: #f2f2f2;
+  width: 100%;
+  min-width: 980px;
+}
+.wary_buile .center {
+  width: 94%;
+  margin: 0px auto 30px;
+  min-height: 500px;
+  min-width: 980px;
+  border-radius: 6px;
+  /*background-color: #fff;*/
+  position: relative;
+  /*padding: 30px;*/
+}
+.wary_buile .center .new_built_title {
+  font-size: 16px;
+  color: #333;
+  padding: 0px 30px;
+  height: 64px;
+  line-height: 64px;
+  border-radius: 6px;
+  background: #fff;
+  position: relative;
+}
+.wary_buile .center .new_built_title a {
+  color: #333;
+}
+.wary_buile .center .new_built_title .goback {
+  font-size: 14px;
+  color: #33a7ff;
+  position: absolute;
+  right: 30px;
+}
+.wary_buile .center .new_built_content {
+  padding: 18px 0 0px;
+  margin-top: 12px;
+  border-radius: 6px;
+  background: #fff;
+}
+.wary_buile .center .new_built_content .new_built_list {
+  padding: 0 30px;
+  margin-bottom: 18px;
+  font-size: 0;
+}
+.wary_buile .center .new_built_content .new_built_list label {
+  display: inline-block;
+  width: 80px;
+  font-size: 14px;
+  color: #999;
+  text-align: right;
+  margin-right: 30px;
+}
+.wary_buile .center .new_built_content .new_built_list input,
+.wary_buile .center .new_built_content .new_built_list select,
+.wary_buile .center .new_built_content .new_built_list textarea {
+  outline: none;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 0 18px;
+  color: #333;
+  font-size: 14px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.wary_buile .center .new_built_content .new_built_list input:focus,
+.wary_buile .center .new_built_content .new_built_list select:focus,
+.wary_buile .center .new_built_content .new_built_list textarea:focus {
+  border: 1px solid #33a7ff;
+  border-radius: 6px;
+}
+.wary_buile .center .new_built_content .new_built_list input {
+  line-height: 40px;
+}
+.wary_buile .center .new_built_content .new_built_list select {
+  height: 42px;
+  line-height: 42px;
+  width: 240px;
+}
+.wary_buile .center .new_built_content .new_built_list textarea {
+  height: 80px;
+  resize: none;
+  padding: 12px 18px;
+  vertical-align: middle;
+}
+.wary_buile .center .new_built_content .new_built_list .title,
+.wary_buile .center .new_built_content .new_built_list .url,
+.wary_buile .center .new_built_content .new_built_list .txt_area,
+.wary_buile .center .new_built_content .new_built_list .suggestions {
+  width: 720px;
+}
+.wary_buile .center .new_built_content .new_built_list .net_source {
+  width: 480px;
+}
+.wary_buile .center .new_built_content .new_built_list .time {
+  width: 240px;
+}
+.wary_buile .center .new_built_content .new_built_list .choices {
+  position: relative;
+  width: 50px;
+}
+.wary_buile .center .new_built_content .new_built_list .choices input {
+  position: absolute;
+  top: 2px;
+  left: 0;
+}
+.wary_buile .center .new_built_content .new_built_list .quick_add {
+  display: inline-block;
+  font-size: 14px;
+  color: #33a7ff;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.wary_buile .center .new_built_content .new_built_list .add_icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  color: #33a7ff;
+  margin-right: 12px;
+  cursor: pointer;
+  background: url('../assets/workbench/add_icon.png') no-repeat;
+  vertical-align: top;
+  vertical-align: top;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.wary_buile .center .new_built_content .new_built_list .enclosure {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #f6f6f6;
+  border-radius: 4px;
+  color: #333;
+  font-size: 14px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+.wary_buile .center .new_built_content .new_built_list .enclosure .close {
+  color: #999999;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.wary_buile .center .new_built_content .new_built_list .pos_left {
+  display: inline-block;
+  width: 140px;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+}
+.wary_buile .center .new_built_content .new_built_list .show_options {
+  width: 70%;
+  float: left;
+}
+.wary_buile .center .built_btn_box {
+  padding: 30px;
+  border-top: 1px solid #e6e6e6;
+}
+.wary_buile .center .built_btn_box .btn {
+  outline: none;
+  width: 120px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  cursor: pointer;
+}
+.wary_buile .center .built_btn_box .built_submit {
+  color: #fff;
+  background: #33a7ff;
+  border: 1px solid #33a7ff;
+}
+.wary_buile .center .built_btn_box .built_cancle {
+  color: #666666;
+  background: #ffffff;
+  border: 1px solid #bbbbbb;
+  margin-left: 20px;
+}
+
+/*错误提示*/
+.hide {
+  display: none;
+}
+.wary_buile .center .edit_tips {
+  margin: 18px 0 18px 140px;
+  /*display: none;*/
+}
+.wary_buile .center .error {
+  color: #ff3333;
+  font-size: 12px;
+}
+.wary_buile .center .error em {
+  font-style: normal;
+  margin-right: 10px;
+ }
+.wary_buile .center .new_built_content .new_built_list .wkx_tit{display: inline-block;width: 80px;font-size: 14px;color: #999;text-align: right;margin-right: 30px;float:left;}
+.wary_buile .center .new_built_content .new_built_list .img_warys{float: left;width: 60%;}
+.wary_buile .center .new_built_content .new_built_list .video_img{width: 130px;height: 110px;background-color: #f2f2f5;float: left;border-radius: 4px;margin-right: 12px;}
+.wary_buile .center .new_built_content .new_built_list .video_img a{display:inline-block;padding: 0 10px 0 10px; white-space: nowrap; border-radius: 2px;height: 24px; line-height: 25px; text-decoration: none; font-size: 12px; min-width: 40px;text-align: center;outline: none;border:1px solid #d9d9d9;position:relative;overflow: hidden;background-color: #fff;margin: 43px 0 0 30px;}
+.wary_buile .center .new_built_content .new_built_list .video_img a em{vertical-align: middle;color: #fa7d3c!important;white-space: nowrap;font-size: 12px;font-weight: 400;}
+.wary_buile .center .new_built_content .new_built_list .video_img a input[type="file"]{position:absolute;bottom:0;right:0;filter:alpha(opacity=0);-moz-opacity:0;cursor:pointer;width:1000px;height:1000px;font-size:100px;border: none;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs{width: 130px;height: 110px;background-color: #f2f2f5;float: left;margin: 0 12px 12px 0;position:relative;border-radius: 4px;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs i{color: #fff;display: block;font-size: 14px;position: absolute;top:4px;right: 4px;cursor: pointer;width: 24px;
+    height: 24px;background: rgba(0,0,0,.5);border-radius: 12px;text-align: center;line-height: 24px;font-weight: bold;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs img{width: 130px;height: 110px;border-radius: 4px;}
+.wary_buile .center .new_built_content .new_built_list .add_icon input[type="file"]{position:absolute;bottom:-5px;right:-5px;filter:alpha(opacity=0);-moz-opacity:0;cursor:pointer;width:1000px;height:1000px;font-size:100px;}
+/*快捷添加*/
+.add_built_diag .el-dialog__body .el-checkbox-group .el-checkbox {
+  margin-bottom: 10px;
+}
+/*批示人*/
+.instruct_diag .el-dialog__body {
+  padding: 0;
+}
+.instruct_diag .el-dialog__footer {
+  border-top: 1px solid #e6e6e6;
+  padding-top: 20px;
+}
+.instruct_diag .el-dialog__header {
+  height: auto;
+  border-bottom: none;
+}
+.instructions_wary_box {
+
+}
+.instructions_wary_box .instructions_title_box {
+  height: 50px;
+  line-height: 50px;
+  margin-top: -30px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0 30px;
+}
+.instructions_wary_box .instructions_title_box span {
+  display: inline-block;
+  font-weight: initial;
+  width: 80px;
+  text-align: center;
+  color: #999999;
+  cursor: pointer;
+}
+.instructions_wary_box .instructions_title_box span.hover {
+  border-bottom: 1px solid #000;
+}
+.instructions_wary_box .instructions_are_content {
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px 20px 0;
+}
+.instructions_wary_box .instructions_are_content .myDw {}
+.instructions_wary_box .instructions_are_content .myDw li {
+  padding: 10px 0;
+  display: block;
+}
+.instructions_wary_box .instructions_are_content .myOrg label {
+  display: block;
+  margin-left: 0;
+  margin-bottom: 10px;
+}
+.instructions_wary_box .instructions_are_content .ztree li a {
+  height: 30px;
+}
+/*加载*/
+.masker {width:100%;height:100%;position: absolute;left: 0;top:0;z-index: 10;text-align: center;color: #fff;font-size: 14px;padding-top:0px;font-weight: bold;background: rgba(0,0,0,0.4);overflow: hidden;}
+.masker > div{position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);text-align: center;}
+.masker > div img{display:block;width: 80px;height: 51px;margin: 0 auto;}
+.masker > div p{height: 30px;line-height: 30px;}
+/*处理日期插件*/
+.wary_buile .center .new_built_content .new_built_list .el-input--prefix .el-input__inner {
+  padding-left: 30px;
+}
+.wary_buile .center .new_built_content .new_built_list .el-input--suffix .el-input__inner {
+  padding-right: 30px;
+}

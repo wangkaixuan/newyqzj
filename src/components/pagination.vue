@@ -8,14 +8,16 @@
         <a v-for="page in showPageBtn" :class="{hover:page==current}" href="javascript:;" v-if="page" @click="goPage(page)">{{page}}</a><a href="javascript:;" class="more" v-else>···</a><a href="javascript:;" @click="nextPage()" aria-label="Next" class="next">
         <span aria-hidden="true">&gt;</span></a> <span class="total_num">共{{pages}}页</span>
       </div>
-      <div class="jump_page"><input type="text" name="page" value="1"/><span class="sure_btn" @click="skipPage()">确定</span></div>
+      <div class="jump_page"><input type="text" name="page" v-model="jumpPage"/><span class="sure_btn" @click="skipPage()">确定</span></div>
     </div>
   </nav>
 </template>
 <script>
   export default {
     data(){
-        return {}
+        return {
+          jumpPage: '' 
+        }
     },
     props:{pages: {type: Number, default: 1}, current: {type: Number, default: 1}},
     computed: {
@@ -59,7 +61,7 @@
           this.$emit('navpage', index)
         }
       },skipPage(){
-        var index = $('[name=page]').val();
+        var index = parseInt(this.jumpPage);
         if (index == this.current) {
           return false;
         }
@@ -70,10 +72,11 @@
         };
         if(index > this.pages){
           index = this.pages
-          $('[name=page]').val(index);
+          this.jumpPage = index;
         }
         if(index){
           this.$emit('navpage', index);
+          this.jumpPage = ''; //跳转之后清空
         }
       }
     }

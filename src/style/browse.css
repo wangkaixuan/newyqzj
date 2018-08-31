@@ -1,4 +1,4 @@
-.clearfix:after {
+.clearfix_browse:after {
   display: block;
   clear: both;
   content: "";
@@ -6,8 +6,7 @@
   height: 0;
 }
 
-.clearfix {
-  overflow: auto;
+.clearfix_browse {
   zoom: 1; /* For IE 6/7 (trigger hasLayout) */
 }
 a:hover {
@@ -19,12 +18,12 @@ a:hover {
   /*min-width: 980px;*/
   min-width: 1100px;
 }
-.center {
-  margin: 75px auto 30px;
-  width: 90%;
+.wrap .center {
+  margin: 15px auto 30px;
+  width: 94%;
   min-height: 500px;
   position: relative;
-  max-width: 1600px;
+  /*max-width: 1600px;*/
 }
 .center .center_content {
   font-family: Avenir,Helvetica,Arial,sans-serif;
@@ -135,7 +134,7 @@ a:hover {
   color: #626262;
   cursor: pointer;
 }
-.center .center_content .sx_top .top_three ul li.hover, 
+.center .center_content .sx_top .top_three ul li.hover,
 .center .center_content .sx_top .top_three ul li:hover {
   background: #dbdbdb;
   color: #333;
@@ -255,7 +254,7 @@ a:hover {
     background-color: #f6f6f6;
 }
 /*弹窗的选项*/
-.hide: {
+.hide {
   display: none;
 }
 .sx_wrap .sx_content .sx_pub {
@@ -290,6 +289,10 @@ a:hover {
   padding: 0 10px;
   color: #666;
   cursor: pointer;
+}
+.sx_wrap .sx_content .sx_pub ul li span.el-range-separator{
+  padding: 0;
+  height: auto;
 }
 .sx_wrap .sx_content .sx_pub ul li span.hover {
   color: #38a9e1;
@@ -339,7 +342,10 @@ a:hover {
   height: 36px;
   overflow: hidden;
   text-align: center;
-  margin-top: 34px;
+  margin-top: 16px;
+}
+.sx_wrap .sx_content .mult_pub .btn_wrap {
+  display: inline-block;
 }
 .sx_wrap .sx_content .sx_pub .btn_wrap .btn {
   display: inline-block;
@@ -510,7 +516,7 @@ a:hover {
 .center .center_content .content_list .message_list ul li .new_data .title_text .title {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 .center .center_content .content_list .message_list ul li .new_data .title_text .title .icon {
   width: 18px;
@@ -534,6 +540,7 @@ a:hover {
   font-weight: 700;
 
 }
+.center .center_content .content_list .message_list ul li .new_data .title_text .title a.visited,
 .center .center_content .content_list .message_list ul li .new_data .title_text .title a:visited {
   color: #b3b3b3;
 }
@@ -563,7 +570,6 @@ a:hover {
   font-size: 12px;
   float: right;
 }
-.center .center_content .content_list .message_list ul li .new_data .pic .yiyue,
 .center .center_content .content_list .message_list ul li .new_data .pic .yiyujing,
 .center .center_content .content_list .message_list ul li .new_data .pic .tuisong {
   display: none;
@@ -601,7 +607,7 @@ a:hover {
   margin-right: 20px;
   color: #888;
   font-size: 12px;
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 .center .center_content .content_list .message_list ul li .new_data .url_wrap .address em.weibo_photo {
   margin-right: 2px;
@@ -631,6 +637,9 @@ a:hover {
 }
 .center .center_content .content_list .message_list ul li .new_data .url_wrap .address em.keywords i {
   color:#ff0000;
+}
+.center .center_content .content_list .message_list ul li .new_data .url_wrap .address em.tags {
+  display: none;
 }
 .center .center_content .content_list .message_list ul li .new_data .url_wrap .address em.tags i {
   padding: 4px 10px;
@@ -664,7 +673,7 @@ a:hover {
 }
 .center .center_content .content_list .message_list ul li ul.pic_list li.li6 {
   background-position: -152px 0;
-  margin-right: 2px;  
+  margin-right: 2px;
 }
 .center .center_content .content_list .message_list ul li ul.pic_list li.li5 {
   background-position: -122px 0;
@@ -679,7 +688,7 @@ a:hover {
   box-shadow: 0 0 8px #ccc;
   top: 20px;
   left: -14px;
-  display: none; 
+  display: none;
   background-color: #fff;
   z-index: 12;
 }
@@ -732,10 +741,15 @@ a:hover {
   margin-top: 5px;
   margin-bottom: 6px;
 }
+.center .center_content .content_list .message_list ul li .photo img {
+  display: block;
+  width: 145px;
+  height: 107px;
+}
 .center .center_content .content_list .message_list ul li .content_right {
   height: auto;
   padding-right: 10px;
-  margin-left: 180px;
+  margin-left: 188px;
 }
 .center .center_content .content_list .message_list ul li .content_right .top_message {
   overflow: hidden;
@@ -874,13 +888,13 @@ a:hover {
   float: left;
   display: block;
 }
-.comold_jump_browse .jump_wrap .prev, 
+.comold_jump_browse .jump_wrap .prev,
 .comold_jump_browse .jump_wrap .next {
   width: 50px;
   float: left;
   display: block;
 }
-.comold_jump_browse .jump_wrap .first, 
+.comold_jump_browse .jump_wrap .first,
 .comold_jump_browse .jump_wrap .end {
   width: 30px;
   float: left;

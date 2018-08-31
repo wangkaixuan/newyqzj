@@ -1,5 +1,5 @@
 import { fetch } from "../config/fetch"; //引用fetch.js
-import api from '../config/env'; //引用url.js
+import api from '../../config/env'; //引用url.js
 
 //获得组织机构树数据
 export function getOrganizationalManagementTree(groupId) {
