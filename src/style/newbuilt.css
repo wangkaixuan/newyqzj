@@ -19,24 +19,20 @@ a:hover {
 .wary_buile {
 	background-color: #f2f2f2;
   width: 100%;
-  min-width: 980px;
+  min-width: 1100px;
 }
 .wary_buile .center {
   width: 94%;
-  margin: 0px auto 30px;
-  min-height: 500px;
-  min-width: 980px;
+  margin: 80px auto 30px;
   border-radius: 6px;
-  /*background-color: #fff;*/
   position: relative;
-  /*padding: 30px;*/
 }
 .wary_buile .center .new_built_title {
   font-size: 16px;
   color: #333;
   padding: 0px 30px;
-  height: 64px;
-  line-height: 64px;
+  height: 50px;
+  line-height: 50px;
   border-radius: 6px;
   background: #fff;
   position: relative;
@@ -51,10 +47,18 @@ a:hover {
   right: 30px;
 }
 .wary_buile .center .new_built_content {
-  padding: 18px 0 0px;
+  padding: 0px;
   margin-top: 12px;
   border-radius: 6px;
   background: #fff;
+}
+.wary_buile .center .new_built_content .new_built_tit {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px 0;
+  padding-left: 30px;
+  margin-bottom: 18px;
+  color:#333;
+  font-size: 16px;
 }
 .wary_buile .center .new_built_content .new_built_list {
   padding: 0 30px;
@@ -68,6 +72,11 @@ a:hover {
   color: #999;
   text-align: right;
   margin-right: 30px;
+}
+.wary_buile .center .new_built_content .new_built_list label .start {
+  color: #ff3333;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 .wary_buile .center .new_built_content .new_built_list input,
 .wary_buile .center .new_built_content .new_built_list select,
@@ -96,8 +105,9 @@ a:hover {
   line-height: 42px;
   width: 240px;
 }
-.wary_buile .center .new_built_content .new_built_list textarea {
-  height: 80px;
+.wary_buile .center .new_built_content .new_built_list textarea.txt_area,
+.wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+  height: 120px;
   resize: none;
   padding: 12px 18px;
   vertical-align: middle;
@@ -105,18 +115,25 @@ a:hover {
 .wary_buile .center .new_built_content .new_built_list .title,
 .wary_buile .center .new_built_content .new_built_list .url,
 .wary_buile .center .new_built_content .new_built_list .txt_area,
-.wary_buile .center .new_built_content .new_built_list .suggestions {
-  width: 720px;
-}
+.wary_buile .center .new_built_content .new_built_list .suggestions,
 .wary_buile .center .new_built_content .new_built_list .net_source {
-  width: 480px;
+  min-width: 378px;
+  width: 76%;
 }
+.wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+  min-width: 308px;
+  width: 76%;
+}
+/*.wary_buile .center .new_built_content .new_built_list .net_source {
+  width: 480px;
+}*/
 .wary_buile .center .new_built_content .new_built_list .time {
   width: 240px;
 }
 .wary_buile .center .new_built_content .new_built_list .choices {
   position: relative;
   width: 50px;
+  color: #333;
 }
 .wary_buile .center .new_built_content .new_built_list .choices input {
   position: absolute;
@@ -138,7 +155,6 @@ a:hover {
   margin-right: 12px;
   cursor: pointer;
   background: url('../assets/workbench/add_icon.png') no-repeat;
-  vertical-align: top;
   vertical-align: top;
   margin-top: 8px;
   position: relative;
@@ -215,12 +231,27 @@ a:hover {
 .wary_buile .center .error em {
   font-style: normal;
   margin-right: 10px;
+  vertical-align: middle;
  }
 .wary_buile .center .new_built_content .new_built_list .wkx_tit{display: inline-block;width: 80px;font-size: 14px;color: #999;text-align: right;margin-right: 30px;float:left;}
-.wary_buile .center .new_built_content .new_built_list .img_warys{float: left;width: 60%;}
-.wary_buile .center .new_built_content .new_built_list .video_img{width: 130px;height: 110px;background-color: #f2f2f5;float: left;border-radius: 4px;margin-right: 12px;}
-.wary_buile .center .new_built_content .new_built_list .video_img a{display:inline-block;padding: 0 10px 0 10px; white-space: nowrap; border-radius: 2px;height: 24px; line-height: 25px; text-decoration: none; font-size: 12px; min-width: 40px;text-align: center;outline: none;border:1px solid #d9d9d9;position:relative;overflow: hidden;background-color: #fff;margin: 43px 0 0 30px;}
-.wary_buile .center .new_built_content .new_built_list .video_img a em{vertical-align: middle;color: #fa7d3c!important;white-space: nowrap;font-size: 12px;font-weight: 400;}
+.wary_buile .center .new_built_content .new_built_list .img_warys{float: left;width: 84%;min-width: 324px;}
+.wary_buile .center .new_built_content .new_built_list .video_img{
+  width: 130px;height: 110px;
+  /*background-color: #f2f2f5;*/
+  float: left;
+  border-radius: 4px;
+  margin-right: 12px;
+  border: 1px dashed #d9d9d9;
+}
+.wary_buile .center .new_built_content .new_built_list .video_img a{display:inline-block; white-space: nowrap;
+ /*border-radius: 2px;height: 24px; line-height: 25px; */text-decoration: none; font-size: 12px;
+  min-width: 40px;text-align: center;outline: none;
+  /*border:1px solid #d9d9d9;*/
+  position:relative;overflow: hidden;background-color: #fff;
+  width: 130px;height: 110px;padding: 0;margin: 0;
+  background: url('../assets/workbench/add_icon.png') no-repeat center;
+}
+.wary_buile .center .new_built_content .new_built_list .video_img a em{vertical-align: middle;color: #fa7d3c!important;white-space: nowrap;font-size: 12px;font-weight: 400;display: none;}
 .wary_buile .center .new_built_content .new_built_list .video_img a input[type="file"]{position:absolute;bottom:0;right:0;filter:alpha(opacity=0);-moz-opacity:0;cursor:pointer;width:1000px;height:1000px;font-size:100px;border: none;}
 .wary_buile .center .new_built_content .new_built_list .pub_imgs{width: 130px;height: 110px;background-color: #f2f2f5;float: left;margin: 0 12px 12px 0;position:relative;border-radius: 4px;}
 .wary_buile .center .new_built_content .new_built_list .pub_imgs i{color: #fff;display: block;font-size: 14px;position: absolute;top:4px;right: 4px;cursor: pointer;width: 24px;
@@ -293,4 +324,74 @@ a:hover {
 }
 .wary_buile .center .new_built_content .new_built_list .el-input--suffix .el-input__inner {
   padding-right: 30px;
+}
+.wary_buile .center .new_built_content .new_built_left {
+  float: left;
+  width: 50%;
+}
+.wary_buile .center .new_built_content .new_built_right {
+  float: right;
+  width: 50%;
+  margin-bottom: 20px;
+  border-left: 1px solid #e5e5e5;
+}
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+  .wary_buile .center .new_built_content .new_built_list .title,
+  .wary_buile .center .new_built_content .new_built_list .url,
+  .wary_buile .center .new_built_content .new_built_list .txt_area,
+  .wary_buile .center .new_built_content .new_built_list .suggestions,
+  .wary_buile .center .new_built_content .new_built_list .net_source {
+    width: 84%;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+    width: 62%;
+  }
+}
+@media screen and (min-width: 1281px) and (max-width: 1500px) {
+  .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+    width: 66%;
+  }
+}
+@media screen and (min-width: 1501px) and (max-width: 1720px) {
+  .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+    width: 70%;
+  }
+}
+@media screen and (min-width: 1721px) and (max-width: 1920px) {
+  .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+    width: 76%;
+  }
+}
+/*图片*/
+@media screen and (max-width: 1400px) {
+  .wary_buile .center .new_built_content .new_built_list .img_warys {
+    width: 66%;
+  }
+}
+@media screen and (min-width: 1401px) and (max-width: 1600px) {
+  .wary_buile .center .new_built_content .new_built_list .img_warys {
+    width: 76%;
+  }
+}
+@media screen and (min-width: 1601px) and (max-width: 1920px) {
+  .wary_buile .center .new_built_content .new_built_list .img_warys {
+    width: 84%;
+  }
+}
+/*处置建议*/
+@media screen and (max-width: 1200px) {
+  .wary_buile .center .new_built_content .new_built_list .title,
+  .wary_buile .center .new_built_content .new_built_list .url,
+  .wary_buile .center .new_built_content .new_built_list .txt_area,
+  .wary_buile .center .new_built_content .new_built_list .suggestions,
+  .wary_buile .center .new_built_content .new_built_list .net_source {
+    min-width: 308px;
+    width: auto;
+  }
+  .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
+    min-width: auto;
+    width: 58%;
+  }
 }

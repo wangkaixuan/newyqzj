@@ -1,0 +1,192 @@
+.clearfix_logo:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+.clearfix_logo {
+  /*overflow: auto;*/
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+a:hover {
+  text-decoration: none;
+}
+.border_box {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+body {
+  background: #fff;
+}
+.update_logo_box {
+	background: #fff;
+  width: 100%;
+}
+.update_logo_box .center {
+  width: 94%;
+  margin: 80px auto 30px;
+  border-radius: 6px;
+  position: relative;
+}
+.update_logo_box .center .logo_right {
+  margin-left: 30px;
+  width: 76%;
+}
+
+.update_logo_box .center .logo_right .logo_top_box {
+  /*width: 84px;*/
+  height: 84px;
+  /*border-radius: 4px;
+  border: 1px dashed #33a7ff;*/
+}
+.update_logo_box .center .logo_right .logo_top_box a {
+  display: inline-block;
+  width: 84px;
+  height: 84px;
+  overflow: hidden;
+  background: url('../assets/set/gray_icon.png') no-repeat center center;
+  background-size: 84px 84px;
+  position: relative;
+}
+.update_logo_box .center .logo_right .logo_top_box a:hover {
+  background: url('../assets/set/gray_hover_icon.png') no-repeat center center;
+  background-size: 84px 84px;
+}
+.update_logo_box .center .logo_right .logo_top_box a form input[type="file"] {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  cursor: pointer;
+  width: 1000px;
+  height: 1000px;
+  font-size: 100px;
+  border: none;
+}
+.update_logo_box .center .logo_right .logo_top_box .tips {
+  display: inline-block;
+  color: #999;
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: top;
+  margin: 24px 0 0 16px;
+}
+.update_logo_box .center .logo_right .logo_center_box {
+  margin: 16px 0 0px;
+  width: 80%;
+}
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box {
+  width: 84px;
+  float: left;
+  margin: 0 30px 30px 0;
+  cursor: pointer;
+}
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box .sub_img {
+  width: 84px;
+  height: 84px;
+  /*border-radius: 4px;*/
+  border: 1px solid #e6e6e6; 
+  position: relative;
+}
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box p {
+  text-align: center;
+  color: #333;
+  margin-top: 10px;
+}
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box.hover .sub_img, 
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box:hover .sub_img{
+  border: 1px solid #33a7ff;
+} 
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box.hover p,
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box:hover p {
+  color: #33a7ff;
+}
+/*.update_logo_box .center .logo_right .logo_center_box .sub_img_box .sub_img.hover,
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box .sub_img:hover {
+  
+}*/
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box .sub_img img {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  padding: 18px;
+}
+.update_logo_box .center .logo_right .logo_center_box .sub_img_box .sub_img i {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url('../assets/set/delimg.png') no-repeat center center;
+  background-size: 16px 16px;
+  cursor: pointer;
+  position: absolute; 
+  top: -6px;
+  right: -6px;
+}
+.update_logo_box .center .logo_right .logo_btom_box {
+  width: 640px;
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box {
+  margin-top: 30px;
+  font-size: 0px;
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box button {
+  border: 0;
+  outline: 0;
+  color: #666;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_btn {
+  display: inline-block;
+  width: 80px;
+  height: 36px;
+  border-radius: 4px;  
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_sure {
+  color: #fff;
+  background: #33a7ff;
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_cancle {
+  margin: 0 24px 0 16px;
+  border: 1px solid #ccc;
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_reset {
+
+}
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_cancle:hover,
+.update_logo_box .center .logo_right .logo_btom_box .logo_btn_box .logo_reset {
+  color: #333;
+}
+.update_logo_box .logo_right .logo_diag {
+  position: fixed;
+  top: 0;
+}
+.update_logo_box .logo_right .logo_diag .el-dialog__header {
+  padding: 0;
+}
+.update_logo_box .logo_right .logo_diag .el-dialog__body {
+  padding: 0;
+  height: 64px;
+}
+.update_logo_box .logo_right .logo_diag .el-dialog__footer {
+  padding: 0;
+  text-align: center;
+  position: relative;
+}
+.update_logo_box .logo_right .logo_diag .el-dialog__footer .el-button--primary {
+  padding: 0;
+  width: 80px;
+  height: 36px;
+  position: absolute;
+  top: 16px;
+}

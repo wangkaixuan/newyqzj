@@ -455,7 +455,6 @@ export default {
 .wrap {
   background-color: #f2f2f2;
   width: 100%;
-  min-width: 980px;
 }
 .center {
   margin: 75px auto 30px;
@@ -509,7 +508,7 @@ export default {
   background-color: #fff;
   overflow: auto;
   min-height: 800px;
-  
+
   .ztree {
     *{
       font-size: 14px;

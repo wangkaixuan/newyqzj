@@ -355,9 +355,7 @@ export default{
                     var recurFuncParent = (data,list) => {
 	                        data.forEach((i)=>{
 	                        	if(!isFindRootBool) {
-	                        		console.log(i.id+"，"+parentId);
 		                        	if(i.id == parentId && parentId>0) {
-		                        		console.log("有情况");
 		                        		parentId = i.parentId;
 		                        		i.ckbool = m.ckbool;
 		                        		// 重新查找
@@ -417,7 +415,6 @@ export default{
                 },
                 // 新增节点
 			    addNode(nodeModel){
-			    	console.log(nodeModel);
 			    	return false;
 			        if(nodeModel) {
 			          var _nid = +new Date();
@@ -492,7 +489,6 @@ export default{
 			       }
 			    },
 	            addGroup:function (m) {
-				    console.log("孙子-------------------------------");
 	            	this.$emit('addGroup',m)
 	            }
         	},

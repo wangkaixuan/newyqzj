@@ -40,7 +40,7 @@ export function getYqllCondition(data) {
 //舆情浏览列表——删除
 export function delBrowseList(data) {
   return fetch({
-    url:api.apiUrl+'/wkTValidationRef/delRefByUrlOrHash',
+    url:api.apiUrl+'/wkTValidationRef/delRefByUrlOrHash?msUserId='+data.msUserId+'&shareMsUserId='+data.shareMsUserId,
     method:'post',
     data: data
   })
@@ -48,8 +48,32 @@ export function delBrowseList(data) {
 //舆情浏览列表-标记已读
 export function markRead(data) {
   return fetch({
-    url:api.apiUrl+'/wkTValidationRef/updateRefByUrlOrHash',
+    url:api.apiUrl+'/wkTValidationRef/updateRefByUrlOrHash?msUserId='+data.msUserId+'&shareMsUserId='+data.shareMsUserId,
     method:'post',
     data: data
+  })
+}
+//舆情浏览列表-操作条——标记倾向性
+export function markTendency(data) {
+  return fetch({
+    url:api.apiUrl+'/PublicSentimentBrowse/updateYqllOri?msUserId='+data.msUserId+'&shareMsUserId='+data.shareMsUserId+'&simhash='+data.simhash+'&orientation='+data.orientation,
+    method:'post',
+    data: data
+  })
+}
+//获得舆情浏览保存筛选条件
+export function getSearchCondition(data) {
+  return fetch({
+    url:api.apiUrl+'/wkTValidationRef/getSearchCondition',
+    method:'get',
+    params:data
+  })
+}
+//保存筛选条件
+export function saveSearchCondition(data){
+  return fetch({
+    url:api.apiUrl+'/wkTValidationRef/saveSearchCondition',
+    method:'post',
+    data:data
   })
 }

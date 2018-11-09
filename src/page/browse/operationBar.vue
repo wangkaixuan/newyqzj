@@ -1,169 +1,289 @@
-
 <template>
-	<div class="operation_bar">
-		<div class="operation_con">
-			<label><input type="checkbox" name="checkall">全选</label>
-			<button>批量导出</button>
-			<button>全部导出</button>
-			<button>加简报</button>
-        	<button>加关注</button>
-        	<button>加预警</button>
-        	<div class="button" @click="modifyTendency">倾向性
-	            <div class="li_seccon li_seccon1" v-show="tendencyData.showTendency">
-	                <dl>
-	                    <dd v-for="item,i in tendencyData.vals"><a href="javascript:void(0)" @click.stop="updateTendency(item)">{{item.text}}</a></dd>
-	                </dl>
-	            </div>
-	        </div>
-	        <button>标已读</button>
-	        <button pagesize="10" class="delete"><span class="bot_text">删除</span></button>
-	        <!-- 每页条数设置 -->
-	        <div class="sort">
-	            <!-- <label></label> -->
-	            <span @click="modifyPage">每页{{pageDate.selectPage}}<i class="pagesj"></i></span>
-	            <div class="li_seccon li_seccon2" v-show="pageDate.showPage">
-		            <dl>
-		                <dd v-for="item,i in pageDate.vals"><a href="javascript:void(0)" v-bind:class="{hover: item.isActive}" @click="choosePage(item)">{{item.text}}</a></dd>
-		            </dl>
-		        </div>
-        	</div>
-        	<!-- 按时间或重要度排序 -->
-        	<div class="sort">
-                <label></label> 
-                <span @click="updateTime">{{timesData.selectTxt}}<i></i></span>
-                <div class="li_seccon li_seccon3" v-show="timesData.showTime">
-	                <dl>
-	                    <dd v-for="item,i in timesData.vals"><a href="javascript:void(0)" v-bind:class="{hover: item.isActive}" @click="updateOpts(item)">{{item.text}}</a></dd>
-	                </dl>
-            	</div>
-            </div>
-            <p>   
-                <label>
-                	<input type="checkbox" value="hide"/>
-	                <span>隐藏摘要</span>
-	            </label>
-            	<label>
-                    <input type="checkbox" value="hide" importance="1"/> <span>只看重要</span>
-                </label>        
-            </p>
-		</div>
-	</div>
+  <div class="operation_bar" v-bind:style="styleObject"> <!-- {position: pos} -->
+    <div class="operation_con">
+      <label><input type="checkbox" name="checkall" v-model='isCheck' :is-check="isCheck" @click="selectAll">全选</label>
+      <button @click="alertInfo">批量导出</button>
+      <button @click="alertInfo">全部导出</button>
+      <button @click="alertInfo">加简报</button>
+      <button @click="alertInfo">加关注</button>
+      <button @click="alertInfo">加预警</button>
+      <div class="button" @click.stop="modifyTendency" v-if="hasPower.msUserId == hasPower.shareMsUserId">倾向性
+        <div class="li_seccon li_seccon1" v-show="tendencyData.showTendency">
+          <dl>
+            <dd v-for="item,i in tendencyData.vals"><a href="javascript:void(0)" @click.stop="updateTendency(item)">{{item.text}}</a>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <button @click.stop="markReadAll" v-if="hasPower.msUserId == hasPower.shareMsUserId">标已读</button>
+      <button class="delete" @click.stop="deleteAll" v-if="hasPower.msUserId == hasPower.shareMsUserId"><span
+        class="bot_text">删除</span></button>
+      <!-- 每页条数设置 -->
+      <div class="sort">
+        <!-- <label></label> -->
+        <span @click.stop="modifyPage">每页{{pageDate.selectPage}}<i class="pagesj"></i></span>
+        <div class="li_seccon li_seccon2" v-show="pageDate.showPage">
+          <dl>
+            <dd v-for="item,i in pageDate.vals"><a href="javascript:void(0)" v-bind:class="{hover: item.isActive}" @click="choosePage(item)">{{item.pagesize}}条</a></dd>
+          </dl>
+        </div>
+      </div>
+      <!-- 按时间或重要度排序 -->
+      <div class="sort" @click="alertInfo">
+        <label></label>
+        <span @click="updateTime">{{timesData.selectTxt}}<i></i></span>
+        <div class="li_seccon li_seccon3" v-show="timesData.showTime">
+          <dl>
+            <dd v-for="item,i in timesData.vals"><a href="javascript:void(0)" v-bind:class="{hover: item.isActive}"
+                                                    @click="updateOpts(item)">{{item.text}}</a></dd>
+          </dl>
+        </div>
+      </div>
+      <p>
+        <label @click="alertInfo">
+          <input type="checkbox" value="hide"/>
+          <span>隐藏摘要</span>
+        </label>
+        <label>
+          <input type="checkbox" v-model="importanceWeight"  @click="ShowImportant"/> <span>只看重要</span>
+        </label>
+      </p>
+    </div>
+  </div>
 </template>
 <script>
-import VueCookies from 'vue-cookies'
-
-
-export default {
-	data() {
-	    return {
-	    	//修改倾向性
-	    	tendencyData: {
-	    		showTendency: false,
-	    		vals: [
-	    			{
-	    				text: '标注正面',
-	    				// orientation: 1
-	    			},{
-	    				text: '标注负面',
-	    				// orientation: 2
-	    			},{
-	    				text: '标注中性',
-	    				// orientation: 2
-	    			}
-	    		]
-	    	},
-	    	//按时间或重要度排序
-	    	timesData: {
-	    		showTime: false,
-	    		selectTxt: '按时间',
-	    		vals: [
-	    			{
-	    				text: '按时间',
-	    				isActive: true,
-	    				// sorttype: 1
-	    			},{
-	    				text: '按重要度',
-	    				isActive: false,
-	    				// sorttype: 2
-	    			}
-	    		]
-	    	},
-	    	//选择每页显示的条数
-	    	pageDate: {
-	    		showPage: false,
-	    		selectPage: '10条',
-	    		vals: [
-	    			{
-	    				text: '10条',
-	    				isActive: true,
-	    				// pagesize: 10
-	    			},{
-	    				text: '30条',
-	    				isActive: false,
-	    				// pagesize: 30
-	    			},{
-	    				text: '50条',
-	    				isActive: false,
-	    				// pagesize: 50
-	    			},{
-	    				text: '100条',
-	    				isActive: false,
-	    				// pagesize: 100
-	    			}
-	    		]
-	    	}
-	    }
+  export default {
+    data() {
+      return {
+        //修改倾向性
+        tendencyData: {
+          showTendency: false,
+          vals: [
+            {
+              text: '标注正面',
+              orientation: '1'
+            }, {
+              text: '标注负面',
+              orientation: '2'
+            }, {
+              text: '标注中性',
+              orientation: '3'
+            }
+          ]
+        },
+        //按时间或重要度排序
+        timesData: {
+          showTime: false,
+          selectTxt: '按时间',
+          vals: [
+            {
+              text: '按时间',
+              isActive: true,
+              // sorttype: 1
+            }, {
+              text: '按重要度',
+              isActive: false,
+              // sorttype: 2
+            }
+          ]
+        },
+        //选择每页显示的条数
+        pageDate: {
+          showPage: false,
+          selectPage: '10条',
+          vals: [
+            {
+              pagesize: '10',
+              isActive: true,
+            }, {
+              pagesize: '30',
+              isActive: false,
+            }, {
+              pagesize: '50',
+              isActive: false,
+            }, {
+              pagesize: '100',
+              isActive: false,
+            }
+          ]
+        },
+        styleObject: { //操作条定位
+          position: 'relative',
+          width: '100%',
+          left:'0px'
+        },
+        //pos: 'relative', //操作条定位
+        isCheck: false,  //是否全选
+        importanceWeight: false,  //只看重要度
+      }
     },
-    components:{
-	    
-	},
+    components: {},
+    props: {checked: '', width: '', hasPower: '',inquireParameter:{type: Object, default: {}}},
     methods: {
-    	//倾向性
-    	modifyTendency(){
-    		this.tendencyData.showTendency = true;
-    	},
-	    updateTendency(item){
-    		this.tendencyData.showTendency = false;
-	    },
-	    //时间 重要度
-	    updateTime(){
-	    	this.timesData.showTime = true;
-	    },
-	    updateOpts(item){
-	    	this.timesData.selectTxt = item.text;
-    		for(var i in this.timesData.vals){
-    			this.timesData.vals[i].isActive = false;
-    		}
-    		item.isActive = true;
-    		this.timesData.showTime = false;
-	    },
-	    //选择每页显示条数
-	    modifyPage(){
-	    	this.pageDate.showPage = true;
-	    },
-	    choosePage(item){
-	    	this.pageDate.selectPage = item.text;
-    		for(var i in this.pageDate.vals){
-    			this.pageDate.vals[i].isActive = false;
-    		}
-    		item.isActive = true;
-    		this.pageDate.showPage = false;
-	    }
+        //只看重要度
+      ShowImportant(){
+          let zkzyd = '';
+        if(this.importanceWeight){
+            //不看
+          zkzyd = '0';
+        }else{
+          //看
+          zkzyd = '1';
+        }
+        this.$emit('getListInfo', {
+          keys:'importanceWeight',
+          content: zkzyd
+        });
+      },
+      //倾向性
+      modifyTendency(){
+        this.tendencyData.showTendency = true;
+      },
+      updateTendency(item){
+        this.tendencyData.showTendency = false;
+        this.$emit('updateTendency', item);
+      },
+      //时间 重要度
+      updateTime(){
+        // this.timesData.showTime = true;
+        this.timesData.showTime = false;
+      },
+      updateOpts(item){
+        this.timesData.selectTxt = item.text;
+        for (let i in this.timesData.vals) {
+          this.timesData.vals[i].isActive = false;
+        }
+        item.isActive = true;
+        this.timesData.showTime = false;
+      },
+      //选择每页显示条数
+      modifyPage(){
+        this.pageDate.showPage = true;
+      },
+      choosePage(item){
+        this.pageDate.selectPage = item.pagesize;
+        for (let i in this.pageDate.vals) {
+          this.pageDate.vals[i].isActive = false;
+        }
+        item.isActive = true;
+        this.pageDate.showPage = false;
+        this.$emit('updatePageSize', item.pagesize);
+      },
+      //监听操作条定位
+      handleScroll(){
+        //滚动条滚动时，距离顶部的距离
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        //可视区的高度
+        let windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        //滚动条的总高度
+        let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        //滚动条到底部的条件
+        if (scrollTop + windowHeight + 145 <= scrollHeight) {
+          let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft;
+          this.styleObject.position = 'fixed';
+          this.styleObject.width = this.width + 'px';
+          this.styleObject.left = 'auto';
+          if(scrollLeft > 0){
+            let left = 220 - scrollLeft;
+            this.styleObject.left = left +'px';
+          }
+        } else {
+          this.styleObject.position = 'relative';
+          this.styleObject.width = '100%';
+          this.styleObject.left = '0px';
+        }
+      },
+      //全选
+      selectAll(){
+        this.isCheck = !this.isCheck;
+        //把全选或反选的值传递到父级
+        this.$emit('isCheck', this.isCheck);
+      },
+      alertInfo(){
+        this.$message({
+          message: '此功能正在开发中,请耐心等待...',
+          type: 'warning'
+        });
+      },
+      //批量导出
+      batchExport(){
+
+      },
+      //标记已读
+      markReadAll(){
+        this.$emit('markAllRead');
+      },
+      //删除
+      deleteAll(){
+        this.$emit('deleteAllList');
+      },
+      //点击页面其他区域可以隐藏 标记已读和分页
+      handleBodyClick(){
+        this.tendencyData.showTendency = false;
+        this.pageDate.showPage = false;
+      },
+      setpage(){
+        let _this = this;
+        //设置条数
+        this.pageDate.selectPage = _this.inquireParameter.pageSize+'条';
+        this.pageDate.vals.forEach(function (v,i,a) {
+          if(v.pagesize === _this.inquireParameter.pageSize){
+            v.isActive = true;
+          }else{
+            v.isActive = false;
+          }
+        })
+      }
     },
     mounted (){
-    	let _this = this;
-	   
+      let _this = this;
+      //监听操作条定位
+      this.handleScroll();
+      window.addEventListener('scroll', this.handleScroll);
+      document.addEventListener('click', this.handleBodyClick);
+      if(this.inquireParameter.importanceWeight == '1'){
+          this.importanceWeight = true;
+      }else{
+        this.importanceWeight = false;
+      }
+      this.setpage();
+    },
+    destroyed () {
+      window.removeEventListener('scroll', this.handleScroll);
+      document.removeEventListener('click', this.handleBodyClick);
+    },
+    watch: { //深度 watcher
+      'checked': {
+        handler() {
+          if (this.checked) {
+            this.isCheck = true;
+          } else {
+            this.isCheck = false;
+          }
+        },
+        deep: true
+      },
+      'width': {
+        handler(val, oldVal) {
+          this.width = val;
+          this.styleObject.width = this.width + 'px';
+        },
+        deep: true
+      },
+      'hasPower': {
+        handler(val, oldVal) {
+          this.hasPower = val;
+        },
+        deep: true
+      }
     }
-}
+  }
 </script>
 <style lang="less">
 .operation_bar {
-	width: 100%;
     height: 45px;
     background: rgba(000,000,000,.7);
-    position: relative;
-    display: none;
-
+    bottom: 0;
 	.operation_con {
 		width: 98%;
 	    margin-left: 10px;
@@ -184,7 +304,7 @@ export default {
 	    button {
     	    border: none;
 		    padding: 4px;
-		    border-radius: 24px;
+		    border-radius: 6px;
 		    margin: 10px 0 0 8px;
 		    position: relative;
 		    font-size: 12px;
@@ -195,7 +315,7 @@ export default {
 	    .button {
 	    	border: none;
 		    padding: 4px 12px;
-		    border-radius: 24px;
+		    border-radius: 6px;
 		    margin: 10px 0 0 8px;
 		    position: relative;
 	    }
@@ -206,7 +326,7 @@ export default {
 		    float: left;
 		    cursor: pointer;
 	    }
-	    
+
 	    .li_seccon {
 	    	position: absolute;
 			top: -104px;
@@ -252,7 +372,7 @@ export default {
 		    width: 84px;
 		}
 		.li_seccon3 {
-			top: -62px; 
+			top: -62px;
 			width: 90px;
 		}
 	    .sort {
@@ -265,9 +385,9 @@ export default {
 		    span {
 			    width: 87px;
 			    height: 25px;
-			    -webkit-border-radius: 25px;
-			    -moz-border-radius: 25px;
-			    border-radius: 25px;
+			    -webkit-border-radius: 6px;
+			    -moz-border-radius: 6px;
+			    border-radius: 6px;
 			    background: rgba(000,000,000,.4);
 			    display: block;
 			    float: left;
@@ -301,5 +421,8 @@ export default {
 	        }
 		}
 	}
+}
+@media screen  and (max-width:1240px){
+  .operation_bar .operation_con .sort{margin-left: 5px;}
 }
 </style>

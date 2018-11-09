@@ -354,7 +354,6 @@
   .wary{
     background-color: #f2f2f2;
     width: 100%;
-    min-width: 980px;
   }
   .centre {
     margin: 75px auto 30px;

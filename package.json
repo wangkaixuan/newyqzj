@@ -12,13 +12,16 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^1.1.0",
     "axios": "^0.18.0",
+    "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.4",
     "js-base64": "^2.4.8",
     "js-md5": "^0.7.3",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
     "qs": "^6.5.2",
+    "tinymce": "^4.8.5",
     "vue": "^2.5.2",
     "vue-cookies": "^1.5.6",
     "vue-resource": "^1.5.1",

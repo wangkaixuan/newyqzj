@@ -17,18 +17,18 @@ export default {
   .group_tree_wrap .el-tree {
   	border-radius: 6px;
   }
-  
-  /*组织机构树
-  .group_tree_box  .ztree * {
-    font-size: 14px;
+  /*element ui 提示信息位置调整上下左右居中*/
+  body .ele_ui_tips_position {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
   }
-  .group_tree_box  .ztree li {
-    line-height: 40px;
+  body .el-message {
+    top: 50%;
   }
-  .group_tree_box  .ztree li a {
-    line-height: 40px;
-    height: 40px;
-    padding-top: 0;
-  }
-  组织机构树*/
 </style>

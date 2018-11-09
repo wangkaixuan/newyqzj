@@ -4,8 +4,9 @@
     <div class="sx_content">
       <ul the-id="search_condition">
         <!--时间-->
-        <li  ref="timetype">
-          <a href="javascript:void(0)" v-bind:class="{hover: timetypeData.isActive}" @click.stop="showScreenCondition({'id':'timetype',showKey:'timetypeData'})">
+        <li ref="timetype">
+          <a href="javascript:void(0)" v-bind:class="{hover: timetypeData.isActive}"
+             @click.stop="showScreenCondition({'id':'timetype',showKey:'timetypeData'})">
             <p>时间</p>
             <p>
               <em>{{timetypeData.screenInfo}}</em>
@@ -16,7 +17,8 @@
         </li>
         <!--倾向性-->
         <li ref="orientationt">
-          <a href="javascript:void(0)" v-bind:class="{hover: orientationtypeData.isActive}" @click.stop="showScreenCondition({'id':'orientationt',showKey:'orientationtypeData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: orientationtypeData.isActive}"
+             @click.stop="showScreenCondition({'id':'orientationt',showKey:'orientationtypeData'})">
             <p>倾向性</p>
             <p>
               <em>{{orientationtypeData.screenInfo}}</em>
@@ -27,7 +29,8 @@
         </li>
         <!--媒体类型-->
         <li ref="mediatype">
-          <a href="javascript:void(0)" v-bind:class="{hover: mediatypeData.isActive}"  @click.stop="showScreenCondition({'id':'mediatype',showKey:'mediatypeData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: mediatypeData.isActive}"
+             @click.stop="showScreenCondition({'id':'mediatype',showKey:'mediatypeData'})">
             <p>媒体类型</p>
             <p>
               <em>{{mediatypeData.screenInfo}}</em>
@@ -37,8 +40,10 @@
           </a>
         </li>
         <!--微博类型-->
-        <li v-if="inquireParameter.kvSourcetypeList == '' || (inquireParameter.kvSourcetypeList.indexOf('04,08') > -1)" ref="weibotype">
-          <a href="javascript:void(0)" v-bind:class="{hover: weibotypeData.isActive}" @click.stop="showScreenCondition({'id':'weibotype',showKey:'weibotypeData'})" >
+        <li v-if="inquireParameter.kvSourcetypeList == '' || (inquireParameter.kvSourcetypeList.indexOf('04,08') > -1)"
+            ref="weibotype">
+          <a href="javascript:void(0)" v-bind:class="{hover: weibotypeData.isActive}"
+             @click.stop="showScreenCondition({'id':'weibotype',showKey:'weibotypeData'})">
             <p>微博类型</p>
             <p>
               <em>{{weibotypeData.screenInfo}}</em>
@@ -49,7 +54,8 @@
         </li>
         <!--信源分级-->
         <li ref="infoSource">
-          <a href="javascript:void(0)" v-bind:class="{hover: infoSourceLevelData.isActive}" @click.stop="showScreenCondition({'id':'infoSource',showKey:'infoSourceLevelData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: infoSourceLevelData.isActive}"
+             @click.stop="showScreenCondition({'id':'infoSource',showKey:'infoSourceLevelData'})">
             <p>信源分级</p>
             <p>
               <em>{{infoSourceLevelData.screenInfo}}</em>
@@ -72,7 +78,8 @@
         </li>
         <!--噪音过滤-->
         <li ref="noise">
-          <a href="javascript:void(0)" v-bind:class="{hover: noiseFilterData.isActive}"  @click.stop="showScreenCondition({'id':'noise',showKey:'noiseFilterData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: noiseFilterData.isActive}"
+             @click.stop="showScreenCondition({'id':'noise',showKey:'noiseFilterData'})">
             <p>噪音过滤</p>
             <p>
               <em>{{noiseFilterData.screenInfo}}</em>
@@ -83,7 +90,8 @@
         </li>
         <!--重复信息-->
         <li id="repeat" ref="repeat">
-          <a href="javascript:void(0)" v-bind:class="{hover: repeatData.isActive}"  @click.stop="showScreenCondition({'id':'repeat',showKey:'repeatData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: repeatData.isActive}"
+             @click.stop="showScreenCondition({'id':'repeat',showKey:'repeatData'})">
             <p>重复信息</p>
             <p>
               <em>{{repeatData.screenInfo}}</em>
@@ -93,8 +101,9 @@
           </a>
         </li>
         <!--浏览范围-->
-        <li ref="browseRange">
-          <a href="javascript:void(0)" v-bind:class="{hover: browseRangeData.isActive}" @click.stop="showScreenCondition({'id':'browseRange',showKey:'browseRangeData'})">
+        <li ref="browseRange" v-if="inquireParameter.msUserId == inquireParameter.shareMsUserId">
+          <a href="javascript:void(0)" v-bind:class="{hover: browseRangeData.isActive}"
+             @click.stop="showScreenCondition({'id':'browseRange',showKey:'browseRangeData'})">
             <p>浏览范围</p>
             <p>
               <em>{{browseRangeData.screenInfo}}</em>
@@ -105,10 +114,12 @@
         </li>
         <!--精准筛选-->
         <li ref="accurate">
-          <a href="javascript:void(0)" v-bind:class="{hover: accurateFilterData.isActive}" @click.stop="showScreenCondition({'id':'accurate',showKey:'accurateFilterData'})">
+          <a href="javascript:void(0)" v-bind:class="{hover: accurateFilterData.isActive}"
+             @click.stop="showScreenCondition({'id':'accurate',showKey:'accurateFilterData'})">
             <p>精准筛选</p>
             <p>
-              <em v-if="inquireParameter.kvTitlematch == '' && inquireParameter.kvOnlylocal == '' && inquireParameter.kvMustwordminindex == '' && inquireParameter.kvKeywordsminindex == '' && inquireParameter.kvWeiboovertime == '' && inquireParameter.kvWeibosignlocalnoise == '' && inquireParameter.kvWeibotopicnoise == '' && inquireParameter.kvWeiboatnoise == ''">关闭</em>
+              <em
+                v-if="inquireParameter.kvTitlematch == '' && inquireParameter.kvOnlylocal == '' && inquireParameter.kvMustwordminindex == '' && inquireParameter.kvKeywordsminindex == '' && inquireParameter.kvWeiboovertime == '' && inquireParameter.kvWeibosignlocalnoise == '' && inquireParameter.kvWeibotopicnoise == '' && inquireParameter.kvWeiboatnoise == ''">关闭</em>
               <em v-else>开启</em>
               <i></i>
             </p>
@@ -139,10 +150,11 @@
         <!--</li>-->
       </ul>
       <!--<div class="sx_true">-->
-      <!--<a href="javascript:void(0)" the-id="saveSearchbtn">保存筛选条件</a>-->
+        <!--<a href="javascript:void(0)" @click="saveSearch()">保存筛选条件</a>-->
       <!--</div>-->
       <!--时间-->
-      <div class="sx_pub" v-bind:style="{top:timetypeData.top+'px'}" v-show="timetypeData.isActive" @click.stop="noHide">
+      <div class="sx_pub" v-bind:style="{top:timetypeData.top+'px'}" v-show="timetypeData.isActive"
+           @click.stop="noHide">
         <ul>
           <li>
             <span @click.stop="getListInfo({cxKey:'timeType',cxInfo:'',showKey:'timetypeData',showInfo:'全部'})"
@@ -153,8 +165,8 @@
                   :class="{hover:inquireParameter.timeType === 'day'}">当天</span>
           </li>
           <li>
-            <span @click.stop="getListInfo({cxKey:'timeType',cxInfo:'week',showKey:'timetypeData',showInfo:'近7天'})"
-                  :class="{hover:inquireParameter.timeType === 'week'}">近7天</span>
+            <span @click.stop="getListInfo({cxKey:'timeType',cxInfo:'sevenDays',showKey:'timetypeData',showInfo:'近7天'})"
+                  :class="{hover:inquireParameter.timeType === 'sevenDays'}">近7天</span>
           </li>
           <li class="js_time" @click.stop="showCustomDay">
             <span>自定义时间</span>
@@ -167,7 +179,8 @@
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
-                end-placeholder="结束日期" disabledDate="" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="formData.startDatePicker">
+                end-placeholder="结束日期" disabledDate="" value-format="yyyy-MM-dd HH:mm:ss"
+                :picker-options="formData.startDatePicker">
               </el-date-picker>
               <button @click="updateTimeTj()">确定</button>
             </div>
@@ -175,7 +188,8 @@
         </ul>
       </div>
       <!--倾向性 mult_pub控制input显示-->
-      <div class="sx_pub " v-bind:style="{top:orientationtypeData.top+'px'}" :class="{mult_pub:orientationtypeData.multipleClass}"
+      <div class="sx_pub " v-bind:style="{top:orientationtypeData.top+'px'}"
+           :class="{mult_pub:orientationtypeData.multipleClass}"
            v-show="orientationtypeData.isActive" @click.stop="noHide">
         <ul>
           <li>
@@ -295,7 +309,8 @@
         </div>
       </div>
       <!--信源分级 mult_pub控制input显示-->
-      <div class="sx_pub" v-bind:style="{top:infoSourceLevelData.top+'px'}" :class="{mult_pub:infoSourceLevelData.multipleClass}"
+      <div class="sx_pub" v-bind:style="{top:infoSourceLevelData.top+'px'}"
+           :class="{mult_pub:infoSourceLevelData.multipleClass}"
            v-show="infoSourceLevelData.isActive" @click.stop="noHide">
         <ul the-id="sourcetype_wrap" v-if="infoSourceLevelInfo.length > 0">
           <li>
@@ -325,11 +340,12 @@
         </div>
       </div>
       <!--信源地域-->
-      <div class="sx_pub info_sourceregion"  v-bind:style="{top:infoSourceRegionData.top+'px'}"
+      <div class="sx_pub info_sourceregion" v-bind:style="{top:infoSourceRegionData.top+'px'}"
            v-show="infoSourceRegionData.isActive" @click.stop="noHide">
         <ul>
           <li>
-            <span class="infoSourceRegionall" :class="{hover:inquireParameter.region == ''}" @click.stop="getListInfo({cxKey:'region',cxInfo:'',showKey:'infoSourceRegionData',showInfo:'全部'})">全部</span>
+            <span class="infoSourceRegionall" :class="{hover:inquireParameter.region == ''}"
+                  @click.stop="getListInfo({cxKey:'region',cxInfo:'',showKey:'infoSourceRegionData',showInfo:'全部'})">全部</span>
           </li>
           <li>
             <select autocomplete="off" @change.stop="changeType" v-model="formData.region_selected">
@@ -375,7 +391,7 @@
         </ul>
       </div>
       <!--重复信息-->
-      <div class="sx_pub" v-show="repeatData.isActive" @click.stop="noHide"  v-bind:style="{top:repeatData.top+'px'}">
+      <div class="sx_pub" v-show="repeatData.isActive" @click.stop="noHide" v-bind:style="{top:repeatData.top+'px'}">
         <ul>
           <li>
             <span the-id="browseajsourcetype" :class="{hover:inquireParameter.isRepeat === '1'}"
@@ -388,7 +404,8 @@
         </ul>
       </div>
       <!--浏览范围-->
-      <div class="sx_pub" v-bind:style="{top:browseRangeData.top+'px'}"  v-show="browseRangeData.isActive" @click.stop="noHide">
+      <div class="sx_pub" v-bind:style="{top:browseRangeData.top+'px'}" v-show="browseRangeData.isActive"
+           @click.stop="noHide">
         <ul>
           <li>
             <span isread="-1" :class="{hover:inquireParameter.isread === '-1'}"
@@ -412,16 +429,20 @@
             <i title="匹配全部：标题和内容同时匹配关键词仅匹配标题：仅标题匹配关键词"></i>
             <em>匹配范围：</em>
             <p>
-              <span value="" :class="{hover:accurate.kvTitlematch == ''}"  @click="setAccurateInfo({'cxKey':'kvTitlematch',cxInfo:''})">匹配全部</span>
-              <span value="1" :class="{hover:accurate.kvTitlematch != ''}"  @click="setAccurateInfo({'cxKey':'kvTitlematch',cxInfo:'1'})">仅匹配标题</span>
+              <span value="" :class="{hover:accurate.kvTitlematch == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvTitlematch',cxInfo:''})">匹配全部</span>
+              <span value="1" :class="{hover:accurate.kvTitlematch != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvTitlematch',cxInfo:'1'})">仅匹配标题</span>
             </p>
           </li>
           <li the-id="region">
             <i title="开启后，信息中将进行地域词匹配，只有当设置的地域词占比最高时，该条信息才会被筛选出来。"></i>
             <em>唯一地域：</em>
             <p>
-              <span value="" :class="{hover:accurate.kvOnlylocal == ''}"  @click="setAccurateInfo({'cxKey':'kvOnlylocal',cxInfo:''})">关闭</span>
-              <span value="1" :class="{hover:accurate.kvOnlylocal != ''}" @click="setAccurateInfo({'cxKey':'kvOnlylocal',cxInfo:'1'})">开启</span>
+              <span value="" :class="{hover:accurate.kvOnlylocal == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvOnlylocal',cxInfo:''})">关闭</span>
+              <span value="1" :class="{hover:accurate.kvOnlylocal != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvOnlylocal',cxInfo:'1'})">开启</span>
             </p>
           </li>
           <li the-id="position">
@@ -429,7 +450,8 @@
             <em>位置：</em>
             <p>
               <span style="color:#333">品牌词首次出现位置</span>
-              <input type="text" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/"  v-model="accurate.kvMustwordminindex">
+              <input type="text" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/"
+                     v-model="accurate.kvMustwordminindex">
               <span style="color:#333">个字</span>
             </p>
           </li>
@@ -437,7 +459,8 @@
             <i title="设置关键词的词距范围。如果设置2组关键词，则必须满足2组词词距小于等于设定值；如果设置3组关键词，则品牌词与主体词，主体词与事件词都要小于等于设定值，信息才会被筛选出来。"></i>
             <em>词距范围：</em>
             <p>
-              <input type="text" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/"  v-model="accurate.kvKeywordsminindex">
+              <input type="text" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/"
+                     v-model="accurate.kvKeywordsminindex">
               <span style="color: #333;">个字</span>
             </p>
           </li>
@@ -445,32 +468,40 @@
             <i title="开启后，微博信息中出现的时间在专题创建时间前后1个月之外的数据会被过滤掉。"></i>
             <em>微博时间过滤：</em>
             <p>
-              <span value="" :class="{hover:accurate.kvWeiboovertime == ''}"  @click="setAccurateInfo({'cxKey':'kvWeiboovertime',cxInfo:''})">关闭</span>
-              <span value="1" :class="{hover:accurate.kvWeiboovertime != ''}"  @click="setAccurateInfo({'cxKey':'kvWeiboovertime',cxInfo:'1'})">开启</span>
+              <span value="" :class="{hover:accurate.kvWeiboovertime == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeiboovertime',cxInfo:''})">关闭</span>
+              <span value="1" :class="{hover:accurate.kvWeiboovertime != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeiboovertime',cxInfo:'1'})">开启</span>
             </p>
           </li>
           <li the-id="ignore_loc">
             <i title="若选择“是”，则对微博信息中出现的位置信息不进行关键词匹配。位置信息为位置定位显示的信息。"></i>
             <em>忽略微博位置信息中的关键词：</em>
             <p>
-              <span value="0" :class="{hover:accurate.kvWeibosignlocalnoise == ''}"  @click="setAccurateInfo({'cxKey':'kvWeibosignlocalnoise',cxInfo:''})">否</span>
-              <span value="1" :class="{hover:accurate.kvWeibosignlocalnoise != ''}"  @click="setAccurateInfo({'cxKey':'kvWeibosignlocalnoise',cxInfo:'1'})">是</span>
+              <span value="0" :class="{hover:accurate.kvWeibosignlocalnoise == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeibosignlocalnoise',cxInfo:''})">否</span>
+              <span value="1" :class="{hover:accurate.kvWeibosignlocalnoise != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeibosignlocalnoise',cxInfo:'1'})">是</span>
             </p>
           </li>
           <li the-id="ignore_topic">
             <i title="若选择“是”，则对微博信息中出现的话题信息不进行关键词匹配。话题信息一般是热门话题名称。"></i>
             <em>忽略微博话题信息中的关键词：</em>
             <p>
-              <span value="0" :class="{hover:accurate.kvWeibotopicnoise == ''}"  @click="setAccurateInfo({'cxKey':'kvWeibotopicnoise',cxInfo:''})">否</span>
-              <span value="1" :class="{hover:accurate.kvWeibotopicnoise != ''}"  @click="setAccurateInfo({'cxKey':'kvWeibotopicnoise',cxInfo:'1'})">是</span>
+              <span value="0" :class="{hover:accurate.kvWeibotopicnoise == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeibotopicnoise',cxInfo:''})">否</span>
+              <span value="1" :class="{hover:accurate.kvWeibotopicnoise != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeibotopicnoise',cxInfo:'1'})">是</span>
             </p>
           </li>
           <li the-id="ignore_a">
             <i title="若选择“是”，则对微博信息中的@信息部分不进行关键词匹配。@信息一般是网名、微博名称等。"></i>
             <em>忽略微博@信息中的关键词：</em>
             <p>
-              <span value="0" :class="{hover:accurate.kvWeiboatnoise == ''}"  @click="setAccurateInfo({'cxKey':'kvWeiboatnoise',cxInfo:''})">否</span>
-              <span value="1" :class="{hover:accurate.kvWeiboatnoise != ''}"  @click="setAccurateInfo({'cxKey':'kvWeiboatnoise',cxInfo:'1'})">是</span>
+              <span value="0" :class="{hover:accurate.kvWeiboatnoise == ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeiboatnoise',cxInfo:''})">否</span>
+              <span value="1" :class="{hover:accurate.kvWeiboatnoise != ''}"
+                    @click="setAccurateInfo({'cxKey':'kvWeiboatnoise',cxInfo:'1'})">是</span>
             </p>
           </li>
           <li>
@@ -482,18 +513,18 @@
       <!--自定义筛选-->
       <!--标签-->
       <!--<div class="sx_pub sx_labelname" style="display: none; top: 82px;" v-show="labelData.showLabel"-->
-           <!--@click.stop="noHide">-->
-        <!--<ul style="width: 100%;">-->
-          <!--<li>-->
-            <!--<span the-id="browseajsourcetype" labelname="" class="hover">全部</span>-->
-          <!--</li>-->
-        <!--</ul>-->
+      <!--@click.stop="noHide">-->
+      <!--<ul style="width: 100%;">-->
+      <!--<li>-->
+      <!--<span the-id="browseajsourcetype" labelname="" class="hover">全部</span>-->
+      <!--</li>-->
+      <!--</ul>-->
       <!--</div>-->
     </div>
   </div>
 </template>
 <script>
-  import {getBrowseList, getYqllCondition} from '../../service/browse'
+  import {getBrowseList, getYqllCondition, saveSearchCondition} from '../../service/browse'
   export default {
     data() {
       return {
@@ -501,18 +532,19 @@
           isActive: false,
           top: 43,
           customDay: false,
-          screenInfo: '全部'
+          screenInfo: '全部',
+          screenInfoArry: {'day': '当天', 'sevenDays': '近7天'}
         },
         orientationtypeData: {
           isActive: false,
-          top:43,
+          top: 43,
           multipleClass: false,                     //倾向性更多样式
           screenInfo: '全部',                     //倾向性显示文字
           screenInfoArry: {'1': '正面', '2': '负面', '3': "中性"},                     //倾向性显示文字
         },
         mediatypeData: {
           isActive: false,
-          top:43,
+          top: 43,
           multipleClass: false,                  //媒体类型多选
           screenInfo: '全部',                      //媒体类型显示文字
           allId: '-1,',
@@ -520,41 +552,44 @@
         },
         weibotypeData: {
           isActive: false,
-          top:43,
+          top: 43,
           multipleClass: false,                  //媒体类型多选
           screenInfo: '全部',                      //微博类型显示文字
           screenInfoArry: {'1': '原发', '2': '仅转发', '3': "回复并转发"}
         },
         infoSourceLevelData: {
           isActive: false,
-          top:43,
+          top: 43,
           multipleClass: false,                  //信源分级多选
           screenInfo: '全部',
           allId: '-1,',
           screenInfoArry: []
         },
         infoSourceRegionData: {
-          isActive: false,
-          top:43,
+          isActive: false,                 //信源地域
+          top: 43,
           screenInfo: '全部'
         },
         noiseFilterData: {
-          isActive: false,  //噪音过滤
-          top:43,
+          isActive: false,  //噪音过滤  1 正常 x过滤 jing 精准
+          top: 43,
+          screenInfoArry: {'1': '正常信息', 'x': '过滤信息', 'jing': '精准信息'},
           screenInfo: '正常信息'
         },
         repeatData: {
-          isActive: false,
+          isActive: false,   //重复信息
           top: 43,
+          screenInfoArry: {'0': '不去重', '1': '去重'},
           screenInfo: '去重'
         },
         browseRangeData: {
-          isActive: false,
-          top:43,
+          isActive: false,         //浏览范围
+          top: 43,
+          screenInfoArry: {'0': '未读', '1': '已读'},
           screenInfo: '全部'
         },
         accurateFilterData: {
-          top:43,
+          top: 43,
           isActive: false
         },
         infoSourceLevelInfo: [],   //信源分级
@@ -571,7 +606,7 @@
           sourcetypeInfo: ['-1'],              //媒体数据
           weiboType: ['-1'],                 //微博类型
         },
-        accurate:{
+        accurate: {
           kvTitlematch: '',                //标题是否匹配  匹配全部''  仅匹配标题1
           kvOnlylocal: '',                //是否唯一地域   关闭'' 开启1
           kvMustwordminindex: '',                //位置
@@ -583,7 +618,7 @@
         }
       }
     },
-    props: ['inquireParameter'],
+    props: ['inquireParameter','classId'],
     components: {},
     methods: {
       //其他选项false，当前true
@@ -602,17 +637,17 @@
       showScreenCondition(porpsInfo){
         //初始化
         this.hideOthers();
-          //显示筛选条件
-        let top = parseInt(this.$refs[porpsInfo.id].offsetTop)+33;
+        //显示筛选条件
+        let top = parseInt(this.$refs[porpsInfo.id].offsetTop) + 33;
         this[porpsInfo.showKey].top = top;
         this[porpsInfo.showKey].isActive = true;
         this[porpsInfo.showKey].multipleClass = false;
-        if(porpsInfo.showKey === 'timetypeData'){
-            //时间
+        if (porpsInfo.showKey === 'timetypeData') {
+          //时间
           this.timetypeData.customDay = false;
         }
-        if(porpsInfo.showKey === 'accurateFilterData'){
-            //精选
+        if (porpsInfo.showKey === 'accurateFilterData') {
+          //精选
           this.accurate.kvTitlematch = this.inquireParameter.kvTitlematch;
           this.accurate.kvOnlylocal = this.inquireParameter.kvOnlylocal;
           this.accurate.kvMustwordminindex = this.inquireParameter.kvMustwordminindex;
@@ -622,48 +657,48 @@
           this.accurate.kvWeibotopicnoise = this.inquireParameter.kvWeibotopicnoise;
           this.accurate.kvWeiboatnoise = this.inquireParameter.kvWeiboatnoise;
         }
-        if(porpsInfo.showKey === 'infoSourceLevelData'){
+        if (porpsInfo.showKey === 'infoSourceLevelData') {
           //信源分级
-          console.log(this.inquireParameter.infoSourceLevelList);
+          this.inquireParameter.infoSourceLevelList = this.inquireParameter.infoSourceLevelList + '';
           this.formData.infoSourceLeveltypeone = (this.inquireParameter.infoSourceLevelList == '') ? ['-1'] : this.inquireParameter.infoSourceLevelList.split(',');
         }
-        if(porpsInfo.showKey === 'weibotypeData'){
+        if (porpsInfo.showKey === 'weibotypeData') {
           //微博类型
           this.formData.weiboType = (this.inquireParameter.wechatInfoTypeList == '') ? ['-1'] : this.inquireParameter.wechatInfoTypeList.split(',');
         }
-        if(porpsInfo.showKey === 'mediatypeData'){
+        if (porpsInfo.showKey === 'mediatypeData') {
           //媒体类型
-          if(this.inquireParameter.kvSourcetypeList == ''){
+          if (this.inquireParameter.kvSourcetypeList == '') {
             this.formData.sourcetypeInfo = ['-1']
-          }else if(this.inquireParameter.kvSourcetypeList.indexOf('04,08') > -1){
-              let typeArray = this.inquireParameter.kvSourcetypeList.split(',');
-              let newSourcetypeInfoArray = [];
-              for(let i in typeArray){
-                  if(typeArray[i] == '04'){
-                    newSourcetypeInfoArray.push('04,08');
-                  }
-                  if(typeArray[i] != '08' && typeArray[i] != '04' ){
-                    newSourcetypeInfoArray.push(typeArray[i]);
-                  }
+          } else if (this.inquireParameter.kvSourcetypeList.indexOf('04,08') > -1) {
+            let typeArray = this.inquireParameter.kvSourcetypeList.split(',');
+            let newSourcetypeInfoArray = [];
+            for (let i in typeArray) {
+              if (typeArray[i] == '04') {
+                newSourcetypeInfoArray.push('04,08');
               }
+              if (typeArray[i] != '08' && typeArray[i] != '04') {
+                newSourcetypeInfoArray.push(typeArray[i]);
+              }
+            }
             this.formData.sourcetypeInfo = newSourcetypeInfoArray;
-          }else{
+          } else {
             this.formData.sourcetypeInfo = this.inquireParameter.kvSourcetypeList.split(',');
           }
         }
-        if(porpsInfo.showKey ==='orientationtypeData'){
+        if (porpsInfo.showKey === 'orientationtypeData') {
           //倾向性
           this.formData.orientationtypeone = (this.inquireParameter.orientationList == '') ? ['-1'] : this.inquireParameter.orientationList.split(',');
         }
-        if(porpsInfo.showKey ==='infoSourceRegionData'){
+        if (porpsInfo.showKey === 'infoSourceRegionData') {
           //信源地域
-          if(this.formData.provinceOrCity && this.inquireParameter.region != ''){
+          if (this.formData.provinceOrCity && this.inquireParameter.region != '') {
             //恢复地域显示
             this.formData.region_selected = this.formData.provinceOrCity.region;
             this.formData.city = this.formData.region[this.formData.provinceOrCity.region].cities;
             this.formData.city_selected = this.formData.provinceOrCity.city;
           }
-          if(this.inquireParameter.region === ''){
+          if (this.inquireParameter.region === '') {
             this.formData.region_selected = '';
             this.formData.city_selected = '';
           }
@@ -675,14 +710,12 @@
       },
       //解决点击选项卡区域 不隐藏选项卡
       noHide(){
-          //console.log('组织时间冒泡');
+        //console.log('组织时间冒泡');
       },
       getCondition(){
         //查询筛选条件  媒体类型  信源 分级、地域
         let _this = this;
         getYqllCondition('').then(res => {
-          console.log('----------查询筛选条件------------');
-          console.log(res.data.result.data);
           if (res.data.result.data) {
             _this.sourceTypeList = res.data.result.data.sourceTypeList || [];    //媒体类型
             _this.formData.region = res.data.result.data.region || [];                    //地域 省
@@ -702,9 +735,125 @@
               this.infoSourceLevelData.allId = this.infoSourceLevelData.allId.substr(0, this.infoSourceLevelData.allId.length - 1);
             }
           }
+          //_this.setSearchWz();
         }).catch(err => {
           console.log(err, '请求失败！');
         })
+      },
+      setSearchWz(){
+        //设置显示文字
+        let _this = this;
+        //设置时间
+        if (_this.inquireParameter.timeType !== '') {
+          _this.timetypeData.screenInfo = _this.timetypeData.screenInfoArry[_this.inquireParameter.timeType] || '全部';
+          if(this.inquireParameter.timetypeInfo){
+            _this.timetypeData.screenInfo = this.inquireParameter.timetypeInfo;
+          }
+        }else{
+          _this.timetypeData.screenInfo = '全部';
+        }
+        //设置倾向性
+        if (_this.inquireParameter.orientationList !== '') {
+          this.setScreenInfo({
+            'inquireP': 'orientationList',
+            'showKey': 'orientationtypeData'
+          });
+        }else{
+          _this.orientationtypeData.screenInfo = '全部'
+        }
+        //设置媒体类型
+        if (_this.inquireParameter.kvSourcetypeList !== '') {
+          let typeList = _this.inquireParameter.kvSourcetypeList,
+            typeInfo = '';
+          if (typeList.length > 0) {
+            for (let i in _this.sourceTypeList) {
+              if (typeList.indexOf(_this.sourceTypeList[i].id) > -1) {
+                typeInfo += _this.sourceTypeList[i].name + ',';
+              }
+            }
+            _this.mediatypeData.screenInfo = typeInfo.substr(0, typeInfo.length - 1);
+          }
+        }else{
+          _this.mediatypeData.screenInfo = '全部'
+        }
+        //微博类型设置
+        if (_this.inquireParameter.wechatInfoTypeList !== '') {
+          this.setScreenInfo({
+            'inquireP': 'wechatInfoTypeList',
+            'showKey': 'weibotypeData'
+          });
+        }else{
+          _this.weibotypeData.screenInfo = '全部';
+        }
+        //信源分级
+        if (_this.inquireParameter.infoSourceLevelList !== '') {
+          this.setScreenInfo({
+            'inquireP': 'infoSourceLevelList',
+            'showKey': 'infoSourceLevelData'
+          });
+        }else{
+            _this.infoSourceLevelData.screenInfo = '全部';
+        }
+        //噪音过滤
+        if (_this.inquireParameter.krState !== '') {
+          this.setScreenInfo({
+            'inquireP': 'krState',
+            'showKey': 'noiseFilterData'
+          });
+        }else{
+          _this.noiseFilterData.screenInfo = '全部';
+        }
+        //重复信息
+        if (_this.inquireParameter.isRepeat != '1') {
+          this.setScreenInfo({
+            'inquireP': 'isRepeat',
+            'showKey': 'repeatData'
+          });
+        }else{
+          _this.repeatData.screenInfo = '去重';
+        }
+        //浏览范围
+        if (_this.inquireParameter.isread != '-1') {
+          this.setScreenInfo({
+            'inquireP': 'isread',
+            'showKey': 'browseRangeData'
+          });
+        }else{
+          _this.browseRangeData.screenInfo = '全部';
+        }
+        if (_this.inquireParameter.region !== '') {
+          this.formData.provinceOrCity = this.inquireParameter.provinceOrCity;
+          let info = '';
+          if (this.formData.provinceOrCity.region != '') {
+            //省
+            info = this.formData.region[this.formData.provinceOrCity.region].name;
+          }
+          if (this.formData.provinceOrCity.city != '') {
+            //市
+            info = info + '-' + this.formData.region[this.formData.provinceOrCity.region].cities[this.formData.provinceOrCity.city].name
+          }
+          this.infoSourceRegionData.screenInfo = info;
+        }else{
+          this.infoSourceRegionData.screenInfo = '全部';
+        }
+      },
+      setScreenInfo(porpsInfo){
+        /*
+         * porpsInfo.
+         *   inquireP      inquireParameter 值
+         *   showKey       显示key值
+         * */
+        let _this = this,
+          searchArray = (typeof this.inquireParameter[porpsInfo.inquireP] === 'String') ? this.inquireParameter[porpsInfo.inquireP].split(',') : this.inquireParameter[porpsInfo.inquireP].toString().split(','),//查询数据
+          searchInfo = '';                                                            //显示文字
+
+        if (searchArray.length > 0) {
+          searchArray.forEach((item, index) => {
+            let info = _this[porpsInfo.showKey].screenInfoArry[item] || '全部';
+            searchInfo += info + ',';
+          });
+          _this[porpsInfo.showKey].screenInfo = searchInfo.substr(0, searchInfo.length - 1);
+        }
       },
       changeType(){
         //信源地域 省市联动
@@ -716,6 +865,7 @@
           }
         } else {
           this.formData.city = [];
+          this.formData.city_selected = '';
         }
       },
       multipleOption(opn){
@@ -726,7 +876,6 @@
         this.timetypeData.customDay = true;
       },
       getListInfo(porpsInfo){
-        console.log(porpsInfo);
         /*
          * 单个数据查询
          * 参数值
@@ -777,7 +926,6 @@
           for (let i in xyformData) {
             showInfos += this[porpsInfo.showKey].screenInfoArry[xyformData[i]] + '、';
           }
-          console.log(showInfos);
           this[porpsInfo.showKey].screenInfo = showInfos.substr(0, showInfos.length - 1);
         } else {
           //全选
@@ -792,36 +940,44 @@
       infoSourceRegionBtn(){
         //信源地域
         if (this.formData.region_selected === '' && this.formData.city_selected === '') {
-          alert('请选择信源所属地域!');
-          return false;
+          //alert('请选择信源所属地域!');
+          //return false;
+          this.$emit('getListInfo', {
+            keys: 'region',
+            content: ''
+          });
+          this.infoSourceRegionData.screenInfo = '全部';
+          this.infoSourceRegionData.isActive = false;
+        }else{
+          this.formData.provinceOrCity = {
+            city: this.formData.city_selected,
+            region: this.formData.region_selected
+          };
+          let region = '';
+          let info = '';
+          if (this.formData.region_selected != '') {
+            //省
+            region = this.formData.region_selected;
+            info = this.formData.region[region].name;
+          }
+          if (this.formData.city_selected != '') {
+            //市
+            region = this.formData.city_selected;
+            info = info + '-' + this.formData.region[this.formData.region_selected].cities[region].name
+          }
+          this.inquireParameter.provinceOrCity = {
+            city: this.formData.city_selected,
+            region: this.formData.region_selected
+          };
+          this.$emit('getListInfo', {
+            keys: 'region',
+            content: region
+          });
+          this.infoSourceRegionData.screenInfo = info;
+          this.infoSourceRegionData.isActive = false;
         }
-        this.formData.provinceOrCity = {
-          city: this.formData.city_selected,
-          region:this.formData.region_selected
-        };
-        let region = '';
-        let info = '';
-        if (this.formData.region_selected != '') {
-          //省
-          region = this.formData.region_selected;
-          info = this.formData.region[region].name;
-        }
-        if (this.formData.city_selected != '') {
-          //市
-          region = this.formData.city_selected;
-          info = info + '-' + this.formData.region[this.formData.region_selected].cities[region].name
-        }
-        console.log(region);
-        console.log(info);
-        this.$emit('getListInfo', {
-          keys: 'region',
-          content: region
-        });
-        this.infoSourceRegionData.screenInfo = info;
-        this.infoSourceRegionData.isActive = false;
       },
       cancelShow(cancelKey){
-        console.log(cancelKey);
         //取消
         this[cancelKey].isActive = false;
       },
@@ -844,13 +1000,13 @@
               let allValue = porpsInfo.allValue || '';
               if (allValue != '') {
                 allValue = allValue.split(',');
-                if(porpsInfo.showKey === 'mediatypeData'){
+                if (porpsInfo.showKey === 'mediatypeData') {
                   let newSourcetypeInfoArray = [];
-                  for(let i in allValue){
-                    if(allValue[i] == '04'){
+                  for (let i in allValue) {
+                    if (allValue[i] == '04') {
                       newSourcetypeInfoArray.push('04,08');
                     }
-                    if(allValue[i] != '08' && allValue[i] != '04' ){
+                    if (allValue[i] != '08' && allValue[i] != '04') {
                       newSourcetypeInfoArray.push(allValue[i]);
                     }
                   }
@@ -875,7 +1031,7 @@
         }
       },
       updateTimeTj(){
-          //时间筛选
+        //时间筛选
         if (this.formData.start_end_Time == '') {
           this.$message({
             message: '请选择开始时间和结束时间！',
@@ -884,19 +1040,20 @@
           return false;
         }
         this.$emit('getListInfo', {
-          startTime:this.formData.start_end_Time[0].replace(/-|:|\s/g,""),
-          endTime: this.formData.start_end_Time[1].replace(/-|:|\s/g,"")
+          startTime: this.formData.start_end_Time[0].replace(/-|:|\s/g, ""),
+          endTime: this.formData.start_end_Time[1].replace(/-|:|\s/g, "")
         });
-        this.timetypeData.screenInfo = this.formData.start_end_Time[0]+'至'+this.formData.start_end_Time[1];
+        this.timetypeData.screenInfo = this.formData.start_end_Time[0] + ' 至 ' + this.formData.start_end_Time[1];
+        this.inquireParameter.timetypeInfo = this.timetypeData.screenInfo;
         this.timetypeData.isActive = false;
       },
       setAccurateInfo(porpsInfo){
-          //设置精准相关信息
-          this.accurate[porpsInfo.cxKey] = porpsInfo.cxInfo;
+        //设置精准相关信息
+        this.accurate[porpsInfo.cxKey] = porpsInfo.cxInfo;
       },
       inquireAccurate(){
-          this.$emit('setAccurateInfo',this.accurate);
-          this.accurateFilterData.isActive = false;
+        this.$emit('setAccurateInfo', this.accurate);
+        this.accurateFilterData.isActive = false;
       },
       //处理不能选择今天之后的时间
       beginDate(){
@@ -904,19 +1061,72 @@
         return {
           disabledDate(time){
             let date = new Date();
-            let  timestamp = date.getTime();
+            let timestamp = date.getTime();
             let limitData = new Date(timestamp - _this.$store.state.savedays * 24 * 3600 * 1000);
             return time.getTime() > Date.now() || time.getTime() < limitData//开始时间不选时，结束时间最大值小于等于当天
           }
         }
       },
+      saveSearch(){
+        //保存筛选条件
+        let _this = this;
+        this.$confirm('确认保存筛选条件吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          showClose: false,
+          closeOnClickModal: false
+        }).then(() => {
+          if(_this.inquireParameter.timeType != 'customDay'){
+            _this.inquireParameter.startTime = '';
+            _this.inquireParameter.endTime = ''
+          }
+          if(_this.inquireParameter.startTime == '' && _this.inquireParameter.endTime == ''){
+            _this.inquireParameter.timetypeInfo = ''
+          }
+          if(_this.inquireParameter.region == ''){
+            _this.inquireParameter.provinceOrCity = ''
+          }
+          let kkId = _this.inquireParameter.kkIdList;
+          if(_this.classId != ''){
+            kkId = _this.classId;
+          }
+          saveSearchCondition({
+            msUserId: _this.inquireParameter.msUserId,
+            kkId: kkId,
+            condition: JSON.stringify(_this.inquireParameter)
+          }).then(rel => {
+            if (rel.data.status == '0') {
+              _this.$message({
+                type: 'success',
+                customClass: 'ele_ui_tips_position',
+                message: '设置成功！'
+              });
+            }else if(rel.data.status == '2000000'){
+              _this.$message({
+                type: 'success',
+                customClass: 'ele_ui_tips_position',
+                message: '保存失败！'
+              });
+            }
+          }).catch(err => {
+              console.log(err);
+          });
+        }).catch(err => {
+//          _this.$message({
+//            type: 'error',
+//            customClass: 'ele_ui_tips_position',
+//            message: '请求失败！'
+//          });
+        });
+      }
     },
     mounted (){
       document.addEventListener('click', this.handleBodyClick);
       this.getCondition();
     },
     destroyed () {
-      document.removeEventListener('click', this.handleBodyClick)
+      document.removeEventListener('click', this.handleBodyClick);
     }
   }
 </script>

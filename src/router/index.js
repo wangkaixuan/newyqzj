@@ -1,88 +1,108 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store'
-import {verifyAccess} from '../js/getheightData'
-import opm from '@/page/set/organizationPersonnelManage'
-import text from '@/page/text'
-import dialog from '@/page/set/dialog'
-import organization from '@/page/set/groupManagement'
-import browse from '@/page/browse/index'
-import infodetail from '@/page/browse/infoDetail'
-import workbench from '@/page/theworkbench/workbench'
-import publicOpinionAudit from '@/page/theworkbench/publicOpinionAudit'
-import newbuiltdelivery from '@/page/theworkbench/newBuiltDelivery'
-import seebuilt from '@/page/theworkbench/seebuilt'
-import permissiondenied from '@/page/index/permissionDenied'
-import exit from '@/page/exit'
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router =  new Router({
   routes: [
-    {
-      path:"/",
-      component:text
-    },
+    // {
+    //   path:"/",
+    //   component:text
+    // },
     {
       path:"/exit",
-      component:exit
+      name:"exit",
+      component:resolve => require(['@/page/exit'],resolve)
     },
     {
       path:'/opm',
-      component:opm
+      name:'opm',
+      component:resolve => require(['@/page/set/organizationPersonnelManage'],resolve)
     },
     {
       path:'/dialog',
-      component:dialog
+      name:'dialog',
+      component:resolve => require(['@/page/set/dialog'],resolve)
     },
     {
       path:'/organization',
-      component:organization
+      name:'organization',
+      component:resolve => require(['@/page/set/groupManagement'],resolve)
     },
     {
       path:'/browse',
-      component:browse
+      name:'browse',
+      component:resolve => require(['@/page/browse/index'],resolve)
     },
     {
       path:'/infoDetail',
-      component:infodetail
+      name:'infoDetail',
+      component:resolve => require(['@/page/browse/infoDetail'],resolve)
     },
     {
       path:'/workbench',
-      component:workbench
+      name:'workbench',
+      component:resolve => require(['@/page/theworkbench/workbench'],resolve)
     },
     {
       path:'/publicOpinionAudit',
-      component:publicOpinionAudit
+      name:'publicOpinionAudit',
+      component:resolve => require(['@/page/theworkbench/publicOpinionAudit'],resolve)
     },
     {
       path:'/newbuiltdelivery',
-      component:newbuiltdelivery
+      name:'newbuiltdelivery',
+      component:resolve => require(['@/page/theworkbench/newBuiltDelivery'],resolve)
     },
     {
       path:'/seebuilt',
-      component:seebuilt
+      name:'seebuilt',
+      component:resolve => require(['@/page/theworkbench/seebuilt'],resolve)
     },{
       path:'/permissiondenied',
-      component:permissiondenied
+      name:'permissiondenied',
+      component:resolve => require(['@/page/index/permissionDenied'],resolve)
+    },{
+      path:'/yqtask',
+      name:'yqtask',
+      component:resolve => require(['@/page/theworkbench/yqtask'],resolve)
+    },{
+      path:'/transact',
+      name:'transact',
+      component:resolve => require(['@/page/theworkbench/transact'],resolve)
+    },{
+      path:"/receiptTask",
+      name:'receiptTask',
+      component:resolve => require(['@/page/theworkbench/receiptTask'],resolve)
+    },{
+      path:"/updatelogo",
+      name:'updatelogo',
+      component:resolve => require(['@/page/set/updatelogo'],resolve)
+    },{
+      //工作统计
+      path:"/workbenchChart",
+      name:'workbenchChart',
+      component:resolve => require(['@/page/theworkbench/workbenchChart'],resolve)
+    },{
+      //工作台详情页
+      path:"/details",
+      name:"details",
+      component:resolve => require(['@/page/theworkbench/details'],resolve)
     }
   ]
 });
 router.beforeEach((to, from, next)=>{
   if(to.matched.length  > 0){
-    // console.log(to.matched[0].path);
-    // verifyAccess(to.matched[0].path);
-    // if(verifyAccess){
-    //   //next();
-    // }
-    // console.log(to);
     if(store.state.ACCESSTOKEN != ''){
       next();
     }else{
-      next();
+      console.log('-----------')
+      //window.location = store.state.oldyqzjUrl+'/Login/login'
     }
   }else{
-
+    console.log('+++++++++++++++++++++++++++++++++')
+    //window.location = store.state.oldyqzjUrl+'/Login/login'
   }
 
 });

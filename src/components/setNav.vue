@@ -1,5 +1,5 @@
 <template>
-  <div class="set-nav">
+  <div class="set-nav border_box">
     <ul class="nav">
       <li>
         <a :href="$store.state.oldyqzjUrl+'/Set/userinfo'"><i class="i4"></i>个人信息</a>
@@ -45,7 +45,7 @@
 <style>
   .set-nav {
     -webkit-box-shadow: 0px 3px 7px #ebebeb;
-    -moZ-box-shadow: 0px 3px 7px #ebebeb;
+    -moz-box-shadow: 0px 3px 7px #ebebeb;
     box-shadow: 0px 3px 7px #ebebeb;
     width: 18%;
     float: left;

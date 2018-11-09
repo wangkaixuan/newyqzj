@@ -19,6 +19,9 @@ export function fetch(options){
       })
       .catch(error => {
         if(error.message.indexOf('401') > -1){
+          console.log('--------------------');
+          console.log(error.message);
+          localStorage.clear();
           //window.location = store.state.oldyqzjUrl+'/Login/login'
         }
       });

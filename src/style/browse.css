@@ -13,24 +13,44 @@ a:hover {
   text-decoration: none;
 }
 .wrap {
-  background-color: #f2f2f2;
+  background-color: #fff;
   width: 100%;
-  /*min-width: 980px;*/
-  min-width: 1100px;
+}
+.wrap .backtotop {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  top: 50%;
+  right: 6px;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  text-align: center;
+  line-height: 40px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
 }
 .wrap .center {
-  margin: 15px auto 30px;
+  margin: 0px auto 30px;
   width: 94%;
-  min-height: 500px;
   position: relative;
-  /*max-width: 1600px;*/
+  padding-top: 80px;
 }
 .center .center_content {
   font-family: Avenir,Helvetica,Arial,sans-serif;
   float: left;
-  margin-left: 1%;
-  width: 83%;
+  margin-left: 2%;
+  width: 82%;
   height: auto;
+}
+.center .browse_line {
+  border-left: 1px solid #e6e6e6;
+  position: absolute;
+  top: 100px;
+  left: 17%;
+  bottom: 0;
+  right: 0;
+  width: 1px;
 }
 .center .center_content .sx_top {
   width: 100%;
@@ -235,13 +255,12 @@ a:hover {
   color: #dadada;
   margin-left: 18px;
 }
-.center .center_content .sx_wrap .sx_content .sx_true {
+.center .center_content .sx_true {
   width: 100px;
   float: right;
-  margin-top: 12px;
   margin-right: 2px;
 }
-.center .center_content .sx_wrap .sx_content .sx_true a {
+.center .center_content .sx_true a {
     width: 100px;
     display: block;
     height: 26px;
@@ -249,7 +268,7 @@ a:hover {
     line-height: 26px;
     color: #626262;
     border: 1px solid #c9c9c9;
-    border-radius: 13px;
+    border-radius: 6px;
     font-size: 12px;
     background-color: #f6f6f6;
 }
@@ -492,6 +511,7 @@ a:hover {
   line-height: 25px;
   font-size: 16px;
   color: #666;
+  min-height: 15px;
 }
 .center .center_content .content_list .message_list ul li .input_checkbox {
   margin-left: 10px;
@@ -563,7 +583,7 @@ a:hover {
   height: 16px;
   padding: 0 5px;
   margin: 5px 0 0 15px;
-  border-radius: 16px;
+  border-radius: 6px;
   background-color: #fd433d;
   color: #fff;
   line-height: 16px;
@@ -900,26 +920,4 @@ a:hover {
   float: left;
   display: block;
 }
-
-
-
-
-
-
-
 /*分页结束*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

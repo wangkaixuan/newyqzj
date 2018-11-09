@@ -1,7 +1,7 @@
 <template>
 	<div class="wrap_detail">
-		<yqzj-Head @isHasPower="getPower"></yqzj-Head>
-		<div class="center_detail">
+		<yqzj-Head @isHasPower="getPower" funName="舆情监测"></yqzj-Head>
+		<div class="center center_detail">
 			<div class="info_detail_box clearfix_detail">
 				<div class="info_detail_left fl">
 					<h1 class="info_detail_title" v-html="datailInfo.kvTitleMakeRed"></h1> 
@@ -75,7 +75,7 @@
               <p v-html="detailContent"></p>
             </div>
           </div>
-          <div class="event_tips"><span>*</span> 舆情秘书和网页<i>http://weibo.com/6586838459/GuJ4jF9XY</i>的作者无关，不对其内容负责。</div>
+          <div class="event_tips"><span>*</span> 舆情专家和网页<i>{{datailInfo.kvUrl}}</i>的作者无关，不对其内容负责。</div>
 				</div>
 				<div class="info_detail_right fr">
           <div class="same_info keyword">
@@ -87,8 +87,7 @@
           <div class="same_info special">
             <div class="title clearfix_detail"><b></b>涉及专题<span class="close" v-bind:class="{open:specialsArrow.isOpen}" @click="slideSpecial">{{specialsArrow.text}}</span></div>
             <div class="special_content" v-show="!specialsArrow.isOpen">
-              <router-link  tag="a" :to="{path: 'browse', query: { tid : item.kkType, sid : item.ksId , kkname: item.kkName,shareMsUserId: shareMsUserId}}" target="_blank" title="item.route" v-for="(item,i) in specials" :key="i">{{item.kkName}}</router-link>
-              <!-- <a href="/Browse/index?tid=01&amp;sid=7bd1597f62ed450daf7443952d32b8dd&amp;kkname=投资理财" target="_blank" class="" :title="item.route">{{item.kkName}}</a> -->
+              <router-link  tag="a" :to="{path: 'browse', query: {sid : item.ksId , shareMsUserId: shareMsUserId}}" target="_blank" :title="item.route" v-for="(item,i) in specials" :key="i">{{item.kkName}}</router-link>
             </div>
           </div>
           <div class="same_info" v-show="sameInfoNum > 0">
@@ -146,6 +145,8 @@ export default {
       kvUrl: '',         //信息URL
       kvSimhash: '',     //信息HASH
       isHasBuiltPower: false, //是否有上报权限
+      markReadList: [],  //标记已读
+      deleteList: [],    //删除
     }
   },
   components:{
@@ -176,17 +177,20 @@ export default {
       let _this = this;
       let isrepeat = _this.isRepeat; //1 去重 0 不去重
       let data = {};
+      _this.deleteList = [];
       if(isrepeat == '0'){
+        _this.deleteList.push(kvUrl)
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
-          kvUrl: kvUrl,           //信息URL
+          kvUrlList: _this.deleteList          //信息URL
         }
       }else{
+        _this.deleteList.push(kvSimhash)
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
-          kvSimhash: kvSimhash    //信息HASH
+          kvSimhashList: _this.deleteList      //信息HASH
         }
       }
       _this.$confirm('确认删除该条信息吗?', '提示', {
@@ -198,14 +202,22 @@ export default {
       }).then(() => {
         delBrowseList(data).then(function (res) {
           if(res.data.status == '0'){
-            _this.$alert('此页面将会关闭，请刷新原来的列表页查看!', '提示', {
-              showClose: false, //是否显示右上角的提示按钮
-              confirmButtonText: '确定',
-              duration: 1000, //显示时间, 毫秒。设为 0 则不会自动关闭
-              callback: action => {
-                window.close();//关闭当前页面
-              }
-            });
+            if(res.data.result.data >= 1){
+              _this.$alert('此页面将会关闭，请刷新原来的列表页查看!', '提示', {
+                showClose: false, //是否显示右上角的提示按钮
+                confirmButtonText: '确定',
+                duration: 1000, //显示时间, 毫秒。设为 0 则不会自动关闭
+                callback: action => {
+                  window.close();//关闭当前页面
+                }
+              });
+            }else{
+              _this.$message({
+                type: 'error',
+                customClass: 'ele_ui_tips_position',
+                message: '删除失败！'
+              });
+            }
           }else{
             _this.$message({
               type: 'error',
@@ -228,22 +240,31 @@ export default {
       let _this = this;
       let isrepeat = _this.isRepeat; //1 去重 0 不去重
       let data = {};
+      _this.markReadList = [];
       if(isrepeat == '0'){
+        _this.markReadList.push(_this.kvUrl);
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
-          kvUrl: _this.kvUrl,           //信息URL
+          kvUrlList: _this.markReadList           //信息URL
         }
       }else{
+        _this.markReadList.push(_this.kvSimhash)
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
-          kvSimhash: _this.kvSimhash    //信息HASH
+          kvSimhashList: _this.markReadList      //信息HASH
         }
       }
       markRead(data).then(function (res) {
-        if(res.data.result.data == 1){
-          console.log('标记已读成功');
+        if(res.data.status == '0'){
+          if(res.data.result.data >= 1){
+            console.log('标记已读成功');
+          }else{
+            console.log('标记已读失败');
+          }
+        }else{
+          console.log('标记已读失败');
         }
       }).catch(err=>{
         console.log(err,'请求失败！');
@@ -252,11 +273,13 @@ export default {
     //是否有上报权限
     getPower(data){
       let _this = this; 
-      console.log('--------是否有上报权限---------');
-      console.log(data);
       for(let i in data){
         if(data[i].funName == '工作台'){
-          _this.isHasBuiltPower = true;
+          for (let m in data[i].funSonList){
+            if(data[i].funSonList[m].funName == '舆情报送'){
+              _this.isHasBuiltPower = true;
+            }
+          }
         }
       }
     },
@@ -265,7 +288,7 @@ export default {
       this.$message({
         type: 'error',
         customClass: 'ele_ui_tips_position',
-        message: '您还没有功能权限，请找管理员开通吧！'
+        message: '您还没有此功能权限，请联系管理员开通吧！'
       });
     }
   },
@@ -285,8 +308,6 @@ export default {
   	}
     //获取舆情浏览详情页
     getBrowseDetail(data).then(function (res) {
-    	console.log('---------获取舆情浏览详情页-------------');
-    	console.log(res);
       let result;
       if(res.data.result){
         result = res.data.result.data;
@@ -305,8 +326,11 @@ export default {
     }).catch(err=>{
       console.log(err,'请求失败！');
     });
-    //标记已读
-    _this.markedRead();
+    //我的专题——有标记已读功能，授权没有
+    if(_this.msUserId == _this.shareMsUserId){
+      //标记已读
+      _this.markedRead();
+    }
   }
 }
 </script>
@@ -343,10 +367,7 @@ a:hover {
 .center_detail {
   margin: 75px auto 30px;
   width: 94%;
-  min-height: 500px;
   position: relative;
-  //max-width: 1600px;
-  font-family: Avenir,Helvetica,Arial,sans-serif;
 }
 .info_detail_left {
   width: 80%;
@@ -413,7 +434,7 @@ a:hover {
       //margin-right: 30px;
     }
     a {
-      color: #333;
+      color: #33a7ff;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

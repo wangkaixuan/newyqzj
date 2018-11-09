@@ -39,7 +39,5 @@ export function verifyAccess(pageSrc) {
     return 'permissiondenied';
   }
   navData = JSON.parse(navData);
-  console.log(pageSrc);
-  console.log(navData);
   return pageSrc;
 }

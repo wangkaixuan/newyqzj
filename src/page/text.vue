@@ -103,6 +103,32 @@
 //      })
     }
   }
+
+//  Function.prototype.aopBefore = function (fn) {
+//    console.log(fn);
+//    const _this = this;
+//    return function () {
+//      fn.apply(this,arguments);
+//      return _this.apply(this,arguments);
+//    }
+//  }
+//  Function.prototype.aopAfter = function (fn) {
+//    const _this = this;
+//    return function () {
+//      let current = _this.apply(this,arguments);
+//      fn.apply(this,arguments);
+//      return current;
+//    }
+//  }
+//  let aopFunc = function () {
+//    console.log("aop");
+//  }
+//  aopFunc = aopFunc.aopBefore(()=>{
+//      console.log("aop before");
+//  }).aopAfter(()=>{
+//      console.log("aop after");
+//  });
+//  aopFunc();
 </script>
 <style>
 

@@ -1,21 +1,17 @@
 <template>
   <div class="wrap">
-    <yqzj-Head @setSecondNav="setSubNav" funName="舆情监测" @isHasPower="getPower"></yqzj-Head>
-    <div class="second_nav clearfix_browse">
-      <ul class="ul_nav">
-        <li v-for="snd in subNavData">
-          <router-link tag="a" :to="{path: snd.funUrl}" :title="snd.funName" class="border_box"  :class="{hover:snd.funName=='舆情浏览'}" v-if="snd.funName == '舆情浏览'">{{snd.funName}}</router-link>
-          <a :href="$store.state.oldyqzjUrl+snd.funUrl" :title="snd.funName" class="border_box" v-else>{{snd.funName}}</a>
-        </li>
-      </ul>
-    </div>
+    <yqzj-Head @setSecondNav="setSubNav" funName="舆情监测" subname="舆情浏览" @isHasPower="getPower" @yqzjNav="firstComeIn"></yqzj-Head>
     <div class="center">
-      <browse-nav @getListInfo="getListInfo" :sid="sid"></browse-nav>
-      <div class="center_content">
+      <browse-nav @getListInfo="getListInfo" @getListInfoZtree="getListInfoZtree" :msUserId="inquireParameter.msUserId" :sid="sid"  @myTopic="myTopic" @shareTopic="shareTopic" :mytree="mySpecialTopic" :specialtree="shareSpecialTopic"></browse-nav>
+      <div class="browse_line"></div>
+      <div class="center_content border_box" ref="contentWidth" id="contentWidth">
         <!--搜12索-->
         <div class="sx_top">
           <div class="top_one">
-            <p>全部专题</p>
+            <p>{{topicTitle}}</p>
+          </div>
+          <div class="sx_true" v-if="inquireParameter.msUserId == inquireParameter.shareMsUserId">
+            <a href="javascript:void(0)" @click="saveSearch()">保存筛选条件</a>
           </div>
           <!--<div class="top_three">-->
             <!--<div class="select" the-id="select_words" @click="showSearchWords">-->
@@ -32,7 +28,7 @@
         </div>
         <!--搜索条件上-->
         <div the-id="search_criteria">
-          <search @getListInfo="getListInfo" @setAccurateInfo="setAccurateInfo" :inquireParameter="inquireParameter"></search>
+          <search @getListInfo="getListInfo"  ref="search" @setAccurateInfo="setAccurateInfo" :inquireParameter="inquireParameter" :classId="classId"></search>
         </div>
         <!-- <div the-id="browse_tab_content"> -->
         <div class="content_list">
@@ -44,8 +40,7 @@
                 <li v-for="item,i in listData">
                   <div class="all_checkbox">
                     <label>
-                      <input type="checkbox" class="input_checkbox" id="item.kvUuid" kruuid="item.krUuid"
-                             keywordid="item.krKeywordid"/>
+                      <input type="checkbox" class="input_checkbox" :id="item.kvUuid" :kruuid="item.krUuid" :keywordid="item.krKeywordid" :kvUrl="item.kvUrl" :kvSimhash="item.kvSimhash" :krUid="item.krUid" v-model='checkList' :value="item.kvSimhash"/>
                     </label>
                   </div>
                   <div class="photo" v-if="item.kvIspic != 0 ">
@@ -150,8 +145,9 @@
               </ul>
               <div class="clear"></div><!-- 处理此页面引用分页组件引起的问题，不可删除 -->
               <!-- 分页 -->
-              <pubpaging :pages="pages" :current.sync="borwseListData.pageNum" @navpage="clickPage"
+              <pubpaging :pages="pages" :current.sync="borwseListData.pageNum" @navpage="clickPage" :totals="borwseListData.total"
                      v-show="listData != ''"></pubpaging>
+              <operationBar @isCheck="checkedAll" :checked="checked" :width="parentWidth" @updateTendency="updateTendency" @markAllRead="markAllRead" @deleteAllList="deleteAllList" @updatePageSize="updatePageSize" :hasPower="inquireParameter"  :inquireParameter="inquireParameter" @getListInfo="getListInfo" ref="operationBar"></operationBar>
             </div>
             <!--无数据-->
             <div v-else class="nodata">
@@ -165,13 +161,14 @@
                 <p>加载中...</p></div>
             </div>
           </div>
-          <operation-bar></operation-bar>
+
         </div>
         <!-- </div> -->
       </div>
       <div class="clear"></div>
     </div>
     <yqzj-Footer></yqzj-Footer>
+    <a href="javascript:void(0)" class="backtotop" title="返回顶部" @click.stop="backToTop">↑</a>
   </div>
 </template>
 <script>
@@ -181,11 +178,15 @@
   import search from './search.vue'
   import operationBar from './operationBar.vue'
   import pubpaging from '../../components/pagination.vue'
-  import {getBrowseList,delBrowseList,markRead} from '../../service/browse'
+  import {getSpecialTopicTree,getBrowseList,delBrowseList,markRead,getSearchCondition,markTendency} from '../../service/browse'
 
   export default {
     data() {
       return {
+        topicTitle: '我的专题', //专题名称 默认
+        classId: '',            //分类
+        mySpecialTopic:[],      //我的专题
+        shareSpecialTopic:[],   //授权专题
         //搜索
         selectWords: {
           selectedtxt: '全文',
@@ -227,16 +228,16 @@
             }
           ]
         },
-        pages: 1,             //总页数
+        pages: 1,               //总页数
         //列表数据
-        listData: [],        //列表数据
+        listData: [],           //列表数据
         borwseListData: {
-          pageNum: 1,      //当前页数
-          pageSize: 10,    //每页条数 默认10条，30 , 50 , 100
-          total: 0         //总条数
+          pageNum: 1,           //当前页数
+          pageSize: 10,         //每页条数 默认10条，30 , 50 , 100
+          total: 0              //总条数
         },
-        isLoading: false,    //是否显示加载的遮罩层
-        subNavData: [],       //子集导航
+        isLoading: false,       //是否显示加载的遮罩层
+        subNavData: [],         //子集导航
         inquireParameter: {
           pageNum: '1',                 //一页多条
           pageSize: '10',                 //当前页数
@@ -262,9 +263,16 @@
           kvWeiboatnoise: '',                //忽略微博@信息中的关键词
           msUserId: '',     //msUserId
           shareMsUserId: '',     //shareMsUserId
+          importanceWeight: '0',     //只看重要度
         },
-        sid: '',  //处理从详情页跳转到舆情列表页定位问题
+        sid: '',                //处理从详情页跳转到舆情列表页定位问题
         isHasBuiltPower: false, //是否有上报权限
+        checkList: [],          //全选或者返选
+        checked: false, //全选框
+        parentWidth: '', //父元素的宽度传递到子元素
+        markReadList: [], //标记已读
+        deleteList: [],   //删除
+        isClickLeft:false
       }
     },
     components: {
@@ -276,6 +284,10 @@
       pubpaging
     },
     methods: {
+        //保存筛选条件
+      saveSearch(){
+        this.$refs.search.saveSearch();
+      },
       //是否显示搜索框条件
       showSearchWords(e) {
         e.stopPropagation();
@@ -283,7 +295,6 @@
       },
       //搜索框条件选择
       selevtOpts(item) {
-        console.log(item);
         this.selectWords.selectedtxt = item.content;
         for (var i in this.selectWords.opts) {
           this.selectWords.opts[i].isActive = false;
@@ -293,7 +304,6 @@
       },
       //修改倾向性
       changeTendency(item) {
-        console.log(item);
         for (var i in this.modifyTendency.opts) {
           this.modifyTendency.opts[i].isActive = false;
         }
@@ -306,10 +316,14 @@
       //查询数据
       queryData(){
         let _this = this;
+        _this.checkList = [];  //重新刷新时，清空checkbox的选中
+        if(_this.inquireParameter.timeType !='customDay'){
+          _this.inquireParameter.timetypeInfo = '';
+          _this.inquireParameter.endTime = '';
+          _this.inquireParameter.startTime = '';
+        }
         //获取舆情浏览列表数据
         getBrowseList(_this.inquireParameter, _this.hideLays).then(function (res) {
-          console.log('----------获取舆情浏览列表数据------------');
-          console.log(res);
           if (res.data.result.data) {
             _this.listData = res.data.result.data;
             _this.borwseListData.total = res.data.result.total;
@@ -323,7 +337,10 @@
             // _this.keypage = 0;
             _this.isLoading = false;
           }
-
+          if(_this.isClickLeft){
+            _this.$refs.operationBar.setpage();
+          }
+          _this.$refs.search.setSearchWz();
         }).catch(err => {
           console.log(err, '请求失败！');
         });
@@ -331,6 +348,7 @@
       //首次进入页面查询的数据
       firstComeIn(){
         let _this = this;
+        _this.topicTitle = '我的专题'; //我的专题title
         let query = _this.$route.query;  //获取链接 ？ 之后的参数
         _this.sid = query.sid || '';
         _this.inquireParameter.orgId = _this.$store.state.orgId;  //集团id
@@ -341,8 +359,27 @@
           _this.inquireParameter.shareMsUserId = query.shareMsUserId;
         }
         _this.inquireParameter.kkIdList = _this.sid || '';  //分类ID
-        console.log(_this.inquireParameter.kkIdList)
-        _this.queryData();
+        //查询保存筛选条件
+        getSearchCondition({msUserId:_this.inquireParameter.msUserId,kkId:_this.inquireParameter.kkIdList}).then(res=>{
+            if(res.data.result.data){
+                //_this.queryData();
+              _this.inquireParameter = JSON.parse(res.data.result.data);
+              _this.inquireParameter.pageNum = '1';
+              _this.borwseListData.pageNum = 1;
+              _this.inquireParameter.msUserId = _this.$store.state.msUserId;
+              _this.inquireParameter.shareMsUserId = _this.$store.state.msUserId;
+              if(_this.sid == ''){
+                _this.inquireParameter.kkIdList = '';
+              }
+              _this.queryData();
+            }else{
+              _this.borwseListData.pageNum = 1;
+              _this.queryData();
+            }
+        }).catch(error=>{
+
+        });
+        //_this.queryData();
       },
       //分页
       clickPage(curPage) {
@@ -352,16 +389,91 @@
         this.queryData();
       },
       setSubNav(navData){
-        console.log('-----------------');
-        console.log(navData);
         this.subNavData = navData[0];
       },
+      //回复默认
+      restoredefault(){
+        let msUserId = this.inquireParameter.msUserId;
+        let shareMsUserId = this.inquireParameter.shareMsUserId;
+        this.inquireParameter = {
+            pageNum: '1',                 //一页多条
+            pageSize: '10',                 //当前页数
+            kkIdList: '',                 //专题ID
+            startTime: '',                //开始时间
+            endTime: '',                //结束时间
+            orientationList: '',                //倾向性  1 2 3
+            kvSourcetypeList: '',               //媒体类型
+            wechatInfoTypeList: '',               //微博类型  原发1 回复并转发3 仅转发2
+            timeType: '',                //时间类型  day   sevenDays  customDay
+            region: '',                //信源地域   传最后一个  选市传市  否则传省
+            infoSourceLevelList: '',                //信源分级
+            isread: '-1',                 //浏览范围  -1全部 1已读 0 未读
+            isRepeat: '1',                //1 去重 0 不去重
+            krState: '1',                //噪音过滤  1 正常 x过滤 jing 精准  全部xx
+            kvTitlematch: '',                //标题是否匹配  匹配全部''  仅匹配标题1
+            kvOnlylocal: '',                //是否唯一地域   关闭'' 开启1
+            kvMustwordminindex: '',                //位置
+            kvKeywordsminindex: '',                //词距范围
+            kvWeiboovertime: '',                //微博时间过滤
+            kvWeibosignlocalnoise: '',                //忽略微博位置信息中的关键词
+            kvWeibotopicnoise: '',                //忽略微博话题信息中的关键词
+            kvWeiboatnoise: '',                //忽略微博@信息中的关键词
+            importanceWeight: '0',     //只看重要度
+            msUserId: msUserId,               //msUserId
+            shareMsUserId: shareMsUserId,       //shareMsUserId
+        }
+      },
+      //左侧树查询
+      getListInfoZtree(para){
+        let _this = this;
+        //针对专题标题
+        let oldTitle = this.topicTitle;
+        if(para.name){
+          this.topicTitle = para.name;
+          oldTitle = this.topicTitle;
+        }
+        this.topicTitle = oldTitle;
+
+        if(_this.inquireParameter.msUserId == para.shareMsUserId){
+          if(para.kstype == '2'){
+            _this.classId = para.ztreeId;
+          }else{
+            _this.classId = '';
+          }
+          this.isClickLeft = true;
+          getSearchCondition({msUserId:this.inquireParameter.msUserId,kkId:para.ztreeId}).then(res=>{
+            if(res.data.result.data){
+              //_this.queryData();
+              _this.inquireParameter = JSON.parse(res.data.result.data);
+              _this.inquireParameter.pageNum = '1';
+              _this.borwseListData.pageNum = 1;
+              _this.inquireParameter.kkIdList = para.content;
+              _this.inquireParameter.msUserId = _this.$store.state.msUserId;
+              _this.inquireParameter.shareMsUserId = _this.$store.state.msUserId;
+              _this.queryData();
+            }else{
+              _this.inquireParameter.shareMsUserId = para.shareMsUserId;
+              this.restoredefault();
+              _this.inquireParameter.kkIdList = para.content;
+              _this.borwseListData.pageNum = 1;
+              _this.queryData();
+            }
+          }).catch(error=>{
+            console.log(error);
+          });
+        }else{
+          _this.inquireParameter.isread = '-1';                //回复已读
+          _this.getListInfo(para);
+        }
+        this.$refs.search.hideOthers();
+      },
+      //公共查询
       getListInfo(para){
         //筛选   keys查询的键值   content 内容;
-        console.log(para);
         if (para.startTime && para.endTime) {
           this.inquireParameter.startTime = para.startTime;
           this.inquireParameter.endTime = para.endTime;
+          this.inquireParameter.timeType = 'customDay';
         } else {
           this.inquireParameter[para.keys] = para.content;
         }
@@ -370,6 +482,7 @@
         }
         this.borwseListData.pageNum = 1;
         this.inquireParameter.pageNum = 1;
+
         if(para.isClick){
             this.sid = '';
         }
@@ -380,17 +493,20 @@
         let _this = this;
         let isrepeat = _this.inquireParameter.isRepeat; //1 去重 0 不去重
         let data = {};
+        _this.deleteList = [];
         if(isrepeat == '0'){
+          _this.deleteList.push(item.kvUrl);
           data = {
             msUserId: item.krUid,
             shareMsUserId: item.krUid,
-            kvUrl: item.kvUrl,           //信息URL
+            kvUrlList: _this.deleteList           //信息URL
           }
         }else{
+          _this.deleteList.push(item.kvSimhash)
           data = {
             msUserId: item.krUid,
             shareMsUserId: item.krUid,
-            kvSimhash: item.kvSimhash    //信息HASH
+            kvSimhashList: _this.deleteList      //信息HASH
           }
         }
         _this.$confirm('确认删除该条信息吗?', '提示', {
@@ -402,12 +518,20 @@
         }).then(() => {
           delBrowseList(data).then(function (res) {
             if(res.data.status == '0'){
-              _this.$message({
-                type: 'success',
-                customClass: 'ele_ui_tips_position',
-                message: '删除成功!'
-              });
-              _this.queryData();
+              if(res.data.result.data >= 1){
+                _this.$message({
+                  type: 'success',
+                  customClass: 'ele_ui_tips_position',
+                  message: '删除成功!'
+                });
+                _this.queryData();
+              }else{
+                _this.$message({
+                  type: 'error',
+                  customClass: 'ele_ui_tips_position',
+                  message: '删除失败！'
+                });
+              }
             }else{
               _this.$message({
                 type: 'error',
@@ -441,27 +565,34 @@
       //标记已读
       markedRead(item){
         let _this = this;
-        let isrepeat = _this.isRepeat; //1 去重 0 不去重
+        let isrepeat = _this.inquireParameter.isRepeat; //1 去重 0 不去重
         let data = {};
         item.isread = 1;   //0未读  1已读
+        _this.markReadList = [];
         if(isrepeat == '0'){
+          _this.markReadList.push(item.kvUrl);
           data = {
             msUserId: item.krUid,
             shareMsUserId: item.krUid,
-            kvUrl: item.kvUrl,           //信息URL
+            kvUrlList: _this.markReadList          //信息URL
           }
         }else{
+          _this.markReadList.push(item.kvSimhash);
           data = {
             msUserId: item.krUid,
             shareMsUserId: item.krUid,
-            kvSimhash: item.kvSimhash    //信息HASH
+            kvSimhashList: _this.markReadList    //信息HASH
           }
         }
         markRead(data).then(function (res) {
-          console.log('--------标记已读---------');
-          console.log(res);
-          if(res.data.result.data == 1){
-            console.log('标记已读成功');
+          if(res.data.status == '0'){
+            if(res.data.result.data >= 1){
+              console.log('标记已读成功');
+            }else{
+              console.log('标记已读失败');
+            }
+          }else{
+            console.log('标记已读失败');
           }
         }).catch(err=>{
           console.log(err,'请求失败！');
@@ -470,11 +601,13 @@
       //是否有上报权限
       getPower(data){
         let _this = this;
-        console.log('--------是否有上报权限---------');
-        console.log(data);
         for(let i in data){
           if(data[i].funName == '工作台'){
-            _this.isHasBuiltPower = true;
+            for (let m in data[i].funSonList){
+              if(data[i].funSonList[m].funName == '舆情报送'){
+                _this.isHasBuiltPower = true;
+              }
+            }
           }
         }
       },
@@ -483,14 +616,317 @@
         this.$message({
           type: 'error',
           customClass: 'ele_ui_tips_position',
-          duration: 5000,
-          message: '您还没有功能权限，请找管理员开通吧！'
+          message: '您还没有此功能权限，请联系管理员开通吧！'
         });
-      }
+      },
+      //处理点击我的专题
+      myTopic(){
+        //首次进入页面查询的数据
+        this.firstComeIn();
+      },
+      //处理点击授权专题
+      shareTopic(){
+        let _this = this;
+        _this.topicTitle = '授权专题'; //授权专题title
+        let query = _this.$route.query;  //获取链接 ？ 之后的参数
+        _this.sid = query.sid || '';
+        _this.inquireParameter.orgId = _this.$store.state.orgId;  //集团id
+        _this.inquireParameter.msUserId = _this.$store.state.msUserId;  //秘书ID
+        _this.inquireParameter.shareMsUserId = _this.$store.state.shareMsUserId;  //分享ID
+        //处理从授权专题的详情页跳转到列表页加载不出数据的问题
+        if(query.shareMsUserId != undefined){
+          _this.inquireParameter.shareMsUserId = query.shareMsUserId;
+        }
+        _this.inquireParameter.isread = '-1';                //回复已读
+        _this.inquireParameter.kkIdList = _this.sid || '';  //分类ID
+        _this.queryData();
+      },
+      //获取专题树数据
+      getMyTopicAndSpecialTopicTree(){
+        let _this = this;
+        let data = {
+          orgId: this.$store.state.orgId,
+          msUserId: this.$store.state.msUserId,
+          type: 2   // 1简单树，2 复杂树
+        };
+        //获取舆情浏览专题树
+        getSpecialTopicTree(data).then(function (res) {
+          // console.log('---------获取舆情浏览专题树-----------');
+          // console.log(res);
+          _this.mySpecialTopic = res.data.result.data.mySpecialTopic;
+          _this.shareSpecialTopic = res.data.result.data.shareSpecialTopic;
+        }).catch(err=>{
+          console.log(err,'请求失败！');
+        });
+      },
+      //返回顶部
+      backToTop(){
+        document.documentElement.scrollTop = 0;
+      },
+      /***************以下为操作条功能***************/
+      //操作条 —— 获取子级 全选或反选 的返回值
+      checkedAll(data){
+        let _this = this;
+        if (!data) { //实现反选
+          _this.checkList = [];
+        } else {     //实现全选
+          _this.checkList = [];
+          _this.listData.forEach(function(item, index) {
+            _this.checkList.push(item.kvSimhash);
+          });
+        }
+      },
+      //操作条 —— 修改倾向性
+      updateTendency(data){
+        let _this = this;
+        let parms = {
+          msUserId: _this.$store.state.msUserId,
+          shareMsUserId: _this.$store.state.msUserId,
+          simhash: _this.checkList,                  //信息HASH
+          orientation: data.orientation              //1：正向 2：负向 3：中性
+        };
+        //修改倾向性的状态图标
+        for(let i in _this.listData){
+          for(let j in _this.checkList){
+            if(_this.checkList[j] == _this.listData[i].kvSimhash){
+              _this.listData[i].orientation = data.orientation;
+            }
+          }
+        }
+        if(_this.checkList.length > 0){
+          markTendency(parms).then(function (res) {
+            if(res.data.status == '0'){
+              if(res.data.result.data == 1){
+                _this.$message({
+                  type: 'success',
+                  customClass: 'ele_ui_tips_position',
+                  message: '修改倾向性成功!'
+                });
+              }else{
+                _this.$message({
+                  type: 'error',
+                  customClass: 'ele_ui_tips_position',
+                  message: '修改倾向性失败!'
+                });
+              }
+            }
+          }).catch(err=>{
+            console.log(err,'请求失败！');
+          });
+        }else{
+          _this.$message({
+            type: 'error',
+            customClass: 'ele_ui_tips_position',
+            message: '请选择您要更改倾向性的信息!'
+          });
+        }
+      },
+      //操作条 —— 标记已读
+      markAllRead(){
+        let _this = this;
+        let isrepeat = _this.inquireParameter.isRepeat; //1 去重 0 不去重
+        let data = {};
+        let msUserId = '',shareMsUserId= '';
+        _this.markReadList = [];
+        if(isrepeat == '0'){
+          //修改标记已读的状态图标
+          for(let i in _this.listData){
+            for(let j in _this.checkList){
+              if(_this.checkList[j] == _this.listData[i].kvSimhash){
+                _this.markReadList.push(_this.listData[i].kvUrl);
+                msUserId = _this.listData[i].krUid;
+                shareMsUserId = _this.listData[i].krUid;
+                _this.listData[i].isread = 1;   //0未读  1已读
+              }
+            }
+          }
+          data = {
+            msUserId: msUserId,
+            shareMsUserId: shareMsUserId,
+            kvUrlList: _this.markReadList          //信息URL
+          }
+        }else{
+          //修改标记已读的状态图标
+          for(let i in _this.listData){
+            for(let j in _this.checkList){
+              if(_this.checkList[j] == _this.listData[i].kvSimhash){
+                msUserId = _this.listData[i].krUid;
+                shareMsUserId = _this.listData[i].krUid;
+                _this.listData[i].isread = 1;   //0未读  1已读
+              }
+            }
+          }
+          _this.markReadList = _this.checkList;
+          data = {
+            msUserId: msUserId,
+            shareMsUserId: shareMsUserId,
+            kvSimhashList: _this.markReadList    //信息HASH
+          }
+        };
+        if(_this.checkList.length > 0){
+          markRead(data).then(function (res) {
+            if(res.data.status == '0'){
+              if(res.data.result.data >= 1){
+                _this.$message({
+                  type: 'success',
+                  customClass: 'ele_ui_tips_position',
+                  message: '标记已读成功!'
+                });
+              }else{
+                _this.$message({
+                  type: 'error',
+                  customClass: 'ele_ui_tips_position',
+                  message: '标记已读失败!'
+                });
+              }
+            }else{
+              _this.$message({
+                type: 'error',
+                customClass: 'ele_ui_tips_position',
+                message: '标记已读失败!'
+              });
+            }
+          }).catch(err=>{
+            console.log(err,'请求失败！');
+          });
+        }else{
+          _this.$message({
+            type: 'error',
+            customClass: 'ele_ui_tips_position',
+            message: '请选择您要标记已读的信息!'
+          });
+        }
+      },
+      //操作条 —— 删除
+      deleteAllList(){
+        let _this = this;
+        let isrepeat = _this.inquireParameter.isRepeat; //1 去重 0 不去重
+        let data = {};
+        let msUserId = '',shareMsUserId= '';
+        _this.deleteList = [];
+        if(isrepeat == '0'){
+          for(let i in _this.listData){
+            for(let j in _this.checkList){
+              if(_this.checkList[j] == _this.listData[i].kvSimhash){
+                _this.deleteList.push(_this.listData[i].kvUrl);
+                msUserId = _this.listData[i].krUid;
+                shareMsUserId = _this.listData[i].krUid;
+              }
+            }
+          }
+          data = {
+            msUserId: msUserId,
+            shareMsUserId: shareMsUserId,
+            kvUrlList: _this.deleteList          //信息URL
+          }
+        }else{
+          for(let i in _this.listData){
+            for(let j in _this.checkList){
+              if(_this.checkList[j] == _this.listData[i].kvSimhash){
+                msUserId = _this.listData[i].krUid;
+                shareMsUserId = _this.listData[i].krUid;
+              }
+            }
+          }
+          _this.deleteList = _this.checkList;
+          data = {
+            msUserId: msUserId,
+            shareMsUserId: shareMsUserId,
+            kvSimhashList: _this.deleteList    //信息HASH
+          }
+        };
+        if(_this.checkList.length > 0){
+          _this.$confirm('确认删除该条信息吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            showClose: false,
+            closeOnClickModal: false
+          }).then(() => {
+            delBrowseList(data).then(function (res) {
+              if(res.data.status == '0'){
+                if(res.data.result.data >= 1){
+                  _this.$message({
+                    type: 'success',
+                    customClass: 'ele_ui_tips_position',
+                    message: '删除成功!'
+                  });
+                  _this.queryData();
+                }else{
+                  _this.$message({
+                    type: 'error',
+                    customClass: 'ele_ui_tips_position',
+                    message: '删除失败！'
+                  });
+                }
+              }else{
+                _this.$message({
+                  type: 'error',
+                  customClass: 'ele_ui_tips_position',
+                  message: '删除失败！'
+                });
+              }
+            }).catch(err => {
+              _this.$message({
+                type: 'error',
+                customClass: 'ele_ui_tips_position',
+                message: '请求失败！'
+              });
+            });
+          }).catch(() => {
+          });
+        }else{
+          _this.$message({
+            type: 'error',
+            customClass: 'ele_ui_tips_position',
+            message: '请选择您要删除的信息!'
+          });
+        }
+      },
+      //操作条 —— 分页
+      updatePageSize(pagesize){
+        this.inquireParameter.pageSize = pagesize;
+        this.borwseListData.pageNum = 1; //返回到第一页
+        this.queryData();
+      },
+      /***************以上为操作条功能***************/
     },
     mounted (){
+      let _this = this;
+      //获取专题树数据
+      _this.getMyTopicAndSpecialTopicTree();
       //首次进入页面查询的数据
-      this.firstComeIn();
+      _this.firstComeIn();
+
+      /***************以下为操作条功能***************/
+      _this.$nextTick(() => { //使用nextTick为了保证dom元素都已经渲染完毕
+        let w = _this.$refs.contentWidth.clientWidth;
+          _this.parentWidth = w;
+      });
+      // 操作条—— 注：window.onresize只能在项目内触发1次
+      window.onresize = function windowResize () {
+        // 通过捕获系统的onresize事件触发我们需要执行的事件
+        _this.parentWidth = _this.$refs.contentWidth.clientWidth;
+      }
+      /***************以上为操作条功能***************/
+    },
+    watch: {
+      'checkList': {
+        handler(val, oldVal) {
+          if (val.length === this.listData.length) {
+              this.checked = true;
+          } else {
+              this.checked = false;
+          }
+        },
+        deep: true
+      },
+      'parentWidth':{
+        handler(val,oldVal){
+          this.parentWidth = val;
+        },
+        deep: true
+      }
     }
   }
 </script>
