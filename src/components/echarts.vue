@@ -1,7 +1,5 @@
 <template>
-  <div class="echarts_wary" id="myechart">
-
-  </div>
+  <div class="echarts_wary" :id="myechart"></div>
 </template>
 <script>
   import echarts from 'echarts/lib/echarts'
@@ -14,17 +12,16 @@
   export default {
     data(){
       return {
-
+        myChart:""
       }
     },
-    props:[],
+    props: {chartData: {type: Object}, myechart: {type: String}},
     methods: {
-      pie(){
-        var myChart = echarts.init(document.getElementById('myechart'));
+      bar(){
         let optionDataBar = {
           title: {
             text: '舆情涉事地域统计',
-            x:'center'
+            x: 'center'
           },
           tooltip: {},
           xAxis: {
@@ -36,96 +33,108 @@
             type: 'bar',
             data: [5, 20, 36, 10, 10, 20]
           }]
+        };
+        this.myChart.setOption(optionDataBar);
+      },
+      pie(){
+        let optionDataPie = {
+          title: {
+            text: "舆情分类统计",
+            x: 'center'
+          },
+          "tooltip": {
+            "trigger": "item",
+            "formatter": "{a} <br/>{b} : {c} ({d}%)"
+          },
+          "legend": {
+            "orient": "vertical",
+            "x": "left",
+            "data": [
+              "企业",
+              "政府",
+              "机构",
+              "名人",
+              "网站",
+              "媒体"
+            ]
+          },
+          "calculable": true,
+          "series": [
+            {
+              "name": "",
+              "type": "pie",
+              "radius": [
+                0,
+                110
+              ],
+              "center": [
+                "55%",
+                "55%"
+              ],
+              "itemStyle": {
+                "normal": {
+                  "label": {
+                    "show": true,
+                    "position": "outer",
+                    "formatter": "{b} : {d}%"
+                  }
+                }
+              },
+              "data": [
+                {
+                  "name": "名人",
+                  "value": 4
+                },
+                {
+                  "name": "机构",
+                  "value": 3
+                },
+                {
+                  "name": "企业",
+                  "value": 2
+                },
+                {
+                  "name": "政府",
+                  "value": 1
+                }
+              ]
+            }
+          ],
+          "animation": false
         }
-        myChart.setOption(optionDataBar);
+        this.myChart.setOption(optionDataPie);
+      },
+      line(){
+        let optionData = {
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [{
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line'
+          }]
+        };
+        this.myChart.setOption(optionData);
       }
     },
     mounted(){
-
-      // 绘制图表
-//      let optionData = {
-//        xAxis: {
-//          type: 'category',
-//          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-//        },
-//        yAxis: {
-//          type: 'value'
-//        },
-//        series: [{
-//          data: [820, 932, 901, 934, 1290, 1330, 1320],
-//          type: 'line'
-//        }]
-//      };
-//
-//      let optionDataPie = {
-//        title:{
-//          text:"舆情分类统计",
-//          x:'center'
-//        },
-//        "tooltip": {
-//          "trigger": "item",
-//          "formatter": "{a} <br/>{b} : {c} ({d}%)"
-//        },
-//        "legend": {
-//          "orient": "vertical",
-//          "x": "left",
-//          "data": [
-//            "企业",
-//            "政府",
-//            "机构",
-//            "名人",
-//            "网站",
-//            "媒体"
-//          ]
-//        },
-//        "calculable": true,
-//        "series": [
-//          {
-//            "name": "大V分布",
-//            "type": "pie",
-//            "radius": [
-//              0,
-//              110
-//            ],
-//            "center": [
-//              "55%",
-//              "55%"
-//            ],
-//            "itemStyle": {
-//              "normal": {
-//                "label": {
-//                  "show": true,
-//                  "position": "outer",
-//                  "formatter": "{b} : {d}%"
-//                }
-//              }
-//            },
-//            "data": [
-//              {
-//                "name": "名人",
-//                "value": 4
-//              },
-//              {
-//                "name": "机构",
-//                "value": 3
-//              },
-//              {
-//                "name": "企业",
-//                "value": 2
-//              },
-//              {
-//                "name": "政府",
-//                "value": 1
-//              }
-//            ]
-//          }
-//        ],
-//        "animation": false
-//      }
-//      myChart.setOption(optionDataPie);
+      let _this = this;
+      _this.myChart = echarts.init(document.getElementById(_this.myechart));
+      _this[_this.chartData.type]();
+//      console.log(this.chartData);
+//      console.log(this.myechart);
+//      this.pie();
+      // 绘制图表   myChart.setOption(optionDataPie);
     }
   }
 </script>
 <style>
-  .echarts_wary{width: 100%;height: 300px;}
+  .echarts_wary {
+    width: 100%;
+    height: 300px;
+  }
 </style>

@@ -65,28 +65,41 @@
       <div class="cen_pub cen_pub16">
         <div class="title">舆情涉事地域统计</div>
         <div class="chart">
-          <echarts></echarts>
+          <echarts :chartData="territoryInfo"  myechart="myechart_yqdy"></echarts>
         </div>
       </div>
       <!--舆情涉事地域统计end-->
       <!--舆情报送单位统计start-->
       <div class="cen_pub cen_pub16">
         <div class="title">舆情报送单位统计</div>
+        <div class="chart">
+          <echarts :chartData="builtInfo" myechart="myechart_yqbs"></echarts>
+        </div>
       </div>
       <!--舆情报送单位统计end-->
       <!--舆情整体走势统计start-->
       <div class="cen_pub cen_pub16">
         <div class="title">舆情整体走势统计</div>
+        <div class="chart">
+          <echarts :chartData="yqztInfo" myechart="myechart_yqzs"></echarts>
+        </div>
       </div>
       <!--舆情整体走势统计end-->
       <!--饼图start-->
       <div class="cen_pub_warys">
         <div class="cen_pub cen_pub16 pie_left">
           <div class="title">舆情分类统计</div>
+          <div class="chart">
+            <echarts :chartData="yqClassInfo" myechart="myechart_class"></echarts>
+          </div>
         </div>
         <div class="cen_pub cen_pub16 pie_right">
-          <div class="title">舆情分类统计</div>
+          <div class="title">舆情类型统计</div>
+          <div class="chart">
+            <echarts :chartData="yqMediaInfo" myechart="myechart_yqmt"></echarts>
+          </div>
         </div>
+        <div class="clear"></div>
       </div>
       <!--饼图end-->
     </div>
@@ -123,6 +136,36 @@
           eTime:'',
           groupId:this.$store.state.generalGroupId,              // 集团id
           orgId: this.$store.state.orgId                         //组织id
+        },
+        //地域数据
+        territoryInfo:{
+          valueData:[],
+          nameData:[],
+          type:'bar'
+        },
+        //舆情报送数据
+        builtInfo:{
+          valueData:[],
+          nameData:[],
+          type:'bar'
+        },
+        //舆情整体走势
+        yqztInfo:{
+          valueData:[],
+          nameData:[],
+          type:'line'
+        },
+        //舆情分类统计
+        yqClassInfo:{
+          legendData:[],
+          seriesData:[],
+          type:'pie'
+        },
+        //舆情媒体统计
+        yqMediaInfo:{
+          legendData:[],
+          seriesData:[],
+          type:'pie'
         }
       }
     },
@@ -274,6 +317,7 @@
   .pie_left{width: 49.5%;float:left;}
   .pie_right{width: 49.5%;float:right;}
   .cen_pub .title{width: 96%;margin: 0 auto;padding:16px 0;font-size: 14px;color:#333;border-bottom:1px solid #e5e5e5;}
+  .cen_pub_warys .title{width: 92%;}
   .cen_pub .cen_title{height: 42px;text-indent: 24px;line-height: 42px;font-size: 14px;color:#333;border-bottom:1px solid #e5e5e5;}
   .cen_pub .chart{width: 96%;margin: 20px auto 0px;padding-bottom: 20px;}
   /*搜索*/
