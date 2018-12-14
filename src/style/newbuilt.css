@@ -236,7 +236,8 @@ a:hover {
 .wary_buile .center .new_built_content .new_built_list .wkx_tit{display: inline-block;width: 80px;font-size: 14px;color: #999;text-align: right;margin-right: 30px;float:left;}
 .wary_buile .center .new_built_content .new_built_list .img_warys{float: left;width: 84%;min-width: 324px;}
 .wary_buile .center .new_built_content .new_built_list .video_img{
-  width: 130px;height: 110px;
+  width: 80px;
+  height: 67px;
   /*background-color: #f2f2f5;*/
   float: left;
   border-radius: 4px;
@@ -248,15 +249,15 @@ a:hover {
   min-width: 40px;text-align: center;outline: none;
   /*border:1px solid #d9d9d9;*/
   position:relative;overflow: hidden;background-color: #fff;
-  width: 130px;height: 110px;padding: 0;margin: 0;
+  width: 80px;height: 67px;padding: 0;margin: 0;
   background: url('../assets/workbench/add_icon.png') no-repeat center;
 }
 .wary_buile .center .new_built_content .new_built_list .video_img a em{vertical-align: middle;color: #fa7d3c!important;white-space: nowrap;font-size: 12px;font-weight: 400;display: none;}
 .wary_buile .center .new_built_content .new_built_list .video_img a input[type="file"]{position:absolute;bottom:0;right:0;filter:alpha(opacity=0);-moz-opacity:0;cursor:pointer;width:1000px;height:1000px;font-size:100px;border: none;}
-.wary_buile .center .new_built_content .new_built_list .pub_imgs{width: 130px;height: 110px;background-color: #f2f2f5;float: left;margin: 0 12px 12px 0;position:relative;border-radius: 4px;}
-.wary_buile .center .new_built_content .new_built_list .pub_imgs i{color: #fff;display: block;font-size: 14px;position: absolute;top:4px;right: 4px;cursor: pointer;width: 24px;
-    height: 24px;background: rgba(0,0,0,.5);border-radius: 12px;text-align: center;line-height: 24px;font-weight: bold;}
-.wary_buile .center .new_built_content .new_built_list .pub_imgs img{width: 130px;height: 110px;border-radius: 4px;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs{width: 80px; height: 67px;background-color: #f2f2f5;float: left;margin: 0 12px 12px 0;position:relative;border-radius: 4px;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs i{color: #fff;display: block;font-size: 14px;position: absolute;top:-8px;right: -8px;cursor: pointer;width: 20px;
+    height: 20px;background: rgba(0,0,0,.3);border-radius: 12px;text-align: center;line-height: 20px;font-weight: bold;}
+.wary_buile .center .new_built_content .new_built_list .pub_imgs img{width: 80px; height: 67px;border-radius: 4px;}
 .wary_buile .center .new_built_content .new_built_list .add_icon input[type="file"]{position:absolute;bottom:-5px;right:-5px;filter:alpha(opacity=0);-moz-opacity:0;cursor:pointer;width:1000px;height:1000px;font-size:100px;}
 /*快捷添加*/
 .add_built_diag .el-dialog__body .el-checkbox-group .el-checkbox {
@@ -335,13 +336,13 @@ a:hover {
   margin-bottom: 20px;
   border-left: 1px solid #e5e5e5;
 }
-@media screen and (min-width: 1600px) and (max-width: 1920px) {
+@media screen and (min-width: 1610px) and (max-width: 1920px) {
   .wary_buile .center .new_built_content .new_built_list .title,
   .wary_buile .center .new_built_content .new_built_list .url,
   .wary_buile .center .new_built_content .new_built_list .txt_area,
   .wary_buile .center .new_built_content .new_built_list .suggestions,
   .wary_buile .center .new_built_content .new_built_list .net_source {
-    width: 84%;
+    width: 82%;
   }
 }
 @media screen and (max-width: 1280px) {
@@ -393,5 +394,26 @@ a:hover {
   .wary_buile .center .new_built_content .new_built_list textarea.txt_suggest {
     min-width: auto;
     width: 58%;
+  }
+}
+/*涉事地域*/
+@media screen and (max-width: 1430px) {
+  .wary_buile .center .new_built_content .new_built_list select.dy_select {
+    width: 220px;
+  }
+}
+@media screen and (max-width: 1345px) {
+  .wary_buile .center .new_built_content .new_built_list select.dy_select {
+    width: 200px;
+  }
+}
+@media screen and (max-width: 1260px) {
+  .wary_buile .center .new_built_content .new_built_list select.dy_select {
+    width: 180px;
+  }
+}
+@media screen and (max-width: 1180px) {
+  .wary_buile .center .new_built_content .new_built_list select.dy_select {
+    width: 160px;
   }
 }

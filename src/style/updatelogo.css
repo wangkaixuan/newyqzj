@@ -23,22 +23,21 @@ a:hover {
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 }
-body {
-  background: #fff;
-}
 .update_logo_box {
-	background: #fff;
+	background: transparent;
   width: 100%;
 }
 .update_logo_box .center {
   width: 94%;
-  margin: 80px auto 30px;
+  margin: 88px auto 30px;
   border-radius: 6px;
   position: relative;
 }
 .update_logo_box .center .logo_right {
-  margin-left: 30px;
-  width: 76%;
+  margin-left: 1%;
+  width: 81%;
+  background: #fff;
+  padding: 20px;
 }
 
 .update_logo_box .center .logo_right .logo_top_box {

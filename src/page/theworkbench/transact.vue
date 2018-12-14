@@ -1,12 +1,12 @@
 <template>
-  <div class="wary_workbench">
+  <div class="wary_workbench_new" ref="watermarkWary">
     <yqzj-Head @setSecondNav="setSubNav" funName="工作台" subname="抄送办理"></yqzj-Head>
     <!-- <work-nav :subNavData="subNavData" navName='舆情报送'></work-nav> -->
-    <div class="center border_box">
+    <div class="center border_box clearfix_workbench">
+      <div class="tab_box clearfix_workbench border_box">
+        <div class="nav_button border_box hover" >抄送办理</div>
+      </div>
       <div class="built_top">
-        <div class="classification clearfix_workbench border_box">
-          <div class="nav_button border_box hover" >抄送办理</div>
-        </div>
         <div class="workbench_title">
           <a href="javascript:void(0)" :class="{hover:dataParameter.status == '1'}" @click="setNav('1')">未批示<span class="num" v-if="statusCount.uncommentNum > 0">{{statusCount.uncommentNum}}</span></a>
           <a href="javascript:void(0)" :class="{hover:dataParameter.status == '2'}" @click="setNav('2')">已批示<span class="num" v-if="statusCount.commentNum > 0">{{statusCount.commentNum}}</span></a>
@@ -14,16 +14,16 @@
         <div class="search border_box">
           <ul class="clearfix_workbench">
             <li class="s_time border_box" :class="{hover:searchState == '0'}" @click.stop="searchTime('0')">
-              <span class="work_date_title">上报时间</span><span class="hover">{{timeWz}}</span><i class="arrow"></i><span class="line">|</span>
+              <span class="work_date_title">上报时间</span><span class="hover">{{timeWz}}</span><i class="arrow" :class="{arrowup: showTime}"></i><span class="line">|</span>
             </li>
             <li class="s_time border_box" :class="{hover:searchState == '1'}" @click.stop="searchTime('1')">
-              <span class="work_date_title">媒体类型</span><span class="hover">{{mediaTypeWz}}</span><i class="arrow"></i><span  class="line">|</span>
+              <span class="work_date_title">媒体类型</span><span class="hover">{{mediaTypeWz}}</span><i class="arrow" :class="{arrowup: showMediaType}"></i><span  class="line">|</span>
             </li>
             <li class="s_time border_box" :class="{hover:searchState == '2'}" @click.stop="searchTime('2')">
               <span class="work_date_title">舆情分类</span><span class="hover">{{dimensionWz}}</span><i class="arrow"></i><span  class="line" v-if="status == '1'">|</span>
             </li>
             <li class="s_time border_box" :class="{hover:searchState == '3'}" @click.stop="searchTime('3')" v-if="status == '1'">
-              <span class="work_date_title">浏览范围</span><span class="hover">{{rangeWz}}</span><i class="arrow"></i>
+              <span class="work_date_title">浏览范围</span><span class="hover">{{rangeWz}}</span><i class="arrow" :class="{arrowup: showRange}"></i>
             </li>
             <!--<li>维度 <i class="two"></i></li>-->
             <!--<li>重要性 <i class="three"></i></li>-->
@@ -88,6 +88,8 @@
       </div>
       <div class="built_center">
         <label><input type="checkbox" name="allWork"> 全部</label>
+        <span class="total_box" v-if="total > 0"><span class="total_num">{{total}}</span>&nbsp;条</span>
+        <span class="total_box" v-else><span class="total_num">0</span>&nbsp;条</span>
         <div class="work_botton clearfix_workbench">
           <a href="javascript:void(0)" @click="alertInfo">全部导出</a>
           <a href="javascript:void(0)" @click="alertInfo">批量导出</a>
@@ -108,17 +110,25 @@
                   <p v-else>{{list.importanceName}}</p>
                   <p class="fenlei">{{list.dimensionName}}</p>
                   <!-- <a>{{list.title}}</a> -->
-                  <router-link tag="a" :to="{path: 'seebuilt', query: {id: list.reportId,from: 'transact'}}" target="_blank" @click.native="markedRead(list)">{{list.title}} <span class="hasreaded" v-if="list.status > 0 && status == '1'"><img src="../../assets/browse/push_yiyue.gif"></span></router-link>
+                  <!--<router-link tag="a" :to="{path: 'seebuilt', query: {id: list.reportId,from: 'transact'}}" target="_blank" @click.native="markedRead(list)">{{list.title}} <span class="hasreaded" v-if="list.status > 0 && status == '1'"><img src="../../assets/browse/push_yiyue.gif"></span></router-link>-->
+                  <a href="javascript:void(0)"  @click="detailsInfo(list)" >{{list.title}} <span class="hasreaded" v-if="list.status > 0 && status == '1'"><img src="../../assets/browse/push_yiyue.gif"></span></a>
                 </div>
-                <div class="jb_info">
-                  <p><span>上报时间</span> {{list.createTime}}</p>
-                  <!--<p><span>涉事地域</span> 北京-海淀</p>-->
-                  <p><span>报送人</span> {{list.createUser}}</p>
+                <div class="jb_info clearfix_workbench">
+                  <p><span class="s_light">上报时间</span>  <span class="s_dark">{{list.createTime}}</span></p>
+                  <p v-if="list.city !== 'null' || list.cityId != 0">
+                    <span class="s_light">涉事地域</span>
+                    <span class="s_dark s_max" :title="list.city+'-'+list.county" v-if="list.county !== 'null'">{{list.city}}-{{list.county}}</span>
+                    <span class="s_dark s_max" :title="list.city" v-else>{{list.city}}</span>
+                  </p>
+                  <p v-else><span class="s_light">涉事地域</span></p>
+                  <p><span class="s_light">报送人</span>  <span class="s_dark s_max" :title="list.createUser">{{list.createUser}}</span></p>
+                  <p><span class="s_light">来源</span> <span class="s_dark s_max" :title="list.source">{{list.source}}</span></p>
                 </div>
               </div>
               <!--操作-->
               <div class="info_cz">
-                <router-link tag="a" :to="{path: 'seebuilt', query: {id: list.reportId,from: 'transact'}}" target="_blank" @click.native="markedRead(list)">查看 </router-link>
+                <!--<router-link tag="a" :to="{path: 'seebuilt', query: {id: list.reportId,from: 'transact'}}" target="_blank" @click.native="markedRead(list)">查看 </router-link>-->
+                <a href="javascript:void(0)"  @click="detailsInfo(list)" >查看 </a>
                 <router-link tag="a" :to="{path: 'seebuilt', query: {id: list.reportId,from: 'transact',flag: 'comment'}}" @click.native="markedRead(list)">批示 </router-link>
               </div>
             </div>
@@ -146,6 +156,7 @@
   import workNav from './workNav.vue'
   import Watermark from '../../js/watermark'
   import {getTransactData,getStatusCount,markRead,getAllTypeData} from '../../service/built'
+  import {linkDetails} from '../../service/api'
 
   export default{
     data() {
@@ -199,6 +210,11 @@
       workNav
     },
     methods: {
+      //跳转详情页
+      detailsInfo(list){
+        linkDetails('details?id='+list.reportId+'&from=transact&status='+this.dataParameter.status);
+        this.markedRead(list);
+      },
       setSubNav(navData){
         this.subNavData = navData[0];
       },
@@ -248,6 +264,8 @@
           this.showMediaType = false;
           this.showDimension = false;
           this.showRange = true;
+          this.dataParameter.cityId = '';
+          this.dataParameter.countyId = '';
         }
       },
       //设置上报时间
@@ -520,7 +538,7 @@
     mounted (){
       let username = this.$store.state.userinfo_name;
       let account = this.$store.state.account.substr(7,4);
-      Watermark.set(username+"  "+account);
+      Watermark.set(username+"  "+account,this.$refs.watermarkWary);
       this.getData();
       //获取处置建议、媒体类型、舆情分类列表
       this.getThreeData();

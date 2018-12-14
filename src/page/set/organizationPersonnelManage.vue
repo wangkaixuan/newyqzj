@@ -1,8 +1,8 @@
 <template>
   <div class="wary">
-    <yqzj-Head></yqzj-Head>
+    <yqzj-Head @setSecondNav="setSubNav" funName="系统设置" subname="人员管理"></yqzj-Head>
     <div class="centre">
-      <set-nav :hover="'opm'"></set-nav>
+      <set-Nav :subNavData="subNavData" subname="人员管理"></set-Nav>
       <div class="set-infowary">
         <div class="tit"><a class="hover">人员管理</a> <p class="addrole" v-on:click="addRy()">添加人员</p></div>
         <div class="group_management_wrap clearfix">
@@ -114,6 +114,7 @@
   export default {
       data(){
           return {
+            subNavData: [],     //子集导航
             dataList:[],
             ztreeDataSource:[],
             parentNodeModel:[],//当前点击节点父亲对象
@@ -152,6 +153,10 @@
       setNav
     },
     methods:{
+      //设置顶部导航 —— 左侧导航
+      setSubNav(navData){
+        this.subNavData = navData[0];
+      },
       // 点击节点
       nodeClick:function(m, parent, trees){
         this.treeDeepCopy = trees;

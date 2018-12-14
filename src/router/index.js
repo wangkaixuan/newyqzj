@@ -89,6 +89,11 @@ const router =  new Router({
       path:"/details",
       name:"details",
       component:resolve => require(['@/page/theworkbench/details'],resolve)
+    },
+    {
+      path:'/instruct',
+      name:'instruct',
+      component:resolve => require(['@/page/theworkbench/instruct'],resolve)
     }
   ]
 });
@@ -97,12 +102,10 @@ router.beforeEach((to, from, next)=>{
     if(store.state.ACCESSTOKEN != ''){
       next();
     }else{
-      console.log('-----------')
-      //window.location = store.state.oldyqzjUrl+'/Login/login'
+      window.location = store.state.oldyqzjUrl+'/Login/login'
     }
   }else{
-    console.log('+++++++++++++++++++++++++++++++++')
-    //window.location = store.state.oldyqzjUrl+'/Login/login'
+    window.location = store.state.oldyqzjUrl+'/Login/login'
   }
 
 });

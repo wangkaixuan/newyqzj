@@ -125,6 +125,12 @@
                           <router-link  tag="a" :to="{path: 'newbuiltdelivery', query: {from: 'workbench',title: item.kvTitle,url: item.kvUrl, mediatype: item.kvSourcetype, source: item.kvWebname,time: item.krCtime,summary:item.kvAbstract }}" class="kongshi" title="上报信息" target="_blank" v-if="isHasBuiltPower"></router-link>
                           <a href="javascript:void(0)" class="kongshi" title="上报信息" v-else @click="promptUser"></a>
                         </li>
+                        <!-- 下指令 -->
+                        <li class="li7">
+                          <!-- <a href="javascript:void(0)" class="kongshi" title="上报信息" deleleflag></a> -->
+                          <router-link  tag="a" :to="{path: 'instruct', query: {from: 'examine',title: item.kvTitle,url: item.kvUrl, mediatype: item.kvSourcetype, source: item.kvWebname,time: item.krCtime,summary:item.kvAbstract }}" class="kongshi" title="下指令" target="_blank" v-if="isHasOrderPower"></router-link>
+                          <a href="javascript:void(0)" class="kongshi" title="上报信息" v-else @click="promptUser"></a>
+                        </li>
                         <!-- url查询 -->
                         <li class="urlsearch nobjimg">
                           <a target="_blank"
@@ -267,6 +273,7 @@
         },
         sid: '',                //处理从详情页跳转到舆情列表页定位问题
         isHasBuiltPower: false, //是否有上报权限
+        isHasOrderPower: false, //是否有下指令权限
         checkList: [],          //全选或者返选
         checked: false, //全选框
         parentWidth: '', //父元素的宽度传递到子元素
@@ -337,7 +344,7 @@
             // _this.keypage = 0;
             _this.isLoading = false;
           }
-          if(_this.isClickLeft){
+          if(_this.isClickLeft && _this.listData.length > 0){
             _this.$refs.operationBar.setpage();
           }
           _this.$refs.search.setSearchWz();
@@ -603,9 +610,11 @@
         let _this = this;
         for(let i in data){
           if(data[i].funName == '工作台'){
-            for (let m in data[i].funSonList){
+            for (let m in data[i].funSonList){ 
               if(data[i].funSonList[m].funName == '舆情报送'){
                 _this.isHasBuiltPower = true;
+              }else if(data[i].funSonList[m].funName == '舆情审批'){
+                _this.isHasOrderPower = true;
               }
             }
           }

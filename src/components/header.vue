@@ -49,7 +49,9 @@
       </div>
       <div class="user_box">
         <!--{{nav.funSonList[0].funUrl}}-->
-        <a :href="$store.state.oldyqzjUrl+setUrlInfo" v-if="set_issHow"  class="sys_setup" title="系统设置"></a>
+        <!-- <a :href="$store.state.oldyqzjUrl+setUrlInfo" v-if="set_issHow "  class="sys_setup" title="系统设置"></a> -->
+        <a :href="$store.state.oldyqzjUrl+setUrlInfo" v-if="set_issHow && setUrlInfo != 'updatelogo'"  class="sys_setup" title="系统设置"></a>
+        <router-link tag="a" :to="{path:setUrlInfo}" class="sys_setup" title="系统设置" v-show="set_issHow" v-else-if="set_issHow && setUrlInfo == 'updatelogo'"></router-link>
         <el-dropdown class="change_size" trigger="hover" :show-timeout="showTime" :hide-timeout="showTime">
           <span class="user_img">
             <!-- <img src="../assets/image/login/user_icon.png" /> -->
@@ -92,7 +94,7 @@
         setUrlInfo:'',
         set_issHow:true,  //是否显示
         defaultData: { //默认logo
-          // content: '<p style="font-size: 24px; color: #33a7ff;font-family: 微软雅黑;">舆情专家管理平台</p>', //默认文本
+          // content: '<p style="font-size: 24px; color: #33a7ff;font-family: 微软雅黑;">智慧舆情指挥平台</p>', //默认文本
           content: this.$store.state.sysName, //默认文本
           imgSrc: this.$store.state.orgLogo,  //默认logo,要放在static目录下面
         }
@@ -100,8 +102,9 @@
     },
     computed: {
       ...mapState({
-        accountId: state => state.accountId
-      }),
+        accountId: state => state.accountId,
+        headNavData: state => state.nav.headNavData,
+      })
     },
     props: {funName: '',subname: '',previewContent: '',previewImg: ''},
     methods: {
@@ -182,24 +185,27 @@
           message: '此功能正在开发中,请耐心等待...',
           type: 'warning'
         });
-      }
-    },
-    mounted: function () {
-      let navData = localStorage.getItem("navData");
-      if (!navData) {
-        //获得导航数据
-        this.getNavData();
-
-      } else {
-        //设置数据
-        this.navData = JSON.parse(navData);
-        this.returnNavData();
-        //把导航数据回传到舆情监测列表页，去处理是否授权上报的问题
-        this.sendInfoToParent(this.navData);
+      },
+      disposeData(){
         this.getSetUrl();
         if(this.setUrlInfo === ''){
           this.set_issHow = false;
         }
+        this.returnNavData();
+        this.sendInfoToParent(this.navData);
+      }
+    },
+    mounted: function () {
+      this.navData = this.headNavData;
+      if(this.navData.length == 0){
+        this.$store.dispatch("setHeadNavData",this.accountId).then(()=>{
+          this.navData = this.$store.state.nav.headNavData;
+          this.disposeData();  //处理数据
+        }).catch(()=>{
+
+        });
+      }else{
+        this.disposeData(); //处理数据
       }
       window.addEventListener('scroll', this.handleScroll);
 
@@ -255,7 +261,7 @@ a:active {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 888;
   box-shadow: 0 2px 15px #e5e5e5;
   min-width: 1100px;
 }
@@ -509,6 +515,10 @@ a:active {
   .header .nav > li{width: 110px;}
   .header .userinfo_box .search_box .search_all{width: 150px;}
 }
+@media screen  and (max-width:1510px){
+  .header .logo {width: 22%;}
+  .header .logo .wid236 {max-width: 66%; margin-left: 3%;}
+}
 @media screen  and (max-width:1460px){
   .header .nav > li{width: 100px;}
   .header .nav > li a{padding: 0 15px;}
@@ -519,17 +529,26 @@ a:active {
   .header .nav > li{width: 90px;}
   .header .nav > li a{padding: 0 10px;}
 }
+@media screen  and (max-width:1350px){
+  .header .logo {width: 24%;}
+}
 @media screen  and (max-width:1300px){
   .header .userinfo_box .search_box .search_all{width: 80px;}
 }
 @media screen  and (max-width:1270px){
-  .header .userinfo_box{margin-right:2%;}
+  .header .userinfo_box{margin-right:1.5%;}
   .header .userinfo_box .search_box .search_all{width: 60px;}
+}
+@media screen  and (max-width:1240px){
+  .header .logo {width: 25%;}
 }
 @media screen  and (max-width:1200px){
   .header .nav > li{width: 90px;}
   .header .nav > li a{padding: 0 10px;}
   .header .nav li .subset_nav li{padding: 0 10px;}
+}
+@media screen  and (max-width:1190px){
+  .header .logo {width: 27%;}
 }
 @media screen  and (max-width:1100px){
   .header .nav > li{width: 88px;}

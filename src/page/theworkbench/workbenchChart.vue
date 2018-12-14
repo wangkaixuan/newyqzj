@@ -1,5 +1,5 @@
 <template>
-  <div class="wary_chart">
+  <div class="wary_chart" ref="watermarkWary">
     <yqzj-Head  funName="工作台" subname="工作统计"></yqzj-Head>
     <div class="center border_box">
       <!--搜索start-->
@@ -19,8 +19,6 @@
             </ul>
             <!-- 上报时间 -->
             <div class="searchTimeWary border_box" v-show="showTime" @click.stop="">
-              <a href="javascript:void(0)" :class="{hover:dataParameter.time == 'all'}"
-                 @click.stop="setTime('all','不限')">不限</a>
               <a href="javascript:void(0)" :class="{hover:dataParameter.time == '1day'}"
                  @click.stop="setTime('1day','今天')">今天</a>
               <a href="javascript:void(0)" :class="{hover:dataParameter.time == '3day'}"
@@ -49,12 +47,12 @@
                 </el-date-picker>
               </div>
             </div>
-            <!-- 舆情分类 -->
+            <!-- 舆情状态 -->
             <div class="searchTimeWary border_box" v-show="showDimension" @click.stop="">
-              <a href="javascript:void(0)" :class="{hover:dataParameter.dimension === ''}" @click.stop="setSentimentRange('','全部')">全部</a>
-              <a href="javascript:void(0)" >未审批</a>
-              <a href="javascript:void(0)" >通过</a>
-              <a href="javascript:void(0)" >未通过</a>
+              <a href="javascript:void(0)" :class="{hover:dataParameter.status === null}" @click.stop="setSentimentRange('','全部')">全部</a>
+              <a href="javascript:void(0)" :class="{hover:dataParameter.status == '0'}" @click.stop="setSentimentRange('0','未审批')">未审批</a>
+              <a href="javascript:void(0)" :class="{hover:dataParameter.status == '1'}" @click.stop="setSentimentRange('1','通过')">通过</a>
+              <a href="javascript:void(0)" :class="{hover:dataParameter.status == '2'}" @click.stop="setSentimentRange('2','未通过')">未通过</a>
             </div>
           </div>
           <div style="clear: both;"></div>
@@ -65,7 +63,7 @@
       <div class="cen_pub cen_pub16">
         <div class="title">舆情涉事地域统计</div>
         <div class="chart">
-          <echarts :chartData="territoryInfo"  myechart="myechart_yqdy"></echarts>
+          <echarts :chartData="territoryInfo" ref="territoryChart"  myechart="myechart_yqdy"></echarts>
         </div>
       </div>
       <!--舆情涉事地域统计end-->
@@ -73,15 +71,27 @@
       <div class="cen_pub cen_pub16">
         <div class="title">舆情报送单位统计</div>
         <div class="chart">
-          <echarts :chartData="builtInfo" myechart="myechart_yqbs"></echarts>
+          <echarts :chartData="builtInfo" ref="builtChart" myechart="myechart_yqbs"></echarts>
         </div>
       </div>
       <!--舆情报送单位统计end-->
       <!--舆情整体走势统计start-->
       <div class="cen_pub cen_pub16">
-        <div class="title">舆情整体走势统计</div>
+        <div class="title">舆情整体走势统计
+          <p class="p1">
+            <el-dropdown trigger="click" @command="yqzsTypetime">
+              <span class="el-dropdown-link">
+                {{yqzsWz}} <i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu   slot="dropdown">
+                <el-dropdown-item command="1">按上报时间统计</el-dropdown-item>
+                <el-dropdown-item command="2">按发布时间统计</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </p>
+        </div>
         <div class="chart">
-          <echarts :chartData="yqztInfo" myechart="myechart_yqzs"></echarts>
+          <echarts :chartData="yqztInfo" ref="yqzsChart" myechart="myechart_yqzs"></echarts>
         </div>
       </div>
       <!--舆情整体走势统计end-->
@@ -90,13 +100,13 @@
         <div class="cen_pub cen_pub16 pie_left">
           <div class="title">舆情分类统计</div>
           <div class="chart">
-            <echarts :chartData="yqClassInfo" myechart="myechart_class"></echarts>
+            <echarts :chartData="yqClassInfo" ref="yqClassInfoEcharts" myechart="myechart_class"></echarts>
           </div>
         </div>
         <div class="cen_pub cen_pub16 pie_right">
-          <div class="title">舆情类型统计</div>
+          <div class="title">媒体类型统计</div>
           <div class="chart">
-            <echarts :chartData="yqMediaInfo" myechart="myechart_yqmt"></echarts>
+            <echarts :chartData="yqMediaInfo" ref="mediaEcharts" myechart="myechart_yqmt"></echarts>
           </div>
         </div>
         <div class="clear"></div>
@@ -110,10 +120,13 @@
   import yqzjHead from '../../components/header.vue'
   import yqzjFooter from '../../components/footer.vue'
   import echarts from '../../components/echarts.vue'
+  import Watermark from '../../js/watermark'
   import {
     getRegionCount,
     getMediaCount,
-    getDimenCount
+    getDimenCount,
+    getTrendOfPubOpi,
+    getOrgCount
   } from '../../service/built'
   export default {
     data(){
@@ -125,15 +138,18 @@
         startDatePicker: this.beginDate(),
         endDatePicker: this.processDate(),
         searchState: '', //设置点击哪个筛选 0 上报时间  2 舆情分类
-        timeWz: '不限',                 //搜索时间文字  默认是不限
+        timeWz: '近7天',                 //搜索时间文字  默认是不限
         dimensionWz: '全部',            //搜索舆情分类文字  默认是全部
+        yqzsWz: '按上报时间统计',            //搜索舆情分类文字  默认是全部
         showTime: false,                //是否显示选择时间的下拉菜单
         showDimension: false,           //是否显示舆情分类
+        oldTime: '7day',           //是否显示舆情分类
         dataParameter:{
-          status:'',     //状态: 0待审批，1已通过，2未通过
-          time:'',        //时间： 1day：当天，3day：3天内，7day：7天内
+          status:null,           //状态: 0待审批，1已通过，2未通过
+          time:'7day',        //时间： 1day：当天，3day：3天内，7day：7天内
           sTime:'',
           eTime:'',
+          timeType:1,
           groupId:this.$store.state.generalGroupId,              // 集团id
           orgId: this.$store.state.orgId                         //组织id
         },
@@ -143,7 +159,7 @@
           nameData:[],
           type:'bar'
         },
-        //舆情报送数据
+        //舆情报送单位数据
         builtInfo:{
           valueData:[],
           nameData:[],
@@ -175,6 +191,73 @@
       echarts
     },
     methods:{
+      //舆情走势切换类型
+      yqzsTypetime(command){
+        if (this.dataParameter.timeType != command) {
+          this.dataParameter.timeType = command;
+          if (command == 1) {
+            this.yqzsWz = '按上报时间统计';
+          }
+          if (command == 2) {
+            this.yqzsWz = '按发布时间统计';
+          }
+          this.trendOfPubOpi();
+        }
+      },
+      //筛选时间
+      setTime(time,wz){
+        this.dataParameter.time = time;
+        this.dataParameter.sTime = ''; //解决选择自定义时间出现的bug
+        this.dataParameter.eTime = ''; //解决选择自定义时间出现的bug
+        this.timeWz = wz;
+        this.getData();
+        this.showTime = false;
+        this.dataHover = false;
+        this.searchState = ''; //重置hover态
+        this.oldTime = this.dataParameter.time; //解决切换tab时，上报时间展示
+      },
+      //舆情状态
+      setSentimentRange(s,info){
+        this.dimensionWz = info;
+        this.dataParameter.status = s;
+        if(this.dataParameter.status == ''){
+          this.dataParameter.status = null;
+        }
+        this.getData();
+        this.showDimension = false;
+        this.searchState = ''; //重置hover态
+      },
+      // 获得数据
+      getData(){
+        this.getTerritoryCharts();   //地域统计
+        this.dimenCount();   //分类统计
+        this.mediaCount();   //媒体类型统计
+        this.orgCount();   //报送单位
+        this.trendOfPubOpi();   //获取舆情整体走势统计
+      },
+      selectDate(){
+        this.oldTime = this.dataParameter.time; //处理点击其他按时间选择时引起的问题
+        this.dataParameter.time = '7day';
+        this.showDate = true;
+        this.dataHover = true;
+      },
+      handleBodyClick(){
+        this.showTime = false;
+        this.showMediaType = false;
+        this.showDimension = false;
+        this.dataHover = false; //处理点击其他按时间选择时引起的问题
+        this.chooseSTime = '';
+        this.chooseETime = '';
+        this.searchState = ''; //重置hover态
+        //处理点击其他按时间选择时，又点击自定义时间，自定义没有设置，直接点击空白处的问题
+        if(this.dataParameter.sTime != '' || this.dataParameter.eTime != ''){
+          this.dataParameter.time = '7day';
+          this.dataHover = true;
+        }else{
+          this.dataParameter.time = this.oldTime; //解决选择自定义时间出现的bug
+          this.dataHover = false;
+        }
+      },
       //处理不能选择今天之后的时间
       beginDate(){
         let _this = this;
@@ -231,7 +314,7 @@
             _this.chooseSTime = '';
             _this.chooseETime = '';
           } else {
-            _this.dataParameter.time = '';
+            _this.dataParameter.time = '7day';
             _this.dataParameter.sTime = startTime;
             _this.dataParameter.eTime = endTime;
             _this.timeWz = startTime + ' 至 ' +endTime;
@@ -264,7 +347,7 @@
             _this.chooseSTime = '';
             _this.chooseETime = '';
           } else {
-            _this.dataParameter.time = '';
+            _this.dataParameter.time = '7day';
             _this.dataParameter.sTime = startTime;
             _this.dataParameter.eTime = endTime;
             _this.timeWz = startTime + ' 至 ' +endTime;
@@ -280,28 +363,76 @@
       //涉事地域统计
       getTerritoryCharts(){
         let _this = this;
-        _this.dataParameter.cityId = ''
+        _this.dataParameter.regionPId = this.$store.state.provinceId;
+        _this.dataParameter.regionType = '1';
         getRegionCount(_this.dataParameter).then(rel=>{
-          console.log(rel);
+          let thenData = rel.data.result.data;
+          _this.territoryInfo.valueData = thenData.data;
+          _this.territoryInfo.nameData = thenData.nameData;
+          _this.$refs.territoryChart.createEcharts();
         }).catch(err=>{
           console.log(err);
         })
       },
+      //媒体统计
       mediaCount(){
         let _this = this;
         getMediaCount( _this.dataParameter).then(rel=>{
-          console.log(rel);
+          let thenData = rel.data.result.data;
+          _this.yqMediaInfo.legendData = thenData.nameData;
+          _this.yqMediaInfo.seriesData = thenData.data;
+          _this.$refs.mediaEcharts.createEcharts();
         }).catch(err=>{
             console.log(err);
+        })
+      },
+      //舆情分类统计
+      dimenCount(){
+        let _this = this;
+        getDimenCount(_this.dataParameter).then(rel=>{
+          let thenData = rel.data.result.data;
+          _this.yqClassInfo.legendData = thenData.nameData;
+          _this.yqClassInfo.seriesData = thenData.data;
+          _this.$refs.yqClassInfoEcharts.createEcharts();
+        }).catch(err=>{
+            console.log(err);
+        });
+      },
+      //舆情报送单位统计
+      orgCount(){
+        let _this = this;
+        getOrgCount(_this.dataParameter).then(rel =>{
+          let thenData = rel.data.result.data;
+          _this.builtInfo.valueData = thenData.data;
+          _this.builtInfo.nameData = thenData.nameData;
+          _this.$refs.builtChart.createEcharts();
+        }).catch(err=>{
+          console.log(err);
+        })
+      },
+      //获取舆情整体走势统计
+      trendOfPubOpi(){
+        let _this = this;
+        getTrendOfPubOpi(_this.dataParameter).then(rel=>{
+          let thenData = rel.data.result.data;
+          _this.yqztInfo.valueData = thenData.data;
+          _this.yqztInfo.nameData = thenData.nameData;
+          _this.$refs.yqzsChart.createEcharts();
+        }).catch(err=>{
+          console.log(err);
         })
       }
     },
     mounted(){
-      //地域
-      //this.getTerritoryCharts();
-      //获取媒体类型统计
-      this.mediaCount();
-    }
+      let username = this.$store.state.userinfo_name;
+      let account = this.$store.state.account.substr(7,4);
+      Watermark.set(username+"  "+account,this.$refs.watermarkWary);
+      document.addEventListener('click', this.handleBodyClick);
+      this.getData();
+    },
+    destroyed () {
+      document.removeEventListener('click', this.handleBodyClick);
+    },
   }
 </script>
 <style scoped>
@@ -320,6 +451,8 @@
   .cen_pub_warys .title{width: 92%;}
   .cen_pub .cen_title{height: 42px;text-indent: 24px;line-height: 42px;font-size: 14px;color:#333;border-bottom:1px solid #e5e5e5;}
   .cen_pub .chart{width: 96%;margin: 20px auto 0px;padding-bottom: 20px;}
+  .cen_pub .title .p1{width: 140px;float:right;cursor: pointer;}
+  .cen_pub .title .p1 select{width: 100px;height: 20px;}
   /*搜索*/
   .wary_chart .center .built_top .search {
     width: 100%;

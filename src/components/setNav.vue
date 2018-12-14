@@ -1,49 +1,64 @@
 <template>
-  <div class="set-nav border_box">
-    <ul class="nav">
-      <li>
-        <a :href="$store.state.oldyqzjUrl+'/Set/userinfo'"><i class="i4"></i>个人信息</a>
+  <div class="left_nav border_box">
+    <ul class="">
+      <li v-for="item in subNavData" v-if="item.funName !== '监测设置' && item.funName !== '工作台设置'&& item.funName !== 'LOGO设置' ">
+        <a :href="$store.state.oldyqzjUrl+item.funUrl">{{item.funName}}</a>
       </li>
-      <li :class="{hover:hover=='organization'}">
-          <router-link tag="a" :to="{path:'organization'}"><i class="i5"></i>组织机构管理</router-link>
-      </li>
-      <li>
-        <a :href="$store.state.oldyqzjUrl+'/Set/rolePermission'"><i class="i5"></i>角色权限</a>
-      </li>
-      <li :class="{hover:hover=='opm'}">
-        <router-link tag="a" :to="{path:'opm'}">
-          <i class="i5"></i>人员管理
-        </router-link>
-      </li>
-      <li>
-        <a href="javascript:void(0)"> <i class="i2"></i>监测设置</a> <i the-id="navZk" class="hover"></i>
-        <ul class="level2">
-          <li><a :href="$store.state.oldyqzjUrl+'/Set/special'"><i></i>专题设置</a></li>
-          <li><a :href="$store.state.oldyqzjUrl+'/Set/surface'"><i></i>全局词设置</a></li>
-          <li><a :href="$store.state.oldyqzjUrl+'/Set/qq'"><i></i>社交监控设置</a></li>
-          <li><a :href="$store.state.oldyqzjUrl+'/Set/specialWarning'"><i></i>预警设置</a></li>
-          <li><a href="$store.state.oldyqzjUrl+'/Set/setReportedMail'"><i></i>邮箱设置</a></li>
-          <li><a href="$store.state.oldyqzjUrl+'/Set/attentionSetClass'"><i></i>关注设置</a></li>
-          <li><a href="$store.state.oldyqzjUrl+'/Set/DefinedCondition'"><i></i>自定义筛选设置</a></li>
-          <li><a href="$store.state.oldyqzjUrl+'/Set/infoFilter'"><i></i>信息过滤设置</a></li>
+      <li v-else-if="item.funName == '工作台设置' ">
+        <a href="javascript:void(0);">{{item.funName}}</a>
+        <i class="hover"  @click="showOrhideOne"></i>
+        <ul class="sonlist" v-show="showIconOne">
+          <li v-for="sub in item.funSonList">
+            <a :href="$store.state.oldyqzjUrl+sub.funUrl">{{sub.funName}}</a>
+          </li>
         </ul>
       </li>
-      <li>
-        <a href="$store.state.oldyqzjUrl+'/Set/bulletin'"><i class="i3"></i>报告设置</a>
+      <li v-else-if="item.funName == '监测设置'">
+        <a href="javascript:void(0);">{{item.funName}}</a>
+        <i class="hover"  @click="showOrhideTwo"></i>
+        <ul class="sonlist" v-show="showIconTwo">
+          <li v-for="sub in item.funSonList">
+            <a :href="$store.state.oldyqzjUrl+sub.funUrl">{{sub.funName}}</a>
+          </li>
+        </ul>
+      </li>
+      <li v-else :class="{hover: item.funName == subname}">
+        <router-link tag="a" :to="{path:item.funUrl}">{{item.funName}}</router-link>
       </li>
     </ul>
   </div>
 </template>
 <script>
-  export default {
-    data(){
-      return {}
+  export default{
+    data() {
+      return {
+        showIconOne: true, //是否显示图标 —— 工作台设置
+        showIconTwo: true, //是否显示图标 —— 监测设置
+      }
     },
-    props: ['hover']
+    props: {
+      subNavData: {
+        type: Array
+      },
+      subname: '',
+    },
+    components: {
+    },
+    methods: {
+      showOrhideOne(){
+        this.showIconOne = !this.showIconOne;
+      },
+      showOrhideTwo(){
+        this.showIconTwo = !this.showIconTwo;
+      },
+    },
+    mounted (){
+      console.log(this.subNavData)
+    }
   }
 </script>
 <style>
-  .set-nav {
+  .left_nav {
     -webkit-box-shadow: 0px 3px 7px #ebebeb;
     -moz-box-shadow: 0px 3px 7px #ebebeb;
     box-shadow: 0px 3px 7px #ebebeb;
@@ -52,51 +67,39 @@
     background-color: #fff;
     border: 1px solid #eeeeee;
     padding-bottom: 150px;
+    font-family: "微软雅黑";
   }
-
-  .set-nav .nav {
-    margin: 0px;
+  .left_nav .hide {
+    display: none;
   }
+  .left_nav ul {
 
-  .set-nav .nav li {
+  }
+  .left_nav ul li {
     position: relative;
   }
-
-  .set-nav .nav li a {
+  .left_nav ul li a {
+    display: block;
     color: #333;
     text-indent: 5px;
     font-size: 14px;
     box-sizing: border-box;
-    height: 48px;
-    line-height: 48px;
+    height: 35px;
+    line-height: 35px;
+    text-indent: 15px;
+    font-family: "微软雅黑";
   }
-
-  .set-nav .nav li a > i {
-    width: 0px;
-    height: 0px;
-    display: block;
-    float: left;
-    margin: 14px 0 0 15px;
-  }
-
-  .set-nav .nav li a > i.i1 {
-    background-position: 0px 0px;
-  }
-
-  .set-nav .nav li a > i.i2 {
-    background-position: -30px 0px;
-  }
-
-  .set-nav .nav li a > i.i3 {
-    background-position: -90px 0px;
-  }
-
-  .set-nav .nav li a:hover {
-    background-color: #fff;
+  .left_nav ul li a:hover {
     color: #33a7ff;
   }
+  .left_nav ul li.hover a {
+    color: #33A7FF;
+    font-weight: bold;
+    border-left: 4px solid #33A7FF;
+    text-indent: 11px;
+  }
 
-  .set-nav .nav li > i {
+  .left_nav ul li i {
     display: block;
     width: 19px;
     height: 11px;
@@ -108,7 +111,7 @@
     cursor: pointer;
   }
 
-  .set-nav .nav li > i.hover {
+  .left_nav ul li i.hover {
     display: block;
     width: 15px;
     height: 12px;
@@ -120,66 +123,16 @@
     cursor: pointer;
   }
 
-  .set-nav .nav li.hover > a {
-    color: #33A7FF;
-    font-weight: bold;
-    border-left: 4px solid #33A7FF;
-    display: block;
+  .left_nav ul li .sonlist {
+    margin-left: 25px;
   }
-
-  .set-nav .nav li.hover > a > i.i1 {
-    background-position: 0px -31px;
-  }
-
-  .set-nav .nav li.hover > a > i.i2 {
-    background-position: -30px -32px;
-  }
-
-  .set-nav .nav li.hover > a > i.i3 {
-    background-position: -90px -31px;
-  }
-
-  .set-nav .nav li.hover > i {
-    background-position: -23px -18px;
-  }
-
-  .set-nav .nav li.hover > i.hover {
-    background-position: -1px -20px;
-  }
-
-  .set-nav .nav .level2 {
-    margin-left: 15px;
-    width: 90%;
-  }
-
-  .set-nav .nav .level2 li a {
+  .left_nav ul li .sonlist li a {
     color: #999;
-    text-indent: 0px;
   }
-
-  .set-nav .nav .level2 li a > i {
-    width: 0px;
-    height: 0px;
-    display: block;
-    float: left;
-    margin: 14px 0 0 25px;
-  }
-
-  .set-nav .nav .level2 li a:hover {
+  .left_nav ul li .sonlist li a:hover {
     color: #33a7ff;
-  }
-
-  .set-nav .nav .level2 li a:hover > i {
-    background-position: -186px 1px;
-  }
-
-  .set-nav .nav .level2 li a.hover {
-    color: #33a7ff;
-    background-color: #fff;
-  }
-
-  .set-nav .nav .level2 li a.hover > i {
-    background-position: -186px 1px;
   }
 
 </style>
+
+

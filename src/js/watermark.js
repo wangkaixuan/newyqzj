@@ -2,8 +2,8 @@
 
 let watermark = {}
 
-let setWatermark = (str) => {
-  let id = '1.23452384164.123412415'
+let setWatermark = (str,watermarkWary) => {
+  let id = '1.23452384164.123412415';
 
   if (document.getElementById(id) !== null) {
     document.body.removeChild(document.getElementById(id))
@@ -33,20 +33,20 @@ let setWatermark = (str) => {
   div.style.width = document.documentElement.clientWidth - 100 + 'px'
   div.style.height = document.documentElement.clientHeight - 200 + 'px'
   div.style.background = 'url(' + can.toDataURL('image/png') + ') left top repeat';
-  document.body.appendChild(div)
+  watermarkWary.appendChild(div)
   return id
 }
 
 // 该方法只允许调用一次
-watermark.set = (str) => {
-  let id = setWatermark(str)
+watermark.set = (str,watermarkWary) => {
+  let id = setWatermark(str,watermarkWary);
   setInterval(() => {
     if (document.getElementById(id) === null) {
-      id = setWatermark(str)
+      id = setWatermark(str,watermarkWary)
     }
   }, 500)
   window.onresize = () => {
-    setWatermark(str)
+    setWatermark(str,watermarkWary)
   }
 }
 

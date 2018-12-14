@@ -2,8 +2,8 @@
   <div class="update_logo_box">
     <yqzj-Head @setSecondNav="setSubNav" funName="系统设置" subname="LOGO设置" ref="setlogo"></yqzj-Head>
     <div class="center border_box">
-      <left-Nav :subNavData="subNavData" subname="LOGO设置"></left-Nav>
-      <div class="logo_right fl border_box">
+      <set-Nav :subNavData="subNavData" subname="LOGO设置"></set-Nav>
+      <div class="logo_right fr border_box">
         <div class="logo_top_box">
           <a href="javascript:void(0);">
             <form>
@@ -56,7 +56,7 @@
   import yqzjHead from '../../components/header.vue'
   import yqzjFooter from '../../components/footer.vue'
   import VueCookies from 'vue-cookies'
-  import leftNav from '../../components/leftnav.vue'
+  import setNav from '../../components/setNav.vue'
   import tinymce from 'tinymce/tinymce'
   import 'tinymce/themes/modern/theme'
   import Editor from '@tinymce/tinymce-vue'
@@ -79,7 +79,7 @@
           height: 120,
           plugins: 'textcolor',
           toolbar: 'fontselect | fontsizeselect | forecolor | bold ',
-          fontsize_formats: '10px 12px 14px 18px 24px 36px',
+          fontsize_formats: '10px 12px 14px 16px 18px 20px 22px 24px 26px',
           font_formats: "微软雅黑='微软雅黑';宋体='宋体';黑体='黑体';仿宋='仿宋';楷体='楷体';隶书='隶书';幼圆='幼圆';Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings",
           branding: false,
           menubar: false,
@@ -90,15 +90,13 @@
     components: {
       yqzjHead,
       yqzjFooter,
-      leftNav,
+      setNav,
       'editor': Editor // <- Important part
     },
     methods: {
       //设置顶部导航 —— 左侧导航
       setSubNav(navData){
         this.subNavData = navData[0];
-        console.log('------- this.subNavData-------------------');
-        console.log(navData);
       },
       //查询图片
       queryImgData(){
@@ -140,6 +138,7 @@
                 customClass: 'ele_ui_tips_position',
                 message: '上传失败！上传图片文件只支持jpg jpeg png gif bmp！'
               });
+              return false;
             } else {
               let imgType = 'image/jpeg,image/png,image/gif,image/bmp';
               if (imgType.indexOf(files[i].type) == -1) {
@@ -148,6 +147,7 @@
                   customClass: 'ele_ui_tips_position',
                   message: '上传失败！上传图片文件只支持jpg jpeg png gif bmp！'
                 });
+                return false;
               }
             }
             //单个图片大小限制
@@ -157,6 +157,7 @@
                 customClass: 'ele_ui_tips_position',
                 message: '上传失败！上传图片最大支持200KB！'
               });
+              return false;
             }
             //表单提交
             let formData = new FormData();
@@ -198,7 +199,6 @@
           orgId: this.$store.state.orgId,
           logoId: img.id,
         };
-        console.log(params);
         _this.$confirm('您确认要删除该图片吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -245,10 +245,11 @@
       saveSubmit() {
         let _this = this;
         //获取不带HTML标记的纯文本内容
-        let activeEditor = tinymce.activeEditor; 
-        let editBody = activeEditor.getBody(); 
-        activeEditor.selection.select(editBody); 
-        let text = activeEditor.selection.getContent( { 'format' : 'text'} ).replace(/'/g,"");
+        let activeEditor = tinymce.activeEditor;
+        let editBody = activeEditor.getBody();
+        activeEditor.selection.select(editBody);
+        //文本过滤掉 单引号 和 空格
+        let text = activeEditor.selection.getContent( { 'format' : 'text'} ).replace(/'/g,"").replace(/\s/g, "");
         // 获取纯文本 —— 限制文本长度不可超过20个字
         if (text.length > 20) {
           _this.$message({
@@ -297,7 +298,7 @@
                 _this.$message({
                   type: 'error',
                   customClass: 'ele_ui_tips_position',
-                  message: '图片更换失败！'
+                  message: res.data.msg
                 });
               }
             }).catch(err => {
@@ -316,10 +317,11 @@
       preview(){
         let _this = this;
         //获取不带HTML标记的纯文本内容
-        let activeEditor = tinymce.activeEditor; 
-        let editBody = activeEditor.getBody(); 
-        activeEditor.selection.select(editBody); 
-        let text = activeEditor.selection.getContent( { 'format' : 'text'} ).replace(/'/g,"");
+        let activeEditor = tinymce.activeEditor;
+        let editBody = activeEditor.getBody();
+        activeEditor.selection.select(editBody);
+        //文本过滤掉 单引号 和 空格
+        let text = activeEditor.selection.getContent( { 'format' : 'text'} ).replace(/'/g,"").replace(/\s/g, "");
         // 获取纯文本 —— 限制文本长度不可超过20个字
         if (text.length > 20) {
           _this.$message({
@@ -329,7 +331,7 @@
           });
           return false;
         }
-        
+
         this.dialogVisible = true;
         this.previewContent = tinymce.editors[0].getContent().replace(/'/g,"");
         // 筛选出选中的logo
@@ -338,7 +340,7 @@
           if (this.imagesfileData[i].isSelect == 1) {
             this.previewImg = this.imagesfileData[i].orgLogo;
           }
-        }  
+        }
       },
       //恢复默认
       reset(){
@@ -357,7 +359,7 @@
           }).then(() => {
             let params = {
               orgId: this.$store.state.orgId, //组织ID
-              sysName: '<p style="font-size: 24px; color: #33a7ff;font-family: 微软雅黑;">舆情专家管理平台</p>',
+              sysName: '<p style="font-size: 24px; color: #33a7ff;font-family: 微软雅黑;">智慧舆情指挥平台</p>',
               logoId: 1
             };
             editLogoData(params).then(function (res) {
@@ -375,7 +377,7 @@
                 _this.$message({
                   type: 'error',
                   customClass: 'ele_ui_tips_position',
-                  message: '图片更换失败！'
+                  message: res.data.msg
                 });
               }
             }).catch(err => {

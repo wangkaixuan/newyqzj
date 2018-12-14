@@ -1,23 +1,13 @@
 <template>
   <div class="wary_buile" ref="watermarkWary">
-    <yqzj-Head @setSecondNav="setSubNav" funName="工作台" subname="舆情报送"></yqzj-Head>
-    <!-- <work-nav :subNavData="subNavData"></work-nav> -->
+    <yqzj-Head @setSecondNav="setSubNav" funName="工作台" subname="舆情审批"></yqzj-Head>
     <div class="center border_box">
-      <!-- <div class="new_built_title" v-if="reportId == ''">
-          <router-link  tag="a" :to="{path: 'workbench'}" title="舆情报送">舆情报送</router-link>-<a class="" href="javascript:void (0)">新建报送</a>
-          <router-link  tag="a" :to="{path: 'workbench'}" title="舆情报送" class="goback">返回</router-link>
-      </div>
-      <div class="new_built_title" v-else>
-          <router-link  tag="a" :to="{path: 'workbench'}" title="舆情报送">舆情报送</router-link>-<a class="" href="javascript:void (0)">重报</a>
-          <router-link  tag="a" :to="{path: 'workbench'}" title="舆情报送" class="goback">返回</router-link>
-      </div> -->
       <div class="new_built_content">
-        <div class="new_built_tit" v-if="reportId == ''">舆情报送 - 新建报送</div>
-        <div class="new_built_tit" v-else>舆情报送 - 重报</div>
+        <div class="new_built_tit" v-if="reportId == ''">舆情审批 - 下达指令</div>
+        <div class="new_built_tit" v-else>舆情审批 - 重报</div>
         <div class="new_built_left border_box">
           <div class="new_built_list">
-            <label><em class="start">*</em>标题</label><input type="text" name="built_title" class="title"
-                                                            v-model.trim="form.title"/>
+            <label><em class="start">*</em>标题</label><input type="text" name="built_title" class="title" v-model.trim="form.title"/>
           </div>
           <div class="edit_tips edit_tips1" v-show="err.tips1">
             <span class="error err1"><em>*</em><span class="error_info">{{err.err1}}</span></span>
@@ -161,7 +151,7 @@
           </div>
           <div class="new_built_list clearfix_new">
             <div class="pos_left">
-              <label><em class="start">*</em>批示人</label>
+              <label><em class="start">*</em>执行人</label>
               <span class="add_icon" @click="showOrgLayer">+</span>
             </div>
             <div class="show_options">
@@ -202,7 +192,7 @@
                 <div class="myOrg" v-bind:class="{hide:saveType==1}">
                   <el-checkbox-group v-model="orguserDataArr" @change="checkMylist">
                     <el-checkbox v-for="(org,i) in orguserData" :key="i" :label="org.name" name="userCheckbox"
-                                 v-bind:username="org.name" :value="org.accountId"></el-checkbox>
+                                 v-bind:username="org.name" :value="org.accountId" :disabled="org.disabled"></el-checkbox>
                   </el-checkbox-group>
                 </div>
               </div>
@@ -242,7 +232,8 @@
     getInstructMyTreeData,
     saveBuiltSubmitData,
     getRestatementBuiltData,
-    getAreaList
+    getAreaList,
+    saveOrderSubmitData
   } from '../../service/built'
 
   export default {
@@ -317,7 +308,9 @@
         territory:{
           city:[],
           county:[]
-        }
+        },
+        userOrgId: this.$store.state.orgId,            //自己机构的id
+        userAccountId: this.$store.state.accountId,    //自己的id
       }
     },
     components: {
@@ -388,8 +381,6 @@
             _this.err.tips9 = false;
           }
           for (let i = 0, len = files.length; i < len; i++) {
-            console.log('----------files[i]----------------');
-            console.log(files[i]);
             if (files[i].type == "") {
               _this.err.tips9 = true;
               _this.err.err9 = '上传失败！上传图片文件只支持jpg jpeg png gif bmp！';
@@ -432,8 +423,6 @@
         let _this = this,
           built_file = this.$refs.built_file,
           files = built_file.files;
-        console.log('--------files--------');
-        console.log(files);
         if (!files[0].type || files[0].type == '') {
           //处理word type没值的时候
           let str = "zip,rar,xlsx,pptx,doc,docx,flv,mkv,rmvb,csv",
@@ -536,6 +525,13 @@
         getInstructMyTreeData(parms).then(function (res) {
           if (res.data.result) {
             _this.orguserData = res.data.result.data;
+            //下达指令不能下达给自己和自己的单位
+            // let noSelectUId = _this.userAccountId.toString();
+            // _this.orguserData.forEach((org,index)=>{
+            //     if(noSelectUId.indexOf(org.accountId) > -1){
+            //       _this.orguserData[index].disabled = true;
+            //     }
+            // });
           } else {
             console.log('没有返回值');
           }
@@ -543,6 +539,19 @@
           console.log(err, '请求失败！');
         });
       },
+      //设置机构不能选择
+      // setzTreeNoSelect(z){
+      //   let _this = this;
+      //   z.forEach((tree,index)=>{
+      //     //下达指令不能下达给自己和自己的单位
+      //     if(_this.userOrgId.toString().indexOf(tree.id) > -1){
+      //       tree.disabled = true;
+      //     }
+      //     if(tree.children.length > 0){
+      //       _this.setzTreeNoSelect(tree.children);
+      //     }
+      //   });
+      // },
       //获取批示人数据
       setzTree(){
         let _this = this;
@@ -554,6 +563,7 @@
         getInstructOtherTreeData(parms).then(function (res) {
           if (res.data.result) {
             _this.nodesData = res.data.result.data;
+            // _this.setzTreeNoSelect(_this.nodesData);
           } else {
             console.log('没有返回值');
           }
@@ -721,7 +731,7 @@
           _this.err.tips6 = false;
         }
         //舆情分类
-        if (sentimentVal == '请选择舆情分类' || sentimentVal == '-1') {
+        if (sentimentVal == '请选择舆情分类') {
           _this.err.tips7 = true;
           _this.err.err7 = '请选择舆情分类';
           return false;
@@ -739,7 +749,7 @@
         //批示人
         if (_this.instructionsAreData.length == 0) {
           _this.err.tips11 = true;
-          _this.err.err11 = '请添加批示人';
+          _this.err.err11 = '请添加执行人';
           return false;
         } else {
           _this.err.tips11 = false;
@@ -750,21 +760,24 @@
         formData.append('title', title);                  //标题
         formData.append('url', url);                      //url
         formData.append('mediaType', mediaVal);         //媒体类型
-        formData.append('source', sourceWebsite);           //来源网站
-        formData.append('content', summary);         //内容概要
-        formData.append('importance', importance);       //重要性  0一般  1重要  2紧急
-        formData.append('dimension', sentimentVal);     //舆情分类
-        formData.append('describe', '');                 //上报描述
-        formData.append('handlingProposal', suggestions);  //处置建议
-        formData.append('copyers', "");                   //抄送人 无
-        formData.append('ctime', time);                   //发布时间
+        formData.append('source', sourceWebsite);             //来源网站
+        formData.append('content', summary);                  //内容概要
+        formData.append('importance', importance);            //重要性  0一般  1重要  2紧急
+        formData.append('dimension', sentimentVal);           //舆情分类
+        formData.append('describe', '');                      //上报描述
+        formData.append('handlingProposal', suggestions);     //处置建议
+        formData.append('copyers', "");                       //抄送人 无
+        formData.append('ctime', time);                       //发布时间
         formData.append('groupId', this.$store.state.generalGroupId);       //集团ID
-        formData.append('author', "");                   //作者
-        formData.append('reportId', this.reportId);       //reportId
+        formData.append('author', "");                        //作者
+        formData.append('reportId', this.reportId);           //reportId
         formData.append('provinceId',this.$store.state.provinceId);       //省ID
-        formData.append('cityId',citysID);       //市ID
-        formData.append('countyId',countyIds);       //县ID
-        formData.append('state', 0);                      //state  0审批中 4重报
+        formData.append('cityId',citysID);           //省ID
+        formData.append('countyId',countyIds);       //省ID
+        formData.append('orgId',this.$store.state.orgId);     //组织ID
+        formData.append('state', 10);                          //state  0审批中 4重报  10 直接下任务
+        formData.append('type', 2);                           //type 2:人下达 ，1：部门下达
+        formData.append('reportId', '');                      //reportId
         let sqrID = "";
         for (let i in _this.instructionsAreData) {
           sqrID += _this.instructionsAreData[i].id + ",";
@@ -814,12 +827,12 @@
           formData.append('enclosures', JSON.stringify(enclosures));
           formData.append('state', 4);
         }
-        saveBuiltSubmitData(formData, _this.hideLays).then(function (res) {
+        saveOrderSubmitData(formData, _this.hideLays).then(function (res) {
           if (res || res.status == '0') {
             _this.$message({
               type: 'success',
               customClass: 'ele_ui_tips_position',
-              message: '上报成功!'
+              message: '下达指令成功!'
             });
             if (_this.from == 'workbench') {
               _this.$router.replace({path: 'workbench'});
@@ -972,9 +985,9 @@
       },
       //查询省
       showCountyInfo(){
-        console.log(this.form.cityId);
         if(this.form.cityId === ''){
           this.territory.county = [];
+          this.form.countyId = '';
         }else {
           this.setTerritoryInfo({puuid:this.form.cityId,level:2})
         }
@@ -1038,7 +1051,3 @@
   @import "../../style/newbuilt.css";
   .wary_buile .center .new_built_content .new_built_list .dy_select{margin-right: 5px;}
 </style>
-
-
-
-

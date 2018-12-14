@@ -1,5 +1,5 @@
 <template>
-  <div class="wary_see">
+  <div class="wary_see" ref="watermarkWary">
     <yqzj-Head @setSecondNav="setSubNav" funName="工作台" subname="舆情任务"></yqzj-Head>
     <div class="center border_box">
       <div class="see_built_tit" v-if="cztype ==='receipt'">舆情任务 - 回执</div>
@@ -38,12 +38,25 @@
           <div class="line" v-if="reportInfoData.approvers != ''"></div>
           <div class="start" v-if="reportInfoData.approvers != ''"></div>
           <div class="end" v-if="reportInfoData.approvers != ''"></div>
-          <div class="desc clearfix_see" v-for="item in reportInfoData.approvers" v-if="reportInfoData.approvers != ''">
+          <div class="desc clearfix_see" v-for="(item,i) in reportInfoData.approvers" v-if="reportInfoData.approvers != ''">
             <div class="desc_left" ref="descLeft">
               <p>{{item.opeartTime.substr(11)}}</br>{{item.opeartTime.substr(0,10)}}</p>
             </div>
             <div class="desc_right">
-              <div class="p3 clearfix_see"><span class="light">{{item.accountName}}</span><span class="slant_line">/</span><span class="dark">{{item.stateName}}</span>
+              <div class="p3 clearfix_see s_flex">
+                <span class="light" :title="item.accountName">{{item.accountName}}</span>
+                <span class="ops_process">{{item.stateName}}</span>
+                <!-- 上报、下达任务、交办 多个人时展示 -->
+                <p class="ops_content" v-if="item.approveUsersList.length <= 5">
+                  <span class="dark" v-for="(m,n) in item.approveUsersList" :key="n"><span class="light_line" v-if="(n+1) > 1">|</span>{{m}}</span>
+                </p>
+                <p class="ops_content" v-if="item.approveUsersList.length > 5">
+                  <span class="dark" v-for="(m,n) in item.approveUsersList" v-show="n < 5"><span class="light_line" v-if="(n+1) > 1">|</span>{{m}}</span>
+                  <span class="dark" v-for="(m,n) in item.approveUsersList" v-show="n >= 5 && item.flag">
+                    <span class="light_line">|</span>{{m}}
+                  </span>
+                  <span class="see_more" @click="seeMore2(item,i,reportInfoData.approvers)" v-if="!(item.flag)">更多...</span>
+                </p>
               </div>
               <div class="p4 clearfix_see"><span class="light">描述</span><span class="dark">{{item.approveContent}}</span></div>
               <div class="p5 clearfix_see" v-if="item.fileData.length > 0">
@@ -183,7 +196,7 @@
                 <div class="myOrg" v-bind:class="{hide:saveType==1}">
                   <el-checkbox-group v-model="orguserDataArr" @change="checkMylist">
                     <el-checkbox v-for="(org,i) in orguserData" :key="i" :label="org.name" name="userCheckbox"
-                                 v-bind:username="org.name" :value="org.accountId" :disabled="org.disabled" ></el-checkbox>
+                                 v-bind:username="org.name" :value="org.accountId" :disabled="org.disabled"></el-checkbox>
                   </el-checkbox-group>
                 </div>
               </div>
@@ -651,6 +664,8 @@
       },
       //设置机构不能选择
       setzTreeNoSelect(z){
+        console.log('------_this.handleTaskOrg-----');
+        console.log(this.handleTaskOrg);
         let _this = this;
         z.forEach((tree,index)=>{
             if(_this.handleTaskOrg.indexOf(tree.id) > -1){
@@ -672,9 +687,7 @@
         getInstructOtherTreeData(parms).then(function (res) {
           if (res.data.result) {
             _this.nodesData = res.data.result.data;
-            console.log("getInstructOtherTreeData+++++++++++++++");
-            console.log(_this.nodesData);
-            _this.setzTreeNoSelect(_this.nodesData)
+            _this.setzTreeNoSelect(_this.nodesData);
           } else {
             console.log('没有返回值');
           }
@@ -682,11 +695,20 @@
           console.log(err, '请求失败！');
         });
       },
+      seeMore2(item,i,data){
+        let _this = this;
+        // 上报、下达任务、交办
+        if(item.approveUsersList.length > 5){
+          item.flag = true; 
+          //需要主动通知vue
+          this.$set(_this.reportInfoData.approvers[i],i,item.flag);
+        }
+      }
     },
     mounted() {
       let username = this.$store.state.userinfo_name;
       let account = this.$store.state.account.substr(7,4);
-      Watermark.set(username+"  "+account);
+      Watermark.set(username+"  "+account,this.$refs.watermarkWary);
       let _this = this;
       let query = this.$route.query;  //获取链接 ？ 之后的参数
       _this.cztype = query.cztype;        //类型
@@ -746,6 +768,11 @@
                 // console.log(_this.reportInfoData.approvers[j].imagesSrc)
               }
             }
+          }
+          //处理更多功能 —— 添加标识
+          for(let i in _this.reportInfoData.approvers){ 
+            let list = _this.reportInfoData.approvers[i];
+            list.flag = false;
           }
         } else {
           _this.$message({

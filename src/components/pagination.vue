@@ -86,7 +86,7 @@
   .separate_page {padding: 16px 0;text-align: center;height: 28px;line-height:28px;font-size: 0;background: #fff;border-radius: 4px;}
   .separate_page .link_url,.separate_page .jump_page {display: inline-block;height:28px;}
   .separate_page .link_url a{box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;
-    display: inline-block;/*width: 36px;*/height: 28px;border: 1px solid #e5e5e5;border-radius: 4px;color: #999999;font-size: 14px;margin-right: 8px; padding: 0px 8px;}
+    display: inline-block;height: 28px;border: 1px solid #e5e5e5;border-radius: 4px;color: #999999;font-size: 14px;margin-right: 8px; padding: 0px 8px;}
   .separate_page .link_url a.hover,
   .separate_page .link_url a:hover {background: #33a7ff;color: #fff;border: 1px solid #33a7ff;}
   .separate_page .link_url a.next {margin-right: 0;}

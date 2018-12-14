@@ -4,7 +4,7 @@
 		<div class="center center_detail">
 			<div class="info_detail_box clearfix_detail">
 				<div class="info_detail_left fl">
-					<h1 class="info_detail_title" v-html="datailInfo.kvTitleMakeRed"></h1> 
+					<h1 class="info_detail_title" v-html="datailInfo.kvTitleMakeRed"></h1>
 					<div class="information">
 						<span class="info_time">{{datailInfo.krCtime}}</span>
 						<span class="info_source">来源：{{datailInfo.kvSite}}</span>
@@ -40,8 +40,11 @@
                 <li class="topic">
                   <a href="javascript:void(0)" class="add_topic" title="加入话题"><i></i>加话题</a>
                 </li>
+                <li class="instruct">
+                  <router-link  tag="a" :to="{path: 'instruct', query: {from: 'examine',title: datailInfo.kvTitle, url: datailInfo.kvUrl,mediatype: datailInfo.kvSourceType, source: datailInfo.kvSite,time: datailInfo.krCtime,summary: datailInfo.kvAbstract}}" class="instruct_info" title="下达指令" target="_blank" v-if="isHasOrderPower"><i></i>指令</router-link>
+                  <a href="javascript:void(0)" class="report_info" title="下达指令" v-else @click="promptUser"><i></i>指令</a>
+                </li>
                 <li class="report">
-                  <!-- <a href="javascript:void(0)" class="report_info" title="上报信息"><i></i>上报</a> -->
                   <router-link  tag="a" :to="{path: 'newbuiltdelivery', query: {from: 'workbench',title: datailInfo.kvTitle, url: datailInfo.kvUrl,mediatype: datailInfo.kvSourceType, source: datailInfo.kvSite,time: datailInfo.krCtime,summary: datailInfo.kvAbstract}}" class="report_info" title="上报信息" target="_blank" v-if="isHasBuiltPower"><i></i>上报</router-link>
                   <a href="javascript:void(0)" class="report_info" title="上报信息" v-else @click="promptUser"><i></i>上报</a>
                 </li>
@@ -75,7 +78,7 @@
               <p v-html="detailContent"></p>
             </div>
           </div>
-          <div class="event_tips"><span>*</span> 舆情专家和网页<i>{{datailInfo.kvUrl}}</i>的作者无关，不对其内容负责。</div>
+          <div class="event_tips"><span>*</span> 智慧舆情指挥平台和网页<i>{{datailInfo.kvUrl}}</i>的作者无关，不对其内容负责。</div>
 				</div>
 				<div class="info_detail_right fr">
           <div class="same_info keyword">
@@ -134,7 +137,7 @@ export default {
       },
       datailInfo: {},    // 头部信息
       detailContent: '', //内容
-      sameInfoNum: 0,    //相同信息条数 
+      sameInfoNum: 0,    //相同信息条数
       keywords: [],      //涉及关键词
       specials: [],      //涉及专题
       sameList: [],      //相同信息列表
@@ -145,6 +148,7 @@ export default {
       kvUrl: '',         //信息URL
       kvSimhash: '',     //信息HASH
       isHasBuiltPower: false, //是否有上报权限
+      isHasOrderPower: false, //是否有下指令权限
       markReadList: [],  //标记已读
       deleteList: [],    //删除
     }
@@ -179,14 +183,14 @@ export default {
       let data = {};
       _this.deleteList = [];
       if(isrepeat == '0'){
-        _this.deleteList.push(kvUrl)
+        _this.deleteList.push(kvUrl);
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
           kvUrlList: _this.deleteList          //信息URL
         }
       }else{
-        _this.deleteList.push(kvSimhash)
+        _this.deleteList.push(kvSimhash);
         data = {
           msUserId: _this.msUserId,
           shareMsUserId: _this.shareMsUserId,
@@ -272,12 +276,14 @@ export default {
     },
     //是否有上报权限
     getPower(data){
-      let _this = this; 
+      let _this = this;
       for(let i in data){
         if(data[i].funName == '工作台'){
           for (let m in data[i].funSonList){
             if(data[i].funSonList[m].funName == '舆情报送'){
               _this.isHasBuiltPower = true;
+            }else if(data[i].funSonList[m].funName == '舆情审批'){
+              _this.isHasOrderPower = true;
             }
           }
         }
@@ -402,13 +408,13 @@ a:hover {
 
     }
     .info_source {
-      
+
     }
     .info_author {
-      
+
     }
     .info_forward_num {
-      
+
     }
     .info_tendency {
       .zheng {
@@ -480,7 +486,7 @@ a:hover {
               top: 15px;
               left: 0;
             }
-          } 
+          }
           .copy_infomation {
             i {
               //background: url('../../assets/browse/browsedetail.png') no-repeat;
@@ -509,6 +515,11 @@ a:hover {
           .report_info {
             i {
               background-position: -225px 0;
+            }
+          }
+          .instruct_info {
+            i {
+              background-position:  0 -45px;
             }
           }
           .modify_orientation {
@@ -565,7 +576,7 @@ a:hover {
 
             }
             .three {
-              
+
             }
           }
           &:hover {
@@ -616,7 +627,7 @@ a:hover {
           }
 
           .wxkuang {
-            display: none; 
+            display: none;
             width: 220px;
             height: 240px;
             position: absolute;
@@ -742,7 +753,7 @@ a:hover {
     }
     .keyword_content {
       padding: 12px 14px 4px;
-      
+
       .keywordList {
         margin: 0 6px 15px 0;
         height: 28px;
@@ -797,7 +808,7 @@ a:hover {
       overflow-y: auto;
       padding: 9px 14px 18px;
       max-height: 346px;
-      
+
       li {
         height: 60px;
         overflow: hidden;

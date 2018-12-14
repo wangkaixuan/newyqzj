@@ -240,10 +240,18 @@ export function getAreaList(data) {
     params: data
   })
 }
+//获取审批列表左侧舆情分类 nav
+export function getLeftDimenData(data) {
+  return fetch({
+    url:api.apiUrl+'/workStatistics/getDimenTree',
+    method:'get',
+    params: data
+  })
+}
 //涉事地域统计图
 export function getRegionCount(data) {
   return fetch({
-    url:api.qUrl+'/workStatistics/getRegionCount',
+    url:api.apiUrl+'/workStatistics/getRegionCount',
     method:'get',
     params:data
   })
@@ -251,7 +259,7 @@ export function getRegionCount(data) {
 //获取媒体类型统计
 export function getMediaCount(data) {
   return fetch({
-    url:api.qUrl+'/workStatistics/getMediaCount',
+    url:api.apiUrl+'/workStatistics/getMediaCount',
     method:'get',
     params:data
   })
@@ -262,5 +270,60 @@ export function getDimenCount(data) {
     url:api.apiUrl+'/workStatistics/getDimenCount',
     method:'get',
     params:data
+  })
+}
+//获取舆情整体走势统计
+export function getTrendOfPubOpi(data) {
+  return fetch({
+    url:api.apiUrl+'/workStatistics/getTrendOfPubOpi',
+    method:'get',
+    params:data
+  })
+}
+//获取舆情报送单位统计
+export function getOrgCount(data) {
+  return fetch({
+    url:api.apiUrl+'/workStatistics/getOrgCount',
+    method:'get',
+    params:data
+  })
+}
+/**********************统计数字***************************/
+//舆情报送数据列表 —— 数据状态统计数字
+export function getSentimentDeliveryCount(data) {
+  return fetch({
+    url: api.apiUrl+'/reportInfo/getSentimentDeliveryListCount',
+    method: 'get',
+    params: data
+  })
+}
+//舆情审批数据列表 —— 数据状态统计数字
+export function getReviewCount(data) {
+  return fetch({
+    url: api.apiUrl+'/reportInfo/getReviewListCount',
+    method: 'get',
+    params: data
+  })
+}
+//舆情任务数据列表 —— 数据状态统计数字
+export function getTaskCount(data) {
+  return fetch({
+    url: api.apiUrl+'/reportInfo/getTaskInfoListCount',
+    method: 'get',
+    params: data
+  })
+}
+//舆情审批 —— 舆情监测列表直接下达指令
+export function saveOrderSubmitData(data,fun) {
+  return fetch({
+    transformRequest:function(data){
+      fun();
+      return data;
+    },
+    'timeout':180 * 1000,
+    'Content-Type':'multipart/form-data',
+    url:api.apiUrl+'/taskInfo/saveTaskInfo2',
+    method:'post',
+    data: data
   })
 }

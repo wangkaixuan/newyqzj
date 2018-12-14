@@ -1,5 +1,5 @@
 <template>
-    <div class="wary_see">
+    <div class="wary_see" ref="watermarkWary">
 		<yqzj-Head @setSecondNav="setSubNav" funName="工作台" v-if="from == 'workbench'" subname="舆情报送"></yqzj-Head>
 		<yqzj-Head @setSecondNav="setSubNav" funName="工作台" v-if="from == 'examine'" subname="舆情审批"></yqzj-Head>
 		<yqzj-Head @setSecondNav="setSubNav" funName="工作台" v-if="from == 'task'" subname="舆情任务"></yqzj-Head>
@@ -12,7 +12,7 @@
 			<div class="see_built_tit" v-else-if="from == 'examine' && cztype =='instruct'">舆情审批 - 指令</div>
 			<div class="see_built_tit" v-else-if="from == 'examine' && cztype =='forward'">舆情审批 - 转发</div>
 			<div class="see_built_tit" v-else-if="from == 'examine'">舆情审批 - 查看</div>
-			<div class="see_built_tit" v-else-if="from == 'transact' && cztype =='comment'">抄送办理 - 评论</div>
+			<div class="see_built_tit" v-else-if="from == 'transact' && cztype =='comment'">抄送办理 - 批示</div>
 			<div class="see_built_tit" v-else-if="from == 'transact'">抄送办理 - 查看</div>
 			<div class="see_built_tit" v-else-if="from == 'task'">舆情任务 - 查看</div>
 			<div class="see_built_content">
@@ -82,12 +82,26 @@
 					<div class="line" v-if="reportInfoData.approvers != ''" ></div>
 					<div class="start" v-if="reportInfoData.approvers != ''"></div>
 					<div class="end" v-if="reportInfoData.approvers != ''"></div>
-					<div class="desc clearfix_see" v-for="item in reportInfoData.approvers" v-if="reportInfoData.approvers != ''">
+					<div class="desc clearfix_see" v-for="(item,i) in reportInfoData.approvers" :key="item.id" v-if="reportInfoData.approvers != ''">
 						<div class="desc_left" ref="descLeft">
 							<p>{{item.opeartTime.substr(11)}}</br>{{item.opeartTime.substr(0,10)}}</p>
 						</div>
 						<div class="desc_right">
-							<div class="p3 clearfix_see"><span class="light" >{{item.accountName}}</span><span class="slant_line">/</span><span class="dark">{{item.stateName}}</span></div>
+							<div class="p3 clearfix_see s_flex">
+								<span class="light" :title="item.accountName">{{item.accountName}}</span>
+								<span class="ops_process">{{item.stateName}}</span>
+								<!-- 上报、下达任务、交办 多个人时展示 -->
+								<p class="ops_content" v-if="item.approveUsersList.length <= 5">
+									<span class="dark" v-for="(m,n) in item.approveUsersList" :key="n"><span class="light_line" v-if="(n+1) > 1">|</span>{{m}}</span>
+								</p>
+								<p class="ops_content" v-if="item.approveUsersList.length > 5">
+									<span class="dark" v-for="(m,n) in item.approveUsersList" v-show="n < 5"><span class="light_line" v-if="(n+1) > 1">|</span>{{m}}</span>
+									<span class="dark" v-for="(m,n) in item.approveUsersList" v-show="n >= 5 && item.flag">
+										<span class="light_line">|</span>{{m}}
+									</span>
+									<span class="see_more" @click="seeMore2(item,i,reportInfoData.approvers)" v-if="!(item.flag)">更多...</span>
+								</p>
+							</div>
 							<div class="p4 clearfix_see"><span class="light">描述</span><span class="dark">{{item.approveContent}}</span></div>
 							<div class="p5 clearfix_see" v-if="item.fileData.length > 0">
 								<span class="light">附件</span>
@@ -116,11 +130,11 @@
 							<p>{{item.approveTime.substr(11)}}</br>{{item.approveTime.substr(0,10)}}</p>
 						</div>
 						<div class="desc_right">
-							<div class="p3 clearfix_see">
-								<span class="light" v-if="item.approveType == 1" :ref="'utype'+i" :id="'utype'+i">{{item.forwardUserName}}</span><!-- approveType ：1 转发 2 批示-->
-								<span class="light" v-else>{{item.approverUserName[0]}}</span>
+							<div class="p3 clearfix_see s_flex">
+								<span class="light" :title="item.forwardUserName" v-if="item.approveType == 1">{{item.forwardUserName}}</span><!-- approveType ：1 转发 2 批示-->
+								<span class="light" :title="item.approverUserName[0]" v-else>{{item.approverUserName[0]}}</span>
 
-								<span class="ops_process" v-if="item.approveType == 1" :ref="'uops'+i" :id="'utype'+i">{{item.approveTypeName}}给</span>
+								<span class="ops_process" v-if="item.approveType == 1">{{item.approveTypeName}}给</span>
 								<span class="ops_process" v-else>{{item.approveTypeName}}</span>
 								<!-- 转发多个人时展示 -->
 								<p class="ops_content" v-if="item.approveType == 1 && item.approverUserName.length <= 5">
@@ -211,7 +225,7 @@
                             <!--我的单位-->
                             <div  class="myOrg" v-bind:class="{hide:saveType==1}">
                                 <el-checkbox-group v-model="orguserDataArr" @change="checkMylist">
-                                  <el-checkbox v-for="(org,i) in orguserData" :key="i" :label="org.name" name="userCheckbox" v-bind:username="org.name" :value="org.accountId"></el-checkbox>
+                                  <el-checkbox v-for="(org,i) in orguserData" :key="i" :label="org.name" name="userCheckbox" v-bind:username="org.name" :value="org.accountId" :disabled="org.disabled"></el-checkbox>
                                 </el-checkbox-group>
                             </div>
                         </div>
@@ -397,6 +411,8 @@ export default{
             hasForwardUser: [], //已经转发过的人
             isTask: '',         //转发的信息类型  审批类型 1报送审批 2任务审批
             isOver: false, //是否超过5条
+            userOrgId: this.$store.state.orgId,            //自己机构的id
+        	userAccountId: this.$store.state.accountId,    //自己的id
 	    }
 	},
 	components:{
@@ -404,6 +420,12 @@ export default{
 	    yqzjFooter,
 	    workNav
 	},
+	watch: {
+
+	},
+    computed: {
+
+  	},
 	methods: {
 		setSubNav(navData){
             this.subNavData = navData[0];
@@ -579,6 +601,13 @@ export default{
             getInstructMyTreeData(parms).then(function (res) {
                 if(res.data.result){
                    _this.orguserData = res.data.result.data;
+                    //下达指令不能下达给自己和自己的单位
+		            // let noSelectUId = _this.userAccountId.toString();
+		            // _this.orguserData.forEach((org,index)=>{
+		            //     if(noSelectUId.indexOf(org.accountId) > -1){
+		            //       _this.orguserData[index].disabled = true;
+		            //     }
+		            // });
                 }else{
                     console.log('没有返回值');
                 }
@@ -586,6 +615,19 @@ export default{
                 console.log(err,'请求失败！');
             });
         },
+        //设置机构不能选择
+      	// setzTreeNoSelect(z){
+	      //   let _this = this;
+	      //   z.forEach((tree,index)=>{
+	      //     //下达指令不能下达给自己和自己的单位
+	      //     if(_this.userOrgId.toString().indexOf(tree.id) > -1){
+	      //       tree.disabled = true;
+	      //     }
+	      //     if(tree.children.length > 0){
+	      //       _this.setzTreeNoSelect(tree.children);
+	      //     }
+	      //   });
+      	// },
         //指令 —— 获取批示人数据
         setzTree(){
             let _this = this;
@@ -597,6 +639,7 @@ export default{
             getInstructOtherTreeData(parms).then(function (res) {
                 if(res.data.result){
                    _this.nodesData = res.data.result.data;
+                   // _this.setzTreeNoSelect(_this.nodesData);
                 }else{
                     console.log('没有返回值');
                 }
@@ -1086,15 +1129,25 @@ export default{
 		},
 		//查看更多
 		seeMore(item){
+			// 转发
 			if(item.approverUserName.length > 5){
 				this.isOver = true;
+			}
+		},
+		seeMore2(item,i,data){
+			let _this = this;
+			// 上报、下达任务、交办
+			if(item.approveUsersList.length > 5){
+				item.flag = true; 
+				//需要主动通知vue
+				this.$set(_this.reportInfoData.approvers[i],i,item.flag);
 			}
 		}
 	},
 	mounted() {
     let username = this.$store.state.userinfo_name;
     let account = this.$store.state.account.substr(7,4);
-    Watermark.set(username+"  "+account);
+    Watermark.set(username+"  "+account,this.$refs.watermarkWary);
 		let _this = this;
 	    let query = this.$route.query;  //获取链接 ？ 之后的参数
 	    _this.from = query.from;
@@ -1158,6 +1211,11 @@ export default{
 	            			// console.log(_this.reportInfoData.approvers[j].imagesSrc)
 	            		}
 	            	}
+	            }
+	            //处理更多功能 —— 添加标识
+	            for(let i in _this.reportInfoData.approvers){ 
+	            	let list = _this.reportInfoData.approvers[i];
+	            	list.flag = false;
 	            }
 	    	}else{
                 _this.$message({
